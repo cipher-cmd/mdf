@@ -11,7 +11,7 @@
         <meta property="og:image" content="images/mdfMainLogo.svg">
         <meta property="og:url" content="https://mdfenterprises.com/">
         <meta property="og:type" content="website">
-        <link rel="icon" href="images/mdfMainLogo.svg">
+        <link rel="icon" href="images/mdfFavicon.svg">
         <link href="css/website-base.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
         
@@ -41,14 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. Lenis Smooth Scroll
     if (typeof Lenis !== 'undefined') {
         const lenis = new Lenis({
-            duration: 1.2,
+            duration: 1.8,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             direction: 'vertical',
             gestureDirection: 'vertical',
             smooth: true,
-            mouseMultiplier: 1,
-            touchMultiplier: 2,
+            mouseMultiplier: 0.8,
+            touchMultiplier: 1.5,
+            lerp: 0.1
         })
+        window.lenis = lenis; // Make it globally accessible
         function raf(time) {
             lenis.raf(time)
             requestAnimationFrame(raf)
@@ -65,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 observer.unobserve(entry.target); 
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1 });
 
     // Target elements we want to fade in
     const elementsToAnimate = document.querySelectorAll('h2, h3, h4, h5, p, .brands-slider, #govt-clients > div > div, .stat-item, .trust-badge-item, .portfolio-cat-card');
@@ -88,9 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
             
-            // Subtle 15px magnetic pull
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-            btn.style.transition = 'transform 0.1s ease-out';
+            // Subtle 15px magnetic pull - Refined to 0.25 for smoother glide
+            btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+            btn.style.transition = 'transform 0.15s ease-out';
         });
         
         btn.addEventListener('mouseleave', () => {
@@ -132,6 +134,20 @@ body::before {
 @keyframes drift {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(5%, 10%) scale(1.1); }
+}
+
+.footer-badge {
+    background: rgba(255, 107, 0, 0.1);
+    color: #FF6B00;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(255, 107, 0, 0.2);
 }
 </style>
       </head>
@@ -1213,33 +1229,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ROBUST SCROLL FUNCTION FOR MDF FRAMEWORK */
-window.mdfScroll = function(event, id) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  // Small delay to let framework animations settle
-  setTimeout(() => {
-    const el = document.getElementById(id);
-    if (!el) return;
+window.mdfScroll = function(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  if (window.lenis) {
+    // If Lenis smooth scroll is active, use its API for perfect sync
+    window.lenis.scrollTo(el, {
+      offset: -160,
+      duration: 1.8
+    });
+  } else {
+    // Fallback if Lenis is not available
     const header = document.querySelector('#ihkww7');
     const headerHeight = header ? header.offsetHeight : 110;
-    
-    // Most reliable document-absolute top
     const actualTop = el.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = actualTop - headerHeight - 40;
-    
     window.scrollTo({
       top: offsetPosition,
       behavior: "smooth"
     });
-  }, 50);
+  }
 };
+
+// Global click handler to capture all data-scroll-to clicks
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('[data-scroll-to]');
+  if (target) {
+    e.preventDefault();
+    e.stopPropagation();
+    const targetId = target.getAttribute('data-scroll-to');
+    window.mdfScroll(targetId);
+  }
+}, true); // Capture phase to beat framework listeners
 </script>
         
 
         <div id="pwb-body-wrap">
-          <div id="ip1j" class="pwb-background pwb-flex-grid-wrap"><div id="ip6d1d" class="pw-block-style"><img src="images/overlay.webp" loading="eager" id="ilioas" class="pw-image-style"></div><div id="ip6d1d-2" class="pw-block-style"><img src="images/overlay2.webp" loading="lazy" id="ilioas-2" class="pw-image-style"></div><div id="ijsk" class="pwb-scene"></div></div><div id="ihkww7" class="pwb-flex-grid-wrap"><div id="i1lwz-3" class="pwb-flex-grid-wrap"><div id="imob0j-3-3-2" class="framer-1cc0f02"><div id="i1lwz-2-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="eager" class="mdf-logo-full"></div></div><div id="imob0j-3-3-2-2" class="framer-1cc0f02"><div id="i1lwz-2-3-3-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-3" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'ilwyn')">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'footer-extra')">Contact</div></div></div><div id="imob0j-3-3-2-2-2" class="framer-1cc0f02"><div id="i1lwz-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2" style="text-align: center; line-height: 1.1;">View on GeM<br>Portal</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df" class="pw-image-style"></div></div></div></div><div id="ihkww7-3" class="pwb-flex-grid-wrap"><div id="i1lwz-3-2" class="pwb-flex-grid-wrap"><div id="iy2h61-2" class="pwb-relative-overlay"><div id="i8rrfy-2-2" class="pw-block-style"><div id="iqi1yy-2" class="pw-block-style"><div id="i1lwz-2-3-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f-3-2" class="pw-block-style"><div id="i53c6f-2-3-2" class="pw-block-style"></div><div id="i53c6f-2-2-2-2" class="pw-block-style"></div></div></div><div id="i1lwz-2-3-3-2-2-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'ilwyn')">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'footer-extra')">Contact</div></div></div></div></div></div><div id="ihkww7-2" class="pwb-flex-grid-wrap"><div id="i8rrfy" class="pw-block-style"><div id="i1lwz-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f" class="pw-block-style"><div id="i53c6f-2" class="pw-block-style"></div><div id="i53c6f-2-2" class="pw-block-style"></div></div></div></div><div id="i3owk" class="pwb-anchor"></div><div id="i84ba" class="pwb-flex-grid-wrap"><div id="i1lwz-6" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a"><span id="ik8f8h">/ </span>Scroll down</p><div id="i1lwz-2-8-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-8-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-2-5-2-2" style="font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px;">Sport. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Fitness.</span><br>Music. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Awards.</span><br><span style="font-family: 'Helvetica Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: #FF6B00; font-weight: 600; display: block; margin-top: 25px; font-style: normal;">Engineered for Reliability.</span></div><div id="i1lwz-2-2-2-2-2-2-3" class="pwb-flex-grid-wrap"><div id="i1lwz-2-2-2-2-2-2-4" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-brands-anchor')"><div id="ispyh-2-3-2-2-2-2-4" style="text-align: center; line-height: 1.1;">Brands<br>We Deal In</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-3" class="pw-image-style"></div><div id="i1lwz-2-2-2-2-2-2-3-3" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')"><div id="ispyh-2-3-2-2-2-2-3-3">View Clients</div></div></div></div></div><div id="i1lwz-2-8-2-2-2" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3" class="pw-user-text-style-93533a5b-578a-4ac8-a6d4-64a0f7083c13">A premier institutional supplier bridging the gap between global brands and government needs. Sturdy. Weighted. Engineered.</p></div></div></div><div id="i3owk-2" class="pwb-anchor"></div><div id="ilwyn" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4" class="pwb-flex-grid-wrap"><div id="i3n9rh-2-2" class="pw-block-style"><h5 id="ispyh-2-3-2-3-2-2-2-3" class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee">OUR MISSION</h5><div id="i3n9rh-2" class="pw-block-style"></div><h2 id="ispyh-2-2-2" class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da">We specialize in <span style="color:#FF6B00;">institutional supply</span> for government and private organizations. From sports equipment to musical instruments, we provide <span style="color:#FF6B00;">engineered solutions</span> for growth.</h2></div></div></div><div id="i3owk-2-2" class="pwb-anchor"></div><div id="injpw-2-2-3" class="pwb-flex-grid-wrap"></div><div id="i3owk-2-3" class="pwb-anchor"></div><div id="injpw-2-2-2-2" class="pwb-flex-grid-wrap"></div>
+          <div id="ip1j" class="pwb-background pwb-flex-grid-wrap"><div id="ip6d1d" class="pw-block-style"><img src="images/overlay.webp" loading="eager" id="ilioas" class="pw-image-style"></div><div id="ip6d1d-2" class="pw-block-style"><img src="images/overlay2.webp" loading="lazy" id="ilioas-2" class="pw-image-style"></div><div id="ijsk" class="pwb-scene"></div></div><div id="ihkww7" class="pwb-flex-grid-wrap"><div id="i1lwz-3" class="pwb-flex-grid-wrap"><div id="imob0j-3-3-2" class="framer-1cc0f02"><div id="i1lwz-2-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="eager" class="mdf-logo-full"></div></div><div id="imob0j-3-3-2-2" class="framer-1cc0f02"><div id="i1lwz-2-3-3-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-3" data-has-states="1" style="cursor:pointer;" data-scroll-to="ilwyn">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2" data-has-states="1" style="cursor:pointer;" data-scroll-to="mdf-clients-anchor">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2" data-has-states="1" style="cursor:pointer;" data-scroll-to="footer-extra">Contact</div></div></div><div id="imob0j-3-3-2-2-2" class="framer-1cc0f02"><div id="i1lwz-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap" onclick="window.open('https://gem.gov.in', '_blank')"><div id="ispyh-2-3-2-2-2-2" style="text-align: center; line-height: 1.1; display: block !important;">View on GeM<br>Portal</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df" class="pw-image-style"></div></div></div></div><div id="ihkww7-3" class="pwb-flex-grid-wrap"><div id="i1lwz-3-2" class="pwb-flex-grid-wrap"><div id="iy2h61-2" class="pwb-relative-overlay"><div id="i8rrfy-2-2" class="pw-block-style"><div id="iqi1yy-2" class="pw-block-style"><div id="i1lwz-2-3-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f-3-2" class="pw-block-style"><div id="i53c6f-2-3-2" class="pw-block-style"></div><div id="i53c6f-2-2-2-2" class="pw-block-style"></div></div></div><div id="i1lwz-2-3-3-2-2-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2-2-2" style="cursor:pointer;" data-scroll-to="ilwyn">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2" style="cursor:pointer;" data-scroll-to="mdf-clients-anchor">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2-2-2" style="cursor:pointer;" data-scroll-to="footer-extra">Contact</div></div></div></div></div></div><div id="ihkww7-2" class="pwb-flex-grid-wrap"><div id="i8rrfy" class="pw-block-style"><div id="i1lwz-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f" class="pw-block-style"><div id="i53c6f-2" class="pw-block-style"></div><div id="i53c6f-2-2" class="pw-block-style"></div></div></div></div><div id="i3owk" class="pwb-anchor"></div><div id="i84ba" class="pwb-flex-grid-wrap"><div id="i1lwz-6" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a"><span id="ik8f8h">/ </span>Scroll down</p><div id="i1lwz-2-8-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-8-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-2-5-2-2" style="font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px;">Sport. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Fitness.</span><br>Music. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Awards.</span><br><span style="font-family: 'Helvetica Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: #FF6B00; font-weight: 600; display: block; margin-top: 25px; font-style: normal;">Engineered for Reliability.</span></div><div id="i1lwz-2-2-2-2-2-2-3" class="pwb-flex-grid-wrap"><div id="i1lwz-2-2-2-2-2-2-4" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" data-scroll-to="mdf-brands-anchor"><div id="ispyh-2-3-2-2-2-2-4" style="text-align: center; line-height: 1.1; display: block !important;">Brands<br>We Deal In</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-3" class="pw-image-style"></div><div id="i1lwz-2-2-2-2-2-2-3-3" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" data-scroll-to="mdf-clients-anchor"><div id="ispyh-2-3-2-2-2-2-3-3" style="text-align: center; display: block !important;">View Clients</div></div></div></div></div><div id="i1lwz-2-8-2-2-2" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3" class="pw-user-text-style-93533a5b-578a-4ac8-a6d4-64a0f7083c13">A premier institutional supplier bridging the gap between global brands and government needs. Sturdy. Weighted. Engineered.</p></div></div></div><div id="i3owk-2" class="pwb-anchor"></div><div id="ilwyn" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4" class="pwb-flex-grid-wrap"><div id="i3n9rh-2-2" class="pw-block-style"><h5 id="ispyh-2-3-2-3-2-2-2-3" class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee">OUR MISSION</h5><div id="i3n9rh-2" class="pw-block-style"></div><h2 id="ispyh-2-2-2" class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da">We specialize in <span style="color:#FF6B00;">institutional supply</span> for government and private organizations. From sports equipment to musical instruments, we provide <span style="color:#FF6B00;">engineered solutions</span> for growth.</h2></div></div></div><div id="i3owk-2-2" class="pwb-anchor"></div><div id="injpw-2-2-3" class="pwb-flex-grid-wrap"></div><div id="i3owk-2-3" class="pwb-anchor"></div><div id="injpw-2-2-2-2" class="pwb-flex-grid-wrap"></div>
 
 <!-- BRANDS SCROLLING SECTION -->
 <div id="mdf-brands-anchor" style="position:relative; top:-20px;"></div>
@@ -1589,7 +1616,10 @@ window.mdfScroll = function(event, id) {
     <h6>Contact</h6>
     <a href="mailto:mdfenterprisesjk@gmail.com">mdfenterprisesjk@gmail.com</a>
     <a href="https://wa.me/917006252334" target="_blank">+91 70062 52334</a>
-    <div class="footer-badge">☑ GeM REGISTERED SUPPLIER</div>
+    <div class="footer-badge">
+      <img src="images/gemLogo.png" alt="GeM Logo" style="height: 20px; vertical-align: middle; margin-right: 8px; filter: brightness(0) invert(1);">
+      GeM REGISTERED SUPPLIER
+    </div>
   </div>
   <div class="footer-col">
     <h6>Categories</h6>
