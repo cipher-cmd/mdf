@@ -172,23 +172,220 @@ html, body {
 </style>
         
 <style>
-/* Logo with text SVG - scale cleanly */
+/* Logo with text PNG - scale cleanly */
 .mdf-logo-full {
     width: auto !important;
-    height: 75px !important;
+    height: 120px !important;
     object-fit: contain !important;
 }
 
-/* Prevent the container from clipping */
-#i1lwz-2-3, #i1lwz-2-3-2-3-2, #i1lwz-3-3, #i1lwz-2-3-2 {
+/* Prevent the container from clipping - All Navbar instances and Logo Parents */
+#i1lwz-2-3, #i1lwz-2-3-2-3-2, #i1lwz-3-3, #i1lwz-2-3-2, 
+#imob0j-3-3-2, #imob0j-3-3-2-2, #imob0j-3-3-2-2-2, 
+#ihkww7, #ihkww7-2, #ihkww7-3, #i1lwz-3 {
     overflow: visible !important;
-    width: auto !important;
+    height: auto !important;
 }
 
-/* Improve header spacing for better visual balance */
-#imob0j-3-3-2-2 {
-    margin-left: 40px !important;
+/* ======== EXACT REPLICATION FROM ASCEND STYLE.CSS ======== */
+
+#ihkww7, #ihkww7-2, #ihkww7-3 {
+    top: 0px !important;
+    width: 100% !important;
+    display: flex !important;
+    z-index: 999999 !important;
+    position: fixed !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    pointer-events: none !important;
 }
+
+#i1lwz-3, #i1lwz-3-2 {
+    width: 100% !important;
+    display: flex !important;
+    z-index: 999 !important;
+    position: relative !important;
+    align-items: center !important;
+    padding-top: 20px !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    flex-direction: row !important;
+    padding-bottom: 20px !important;
+    justify-content: space-between !important;
+    max-width: 1440px !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+}
+
+/* Restore pointer events for actual clickable items */
+#ihkww7-3 > div, #ihkww7-2 > div {
+    pointer-events: auto !important;
+}
+
+#brands-section, #portfolio-section, #clients-marquee-section {
+    scroll-margin-top: 150px !important;
+}
+
+/* Left: Logo Container */
+#imob0j-3-3-2 {
+    flex: 1 !important; /* Force equal column distribution for perfect centering */
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    height: auto !important;
+    padding: 0 !important;
+}
+
+.mdf-logo-full {
+    height: 90px !important; /* Significantly larger logo per request */
+    width: auto !important;
+    object-fit: contain !important;
+    transform: scale(1.1); /* Extra pop */
+    transform-origin: left center;
+}
+
+/* Center: Glassmorphic Nav Links Container */
+#imob0j-3-3-2-2 {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: auto !important;
+    padding: 0 10px !important;
+    height: 60px !important;
+    border-radius: 999px !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    background-color: #14141433 !important; /* From user CSS */
+    margin-left: 0 !important;
+}
+
+#i1lwz-2-3-3-2-2, #i1lwz-2-3-3-2-2-2-2 {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 30px !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    padding: 0 20px !important; 
+}
+
+/* Remove stray orange color from contact and unify styling */
+#i1lwz-2-3-3-2-2 > div, #i1lwz-2-3-3-2-2-2-2 > div {
+    color: #FFFFFF !important;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    font-weight: 500 !important; 
+    font-size: 17px !important; /* Increased text size */
+    transition: color 0.3s ease, opacity 0.3s ease !important;
+    opacity: 0.9 !important;
+}
+
+/* Right: CTA Button Container */
+#imob0j-3-3-2-2-2 {
+    flex: 1 !important; /* Force equal column distribution */
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+/* Fix Hero buttons text wrapping */
+#i1lwz-2-2-2-2-2-2-4, #i1lwz-2-2-2-2-2-2-3-3 {
+    width: auto !important;
+    min-width: max-content !important;
+}
+
+#i1lwz-2-3-3-2-2 > div:hover, #i1lwz-2-3-3-2-2-2-2 > div:hover {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4) !important;
+}
+
+/* Right: CTA Button Container */
+#imob0j-3-3-2-2-2 {
+    flex: 1 !important;
+    min-width: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+/* The Solid CTA Button */
+#i1lwz-2-2-2-2-2-2 {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 8px !important; /* Square instead of rounded pill */
+    padding: 6px 6px 6px 20px !important; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s !important;
+    cursor: pointer !important;
+    width: max-content !important; /* Extremely important to prevent flex squeezing */
+    min-width: max-content !important;
+    white-space: nowrap !important;
+}
+
+#i1lwz-2-2-2-2-2-2:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+}
+
+/* CTA Button Text */
+#ispyh-2-3-2-2-2-2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #000000 !important;
+    letter-spacing: 0.1px !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+    min-width: max-content !important; /* Force text to one line */
+}
+
+/* Ascend SVG Arrow - Restore black circle look */
+#igs5df {
+    background: #000000 !important;
+    border-radius: 50% !important;
+    width: 28px !important; /* Sleek size */
+    height: 28px !important;
+    padding: 9px !important;
+    object-fit: contain !important;
+    transition: transform 0.3s ease !important;
+    filter: invert(1) brightness(1.5) !important; /* Black->White filter so arrow is white inside black circle background */
+    flex-shrink: 0 !important; /* Prevent it from squishing */
+}
+
+#i1lwz-2-2-2-2-2-2:hover #igs5df {
+    transform: translateX(3px) !important;
+}
+
+/* Responsive Overrides */
+@media (max-width: 900px) {
+    #ihkww7, #ihkww7-2, #ihkww7-3 { padding: 20px 24px !important; }
+    .mdf-logo-full { height: 38px !important; }
+    #ispyh-2-3-2-2-2-2 { font-size: 13px !important; }
+    #i1lwz-2-2-2-2-2-2 { padding: 4px 4px 4px 16px !important; gap: 8px !important; }
+    #igs5df { width: 24px !important; height: 24px !important; padding: 7px !important; }
+}
+
+@media (max-width: 480px) {
+    #ihkww7, #ihkww7-2, #ihkww7-3 { padding: 15px 16px !important; }
+    .mdf-logo-full { height: 32px !important; }
+}
+
+
+
+
+
 
 /* Portfolio category cards - match dark theme */
 .portfolio-cat-card {
@@ -198,7 +395,6 @@ html, body {
     background: rgba(15, 15, 15, 0.6) !important;
     padding: 20px;
     border-radius: 12px;
-    border-left: 4px solid #FF6B00;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-left: 4px solid #FF6B00;
     backdrop-filter: blur(10px);
@@ -251,23 +447,24 @@ html, body {
 
 /* Logo styling - High visibility */
 .brands-slider-track img {
-    height: 80px; /* Increased from 50px for visibility */
+    height: 75px;
     width: auto;
     margin: 0 50px;
-    opacity: 0.6;
-    filter: grayscale(1);
+    opacity: 0.9;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: white;
-    padding: 15px 35px;
+    background: #ffffff;
+    padding: 14px 40px;
     border-radius: 60px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
     object-fit: contain;
+    filter: grayscale(0.5);
 }
 .brands-slider-track img:hover {
-    opacity: 1;
+    transform: scale(1.07) translateY(-5px);
+    background: #ffffff;
     filter: grayscale(0);
-    transform: scale(1.1);
-    box-shadow: 0 15px 40px rgba(255,107,0,0.2);
+    opacity: 1;
+    box-shadow: 0 15px 35px rgba(255,107,0,0.25);
 }
 
 /* Footer link styling */
@@ -414,11 +611,13 @@ html, body {
 /* === MOBILE RESPONSIVENESS === */
 @media (max-width: 768px) {
     .mdf-logo-full {
-        height: 40px !important;
+        height: 60px !important;
     }
     #imob0j-3-3-2-2 {
         margin-left: 15px !important;
     }
+
+
     
     /* Stats Section */
     .stats-section {
@@ -512,15 +711,540 @@ html, body {
 .portfolio-card-img:hover {
     opacity: 1;
 }
+
+/* Make section titles bigger */
+h5.pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee,
+#brands-section > h5 {
+    font-size: 1.1rem !important;
+    color: rgba(255,255,255,0.9) !important;
+    letter-spacing: 4px !important;
+    font-weight: 700 !important;
+}
+
+#ispyh-2-2-2 { font-size: 2.2rem !important; line-height: 1.4 !important; font-weight: 500;}
+#ispyh-2-2-2-5-2-2-2-2-2 { font-size: 1.15rem !important; line-height: 1.6 !important; }
+
+/* ===== PORTFOLIO: GLASSMORPHIC CARD GRID ===== */
+#portfolio-section {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    display: flex;
+    gap: 80px;
+    align-items: flex-start;
+}
+.portfolio-sidebar {
+    flex: 0 0 320px;
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.portfolio-rows-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+.portfolio-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 24px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: default;
+    transition: border-color 0.5s ease, background 0.5s ease, transform 0.5s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.5s ease;
+    overflow: hidden;
+    position: relative;
+}
+.portfolio-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(255,107,0,0.12), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    z-index: 0;
+}
+.portfolio-row:hover {
+    border-color: rgba(255,107,0,0.4);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(255,107,0,0.12), 0 0 0 1px rgba(255,107,0,0.15);
+}
+.portfolio-row:hover::before { opacity: 1; }
+.portfolio-row-img {
+    width: 100%; height: 180px;
+    border-radius: 0;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative; z-index: 1;
+    transition: transform 0.7s cubic-bezier(0.2,0.8,0.2,1), filter 0.5s ease;
+    filter: brightness(0.85);
+}
+.portfolio-row:hover .portfolio-row-img { transform: scale(1.08); filter: brightness(1); }
+.portfolio-row-text { position: relative; z-index: 1; padding: 24px 24px 28px; }
+.portfolio-row-num {
+    font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+    color: #FF6B00; font-family: 'Helvetica Neue',sans-serif; margin-bottom: 10px;
+    display: inline-block;
+    background: rgba(255,107,0,0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+.portfolio-row-title {
+    font-size: 1.35rem; font-weight: 600; color: white;
+    font-family: 'Helvetica Neue',sans-serif; margin: 0 0 10px 0;
+    letter-spacing: -0.3px;
+}
+.portfolio-row-desc {
+    font-size: 0.88rem; color: rgba(255,255,255,0.55);
+    font-family: 'Helvetica Neue',sans-serif; margin: 0; line-height: 1.65;
+}
+.portfolio-row-arrow {
+    position: absolute;
+    top: 24px; right: 24px;
+    color: rgba(255,255,255,0.15); font-size: 1.4rem;
+    transition: color 0.3s, transform 0.3s; z-index: 2;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+}
+.portfolio-row:hover .portfolio-row-arrow { color: #FF6B00; transform: translateX(3px); background: rgba(255,107,0,0.15); }
+
+/* ===== PROVEN EXPERIENCE CARDS ===== */
+#clients-marquee-section {
+    padding: 100px 40px;
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.clients-marquee-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Helvetica Neue',sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+}
+.clients-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.client-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 36px 20px 30px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    cursor: default;
+    transition: all 0.5s cubic-bezier(0.2,0.8,0.2,1);
+    position: relative;
+    overflow: hidden;
+}
+.client-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,107,0,0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+.client-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,107,0,0.35);
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(255,107,0,0.12), 0 0 0 1px rgba(255,107,0,0.1);
+}
+.client-card:hover::before { opacity: 1; }
+.client-card-logo {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: white;
+    padding: 8px;
+    object-fit: contain;
+    transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.5s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 1;
+}
+.client-card:hover .client-card-logo {
+    transform: scale(1.15) translateY(-4px);
+    box-shadow: 0 8px 30px rgba(255,107,0,0.25);
+}
+.client-card-name {
+    font-size: 0.95rem; font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Helvetica Neue',sans-serif;
+    position: relative; z-index: 1;
+    letter-spacing: -0.2px;
+}
+.client-card-type {
+    font-size: 0.72rem; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Helvetica Neue',sans-serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+    margin-top: -8px;
+}
+
+/* ===== CERT STRIP - FULL COLOR WITH SCROLL HIGHLIGHT ===== */
+.cert-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 60px 40px;
+    margin: 0 auto;
+    max-width: 1400px;
+    position: relative;
+    z-index: 10;
+}
+.cert-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px 36px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    flex-shrink: 0;
+    transition: all 0.6s cubic-bezier(0.2,0.8,0.2,1);
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+.cert-item.cert-highlighted {
+    opacity: 1;
+    transform: scale(1.08);
+    border-color: rgba(255,107,0,0.4);
+    background: rgba(255,255,255,0.07);
+    box-shadow: 0 15px 40px rgba(255,107,0,0.15), 0 0 0 1px rgba(255,107,0,0.1);
+}
+.cert-item:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    border-color: rgba(255,107,0,0.3);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 10px 30px rgba(255,107,0,0.1);
+}
+.cert-logo {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+    filter: none;
+    transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s;
+}
+.cert-item.cert-highlighted .cert-logo {
+    transform: scale(1.15);
+}
+.cert-text strong {
+    display: block; color: white; font-size: 1rem; font-weight: 600;
+    font-family:'Helvetica Neue',sans-serif;
+    transition: color 0.3s;
+}
+.cert-item.cert-highlighted .cert-text strong {
+    color: #FF6B00;
+}
+.cert-text span {
+    color: rgba(255,255,255,0.5); font-size: 0.82rem;
+    font-family:'Helvetica Neue',sans-serif;
+    transition: color 0.3s;
+}
+.cert-item.cert-highlighted .cert-text span {
+    color: rgba(255,255,255,0.7);
+}
+
+@media (max-width: 900px) {
+    #portfolio-section {
+        flex-direction: column;
+        padding: 60px 20px;
+        gap: 40px;
+    }
+    .portfolio-sidebar { position: static; flex: unset; }
+    .portfolio-rows-wrap { grid-template-columns: 1fr; }
+    .clients-card-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    #clients-marquee-section { padding: 80px 20px; }
+    .cert-item { padding: 18px 24px; }
+    .cert-strip { padding: 40px 15px; gap: 16px; }
+}
+/* Global Page Reveal */
+body.loaded #pwb-body-wrap {
+    opacity: 1;
+    transform: translateY(0);
+}
+#pwb-body-wrap {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Scroll-reveal base states */
+.reveal-row {
+    opacity: 0;
+    transform: translateY(60px) scale(0.98);
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-row.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+.reveal-pill {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-pill.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+.reveal-sidebar {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-sidebar.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+.reveal-fade {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+.reveal-fade.visible { opacity: 1; }
+
+/* Enhanced Glassmorphism & Hover */
+.portfolio-row {
+    background: rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 28px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    perspective: 1200px;
+}
+
+.portfolio-row::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,107,0,0.08) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+}
+
+.portfolio-row:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 107, 0, 0.25) !important;
+    transform: translateY(-10px) rotateX(1.5deg);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+
+.portfolio-row:hover::before { opacity: 1; }
+
+.portfolio-row-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: none !important;
+}
+
+.portfolio-row:hover .portfolio-row-img { transform: scale(1.04); }
+
+.portfolio-row-title { color: #fff !important; font-size: 1.6rem; letter-spacing: -0.5px; margin: 0; }
+.portfolio-row-desc { color: rgba(255,255,255,0.75) !important; font-size: 1rem; line-height: 1.6; }
+
+
+/* Proven Experience Enhancement */
+.clients-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 0 5% 100px;
+}
+
+.client-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 24px;
+    padding: 44px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity: 0;
+    transform: translateY(50px) scale(0.94);
+}
+
+.client-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+.client-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 107, 0, 0.2);
+    transform: translateY(-14px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(255,107,0,0.05);
+}
+
+.client-card-logo {
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
+    margin-bottom: 24px;
+    filter: none !important; /* Force colors */
+    transition: transform 0.6s cubic-bezier(0.2,0.8,0.2,1);
+}
+
+.client-card:hover .client-card-logo { transform: scale(1.15) rotate(4deg); }
+
+.client-card-name { font-size: 1.25rem; font-weight: 600; color: #fff !important; margin-bottom: 8px; }
+.client-card-type { font-size: 0.75rem; color: rgba(255,255,255,0.6) !important; text-transform: uppercase; letter-spacing: 2px; }
+
+/* Cert Strip Enhancement - Subtle Smudge Style */
+.cert-strip { display: flex; gap: 32px; justify-content: center; padding: 60px 5%; align-items: stretch; }
+.cert-item {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 28px 36px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    opacity: 0.4;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cert-item.visible { opacity: 0.6; }
+.cert-item:hover {
+    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateY(-4px);
+}
+.cert-logo { height: 56px; filter: grayscale(1) brightness(1.2) !important; opacity: 0.7; transition: all 0.5s ease; }
+.cert-item:hover .cert-logo { filter: none !important; opacity: 1; transform: scale(1.05); }
+
+
+
+@media (max-width: 768px) {
+    #portfolio-section {
+        flex-direction: column;
+        padding: 60px 18px;
+        gap: 36px;
+    }
+    .portfolio-sidebar {
+        position: static;
+        flex: unset;
+        width: 100%;
+    }
+    .portfolio-rows-wrap {
+        grid-template-columns: 1fr;
+    }
+    .portfolio-row-img { width: 100%; height: 150px; }
+    .portfolio-row:hover { transform: translateY(-4px); }
+    #clients-marquee-section { padding: 60px 18px; }
+    #clients-marquee-section h2 { font-size: 2rem !important; }
+    .clients-card-grid { grid-template-columns: 1fr; gap: 14px; }
+    .client-card { padding: 28px 16px 24px; }
+    .client-card-logo { width: 56px; height: 56px; }
+    .cert-strip { gap: 12px; padding: 30px 15px; flex-direction: column; align-items: stretch; }
+    .cert-item { width: 100%; padding: 18px 20px; }
+}
 </style>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Body reveal
+    setTimeout(() => document.body.classList.add("loaded"), 100);
+
+    /* Cursor-tracked glow on portfolio cards */
+    document.querySelectorAll(".portfolio-row").forEach(row => {
+        row.addEventListener("mousemove", e => {
+            const r = row.getBoundingClientRect();
+            row.style.setProperty("--mx", `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
+            row.style.setProperty("--my", `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
+        });
+    });
+
+    /* Global Scroll Observer */
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal-row, .reveal-sidebar, .reveal-fade, .client-card, .cert-item")
+        .forEach(el => revealObserver.observe(el));
+});
+
+/* ROBUST SCROLL FUNCTION FOR MDF FRAMEWORK */
+window.mdfScroll = function(event, id) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  // Small delay to let framework animations settle
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const header = document.querySelector('#ihkww7');
+    const headerHeight = header ? header.offsetHeight : 110;
+    
+    // Most reliable document-absolute top
+    const actualTop = el.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = actualTop - headerHeight - 40;
+    
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+  }, 50);
+};
+</script>
         
 
         <div id="pwb-body-wrap">
-          <div id="ip1j" class="pwb-background pwb-flex-grid-wrap"><div id="ip6d1d" class="pw-block-style"><img src="images/overlay.webp" loading="eager" id="ilioas" class="pw-image-style"></div><div id="ip6d1d-2" class="pw-block-style"><img src="images/overlay2.webp" loading="lazy" id="ilioas-2" class="pw-image-style"></div><div id="ijsk" class="pwb-scene"></div></div><div id="ihkww7" class="pwb-flex-grid-wrap"><div id="i1lwz-3" class="pwb-flex-grid-wrap"><div id="imob0j-3-3-2" class="framer-1cc0f02"><div id="i1lwz-2-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWithText.svg" loading="lazy" class="mdf-logo-full"></div></div><div id="imob0j-3-3-2-2" class="framer-1cc0f02"><div id="i1lwz-2-3-3-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-3" data-has-states="1">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2" data-has-states="1">Capabilities</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2" data-has-states="1">Contact</div></div></div><div id="imob0j-3-3-2-2-2" class="framer-1cc0f02"><div id="i1lwz-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2">View on GeM Portal</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df" class="pw-image-style"></div></div></div></div><div id="ihkww7-3" class="pwb-flex-grid-wrap"><div id="i1lwz-3-2" class="pwb-flex-grid-wrap"><div id="iy2h61-2" class="pwb-relative-overlay"><div id="i8rrfy-2-2" class="pw-block-style"><div id="iqi1yy-2" class="pw-block-style"><div id="i1lwz-2-3-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWithText.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f-3-2" class="pw-block-style"><div id="i53c6f-2-3-2" class="pw-block-style"></div><div id="i53c6f-2-2-2-2" class="pw-block-style"></div></div></div><div id="i1lwz-2-3-3-2-2-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2-2-2">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2">Capabilities</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2-2-2">Contact</div></div></div></div></div></div><div id="ihkww7-2" class="pwb-flex-grid-wrap"><div id="i8rrfy" class="pw-block-style"><div id="i1lwz-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWithText.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f" class="pw-block-style"><div id="i53c6f-2" class="pw-block-style"></div><div id="i53c6f-2-2" class="pw-block-style"></div></div></div></div><div id="i3owk" class="pwb-anchor"></div><div id="i84ba" class="pwb-flex-grid-wrap"><div id="i1lwz-6" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a"><span id="ik8f8h">/ </span>Scroll down</p><div id="i1lwz-2-8-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-8-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-2-5-2-2" style="font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px;">Sport. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Fitness.</span><br>Music. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Awards.</span><br><span style="font-family: 'Helvetica Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: #FF6B00; font-weight: 600; display: block; margin-top: 25px; font-style: normal;">Engineered for Reliability.</span></div><div id="i1lwz-2-2-2-2-2-2-3" class="pwb-flex-grid-wrap"><div id="i1lwz-2-2-2-2-2-2-4" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2-4">View on GeM Portal</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-3" class="pw-image-style"></div><div id="i1lwz-2-2-2-2-2-2-3-3" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2-3-3">View Capabilities</div></div></div></div></div><div id="i1lwz-2-8-2-2-2" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3" class="pw-user-text-style-93533a5b-578a-4ac8-a6d4-64a0f7083c13">A premier institutional supplier bridging the gap between global brands and government needs. Sturdy. Weighted. Engineered.</p></div></div></div><div id="i3owk-2" class="pwb-anchor"></div><div id="ilwyn" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4" class="pwb-flex-grid-wrap"><div id="i3n9rh-2-2" class="pw-block-style"><h5 id="ispyh-2-3-2-3-2-2-2-3" class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee">OUR MISSION</h5><div id="i3n9rh-2" class="pw-block-style"></div><h2 id="ispyh-2-2-2" class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da">We specialize in institutional supply for government and private organizations. From sports equipment to musical instruments, we provide engineered solutions for growth.</h2></div></div></div><div id="i3owk-2-2" class="pwb-anchor"></div><div id="injpw-2-2-3" class="pwb-flex-grid-wrap"></div><div id="i3owk-2-3" class="pwb-anchor"></div><div id="injpw-2-2-2-2" class="pwb-flex-grid-wrap"></div>
+          <div id="ip1j" class="pwb-background pwb-flex-grid-wrap"><div id="ip6d1d" class="pw-block-style"><img src="images/overlay.webp" loading="eager" id="ilioas" class="pw-image-style"></div><div id="ip6d1d-2" class="pw-block-style"><img src="images/overlay2.webp" loading="lazy" id="ilioas-2" class="pw-image-style"></div><div id="ijsk" class="pwb-scene"></div></div><div id="ihkww7" class="pwb-flex-grid-wrap"><div id="i1lwz-3" class="pwb-flex-grid-wrap"><div id="imob0j-3-3-2" class="framer-1cc0f02"><div id="i1lwz-2-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="eager" class="mdf-logo-full"></div></div><div id="imob0j-3-3-2-2" class="framer-1cc0f02"><div id="i1lwz-2-3-3-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-3" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'ilwyn')">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2" data-has-states="1" style="cursor:pointer;" onclick="mdfScroll(event, 'footer-extra')">Contact</div></div></div><div id="imob0j-3-3-2-2-2" class="framer-1cc0f02"><div id="i1lwz-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2" style="text-align: center; line-height: 1.1;">View on GeM<br>Portal</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df" class="pw-image-style"></div></div></div></div><div id="ihkww7-3" class="pwb-flex-grid-wrap"><div id="i1lwz-3-2" class="pwb-flex-grid-wrap"><div id="iy2h61-2" class="pwb-relative-overlay"><div id="i8rrfy-2-2" class="pw-block-style"><div id="iqi1yy-2" class="pw-block-style"><div id="i1lwz-2-3-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f-3-2" class="pw-block-style"><div id="i53c6f-2-3-2" class="pw-block-style"></div><div id="i53c6f-2-2-2-2" class="pw-block-style"></div></div></div><div id="i1lwz-2-3-3-2-2-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-3-2-2-2-2-2-2-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'ilwyn')">About</div><div id="ispyh-2-3-2-3-2-2-2-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')">Our Clients</div><div id="ispyh-2-3-2-3-2-2-2-2-2-3-2-2-2" style="cursor:pointer;" onclick="mdfScroll(event, 'footer-extra')">Contact</div></div></div></div></div></div><div id="ihkww7-2" class="pwb-flex-grid-wrap"><div id="i8rrfy" class="pw-block-style"><div id="i1lwz-2-3-2" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i53c6f" class="pw-block-style"><div id="i53c6f-2" class="pw-block-style"></div><div id="i53c6f-2-2" class="pw-block-style"></div></div></div></div><div id="i3owk" class="pwb-anchor"></div><div id="i84ba" class="pwb-flex-grid-wrap"><div id="i1lwz-6" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a"><span id="ik8f8h">/ </span>Scroll down</p><div id="i1lwz-2-8-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-8-2-2" class="pwb-flex-grid-wrap"><div id="ispyh-2-2-5-2-2" style="font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px;">Sport. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Fitness.</span><br>Music. <span style="font-style: italic; color: rgba(255,255,255,0.7);">Awards.</span><br><span style="font-family: 'Helvetica Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: #FF6B00; font-weight: 600; display: block; margin-top: 25px; font-style: normal;">Engineered for Reliability.</span></div><div id="i1lwz-2-2-2-2-2-2-3" class="pwb-flex-grid-wrap"><div id="i1lwz-2-2-2-2-2-2-4" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-brands-anchor')"><div id="ispyh-2-3-2-2-2-2-4" style="text-align: center; line-height: 1.1;">Brands<br>We Deal In</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-3" class="pw-image-style"></div><div id="i1lwz-2-2-2-2-2-2-3-3" data-has-states="1" class="pwb-flex-grid-wrap" style="cursor:pointer;" onclick="mdfScroll(event, 'mdf-clients-anchor')"><div id="ispyh-2-3-2-2-2-2-3-3">View Clients</div></div></div></div></div><div id="i1lwz-2-8-2-2-2" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-3-3-2-3" class="pw-user-text-style-93533a5b-578a-4ac8-a6d4-64a0f7083c13">A premier institutional supplier bridging the gap between global brands and government needs. Sturdy. Weighted. Engineered.</p></div></div></div><div id="i3owk-2" class="pwb-anchor"></div><div id="ilwyn" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4" class="pwb-flex-grid-wrap"><div id="i3n9rh-2-2" class="pw-block-style"><h5 id="ispyh-2-3-2-3-2-2-2-3" class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee">OUR MISSION</h5><div id="i3n9rh-2" class="pw-block-style"></div><h2 id="ispyh-2-2-2" class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da">We specialize in <span style="color:#FF6B00;">institutional supply</span> for government and private organizations. From sports equipment to musical instruments, we provide <span style="color:#FF6B00;">engineered solutions</span> for growth.</h2></div></div></div><div id="i3owk-2-2" class="pwb-anchor"></div><div id="injpw-2-2-3" class="pwb-flex-grid-wrap"></div><div id="i3owk-2-3" class="pwb-anchor"></div><div id="injpw-2-2-2-2" class="pwb-flex-grid-wrap"></div>
 
 <!-- BRANDS SCROLLING SECTION -->
-<section id="brands-section" class="brands-slider">
-  <h5>THE BRANDS WE DEAL IN</h5>
+<div id="mdf-brands-anchor" style="position:relative; top:-20px;"></div>
+<section id="mdf-brands-section" class="brands-slider">
+  <h5>THE Brands<br>We Deal In</h5>
   <div class="brands-slider-track">
     <!-- First set -->
     <img src="images/brands/JonexLogo.jpg" alt="Jonex">
@@ -545,135 +1269,142 @@ html, body {
   </div>
 </section>
 
-<div id="ilwyn-4-2-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4-4-3-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4-4-2-3-2" class="pwb-flex-grid-wrap"><div id="i3oqmq-2-3-2" class="pw-rows-style"><div id="i3oqmq-2-2-3-2" class="pw-rows-style"><h5 id="ispyh-2-3-2-3-2-2-2-3-3-3-2" class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee">OUR PORTFOLIO</h5><h2 id="ispyh-2-2-2-5-2-3-3-2" class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da"><span id="ilz9xo" style="color:#FF6B00">Diverse</span> Supply for <br id="ijauym">Every Need.</h2><div id="i1lwz-2-2-2-2-2-2-3-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap"><div id="ispyh-2-3-2-2-2-2-3-2-2-2">View Full List</div><img src="fonts/group-1597882162_1.svg" loading="lazy" id="igs5df-3-2-2-2" class="pw-image-style"></div></div></div><div id="i1lwz-2-4-4-2-2-2-2" class="pwb-flex-grid-wrap"><p id="ispyh-2-2-2-5-2-2-2-2-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">We provide specialised procurement categories designed for diverse organisational needs, bridging global standards with local institutional execution.</p><div id="ionv0l-2-2" class="pw-block-style"><div id="idk01s-3-2" class="pw-rows-style" style="gap:20px; display:flex; flex-direction:column; max-width: 500px;">
-      <!-- Sports -->
-      <div style="display:flex; align-items:center; gap:25px; padding:25px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; transition:all 0.3s ease; backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateX(10px)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)'">
-        <img src="images/sportsGoods.jpg" alt="Sports" style="width:65px; height:65px; object-fit:cover; border-radius:14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <div>
-          <h4 style="color:white; font-family:'Helvetica Neue', sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:1px; margin:0 0 6px 0;">SPORTS GOODS</h4>
-          <p style="color:rgba(255,255,255,0.5); margin:0; font-size:0.95rem; line-height:1.4;">Professional gear &amp; setups.</p>
-        </div>
-      </div>
-      <!-- Fitness -->
-      <div style="display:flex; align-items:center; gap:25px; padding:25px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; transition:all 0.3s ease; backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateX(10px)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)'">
-        <img src="images/fitness.jpg" alt="Fitness" style="width:65px; height:65px; object-fit:cover; border-radius:14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <div>
-          <h4 style="color:white; font-family:'Helvetica Neue', sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:1px; margin:0 0 6px 0;">FITNESS</h4>
-          <p style="color:rgba(255,255,255,0.5); margin:0; font-size:0.95rem; line-height:1.4;">Commercial gym machinery.</p>
-        </div>
-      </div>
-      <!-- Music -->
-      <div style="display:flex; align-items:center; gap:25px; padding:25px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; transition:all 0.3s ease; backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateX(10px)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)'">
-        <img src="images/music.jpg" alt="Music" style="width:65px; height:65px; object-fit:cover; border-radius:14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <div>
-          <h4 style="color:white; font-family:'Helvetica Neue', sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:1px; margin:0 0 6px 0;">MUSIC</h4>
-          <p style="color:rgba(255,255,255,0.5); margin:0; font-size:0.95rem; line-height:1.4;">High fidelity school instruments.</p>
-        </div>
-      </div>
-      <!-- Awards -->
-      <div style="display:flex; align-items:center; gap:25px; padding:25px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; transition:all 0.3s ease; backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateX(10px)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)'">
-        <img src="images/awards.jpg" alt="Awards" style="width:65px; height:65px; object-fit:cover; border-radius:14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <div>
-          <h4 style="color:white; font-family:'Helvetica Neue', sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:1px; margin:0 0 6px 0;">AWARDS</h4>
-          <p style="color:rgba(255,255,255,0.5); margin:0; font-size:0.95rem; line-height:1.4;">Custom trophies and medals.</p>
-        </div>
-      </div></div></div></div></div></div></div></div><div id="injpw-2-2" class="pwb-flex-grid-wrap"></div>
+<!-- Duplicate portfolio section removed -->
+<div id="injpw-2-2" class="pwb-flex-grid-wrap"></div>
 
-<!-- GOVERNMENT CLIENTS SECTION (Ascend Minimal Style) -->
-<div id="govt-clients" class="pwb-flex-grid-wrap" style="padding: 120px 20px; z-index: 10; position: relative; max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 80px; align-items: center;">
-  
-  <!-- Left Column: Headers -->
-  <div style="flex: 1; min-width: 320px;">
-    <h5 class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee" style="margin-bottom: 25px; letter-spacing: 2px;">PROVEN EXPERIENCE</h5>
-    <h2 class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da" style="font-size: 3.8rem; line-height: 1.1; margin-bottom: 40px; font-family: 'Playfair Display', serif; font-weight: 500;">
-      Trusted by <br>
-      <span style="font-style: italic; color: rgba(255,255,255,0.8);">Institutions</span> &<br>
-      <span style="font-style: italic; color: rgba(255,255,255,0.8);">Departments.</span>
+<!-- OUR PORTFOLIO: ASCEND STICKY SIDEBAR STYLE -->
+<section id="portfolio-section">
+  <!-- Left sidebar: sticky -->
+  <div class="portfolio-sidebar reveal-sidebar">
+    <h5 class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee" style="margin-bottom:20px;">OUR PORTFOLIO</h5>
+    <h2 class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da" style="font-size:3.2rem;line-height:1.1;margin-bottom:30px;">
+      <span style="color:#FF6B00;">Diverse</span><br>Supply for<br><span style="color: rgba(255,255,255,0.55);">Every Need.</span>
     </h2>
-    <div style="display:inline-flex; align-items:center; gap:12px; padding: 16px 32px; background: white; border-radius: 12px; color: black; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-      Get Started
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+    <p style="color:rgba(255,255,255,0.6);font-size:0.97rem;line-height:1.75;font-family:'Helvetica Neue',sans-serif;margin-bottom:36px;">We provide specialised procurement categories designed for diverse organisational needs, bridging global standards with local institutional execution.</p>
+    <div id="i1lwz-2-2-2-2-2-2-3-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap" style="max-width:200px;"><div id="ispyh-2-3-2-2-2-2-3-2-2-2">View Full List</div><img src="fonts/group-1597882162_1.svg" loading="lazy" id="igs5df-3-2-2-2" class="pw-image-style"></div>
+  </div>
+  <!-- Right: scrolling rows -->
+  <div class="portfolio-rows-wrap">
+    <div class="portfolio-row reveal-row" data-delay="0">
+      <img class="portfolio-row-img" src="images/sportsGoods.png" alt="Sports Goods" />
+      <div class="portfolio-row-text">
+        <p class="portfolio-row-num">01</p>
+        <h3 class="portfolio-row-title">Sports Goods</h3>
+        <p class="portfolio-row-desc">Professional gear &amp; setups spanning all sports categories for institutions and departments.</p>
+      </div>
+    </div>
+    <div class="portfolio-row reveal-row" data-delay="100">
+      <img class="portfolio-row-img" src="images/fitness.png" alt="Fitness" />
+      <div class="portfolio-row-text">
+        <p class="portfolio-row-num">02</p>
+        <h3 class="portfolio-row-title">Fitness Equipment</h3>
+        <p class="portfolio-row-desc">Commercial gym machinery and full-facility setups for universities and government bodies.</p>
+      </div>
+    </div>
+    <div class="portfolio-row reveal-row" data-delay="200">
+      <img class="portfolio-row-img" src="images/music.png" alt="Music" />
+      <div class="portfolio-row-text">
+        <p class="portfolio-row-num">03</p>
+        <h3 class="portfolio-row-title">Musical Instruments</h3>
+        <p class="portfolio-row-desc">High fidelity school instruments and orchestral arrangements at institutional scale.</p>
+      </div>
+    </div>
+    <div class="portfolio-row reveal-row" data-delay="300">
+      <img class="portfolio-row-img" src="images/awards.png" alt="Awards" />
+      <div class="portfolio-row-text">
+        <p class="portfolio-row-num">04</p>
+        <h3 class="portfolio-row-title">Awards &amp; Trophies</h3>
+        <p class="portfolio-row-desc">Custom trophies, premium mementos and specialized medals for state and central departments.</p>
+      </div>
     </div>
   </div>
+</section>
+
+
+<!-- PROVEN EXPERIENCE: CARD GRID -->
+<div id="mdf-clients-anchor" style="position:relative; top:-20px;"></div>
+<section id="mdf-clients-section">
+  <p class="clients-marquee-label" style="font-size: 1rem !important; color: rgba(255,255,255,0.85) !important;">Trusted Partners &amp; Institutions</p>
   
-  <!-- Right Column: Staggered Cards Grid -->
-  <div style="flex: 1.2; min-width: 320px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
-    
-    <!-- Column 1 -->
-    <div style="display: flex; flex-direction: column; gap: 30px;">
-      <!-- Card 1 -->
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; transition: all 0.4s ease; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)'">
-        <img src="images/ys&s.jpg" alt="Youth Services" style="width: 80px; height: 80px; object-fit: contain; background: white; border-radius: 12px; padding: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-        <h3 style="color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 1.5rem; margin-bottom: 12px;">Youth Services <br>&amp; Sports</h3>
-        <p style="color: rgba(255,255,255,0.4); font-size: 0.95rem; line-height: 1.6;">High-volume setups across provincial districts.</p>
-      </div>
+  <!-- Heading centered above cards -->
+  <div style="text-align:center;padding:0 20px 56px;">
+    <h5 class="pw-user-text-style-1ada4437-3995-4878-8bdb-19cbcb2b87ee" style="margin-bottom:16px;">PROVEN EXPERIENCE</h5>
+    <h2 class="pw-user-text-style-4f5b583a-e7db-4022-aa23-07cd6938f7da" style="font-size:2.8rem;line-height:1.15; color: white !important;">
+      Trusted by <em style="color:#FF6B00;">Institutions</em> &amp; <em>Departments.</em>
+    </h2>
+  </div>
 
-      <!-- Card 3 -->
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; transition: all 0.4s ease; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)'">
-        <img src="images/ku.jpg" alt="Universities" style="width: 80px; height: 80px; object-fit: contain; background: white; border-radius: 12px; padding: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-        <h3 style="color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 1.5rem; margin-bottom: 12px;">Universities <br>&amp; Schools</h3>
-        <p style="color: rgba(255,255,255,0.4); font-size: 0.95rem; line-height: 1.6;">Turnkey packages for massive student populations.</p>
-      </div>
+
+  <div class="clients-card-grid">
+    <div class="client-card" style="transition-delay: 0s;">
+      <img class="client-card-logo" src="images/dyssLogo.png" alt="DYSS">
+      <span class="client-card-name">Youth Services &amp; Sports</span>
+      <span class="client-card-type">Government</span>
     </div>
-
-    <!-- Column 2 (Offset by 80px down) -->
-    <div style="display: flex; flex-direction: column; gap: 30px; transform: translateY(80px);">
-      <!-- Card 2 -->
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; transition: all 0.4s ease; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)'">
-        <img src="images/jkp.jpg" alt="State Defense" style="width: 80px; height: 80px; object-fit: contain; background: white; border-radius: 12px; padding: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-        <h3 style="color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 1.5rem; margin-bottom: 12px;">State Defense <br>&amp; Police</h3>
-        <p style="color: rgba(255,255,255,0.4); font-size: 0.95rem; line-height: 1.6;">Procurement and installation of specialized gear.</p>
-      </div>
+    <div class="client-card" style="transition-delay: 0.08s;">
+      <img class="client-card-logo" src="images/kuLogo.png" alt="KU">
+      <span class="client-card-name">Kashmir University</span>
+      <span class="client-card-type">University</span>
     </div>
+    <div class="client-card" style="transition-delay: 0.16s;">
+      <img class="client-card-logo" src="images/jkpLogo.png" alt="JKP">
+      <span class="client-card-name">J&amp;K Police</span>
+      <span class="client-card-type">Law Enforcement</span>
+    </div>
+    <div class="client-card" style="transition-delay: 0.24s;">
+      <img class="client-card-logo" src="images/crpfLogo.png" alt="CRPF">
+      <span class="client-card-name">CRPF</span>
+      <span class="client-card-type">Paramilitary</span>
+    </div>
+    <div class="client-card" style="transition-delay: 0.32s;">
+      <img class="client-card-logo" src="images/gmcLogo.png" alt="GMC">
+      <span class="client-card-name">Govt. Medical College</span>
+      <span class="client-card-type">Medical</span>
+    </div>
+    <div class="client-card" style="transition-delay: 0.4s;">
+      <img class="client-card-logo" src="images/skaustLogo.png" alt="SKUAST">
+      <span class="client-card-name">SKUAST</span>
+      <span class="client-card-type">University</span>
+    </div>
+    <div class="client-card" style="transition-delay: 0.48s;">
+      <img class="client-card-logo" src="images/dsekLogo.png" alt="DSEK">
+      <span class="client-card-name">DSEK</span>
+      <span class="client-card-type">Education</span>
+    </div>
+    <div class="client-card" style="transition-delay: 0.56s;">
+      <img class="client-card-logo" src="images/clusterUniLogo.png" alt="Cluster Uni">
+      <span class="client-card-name">Cluster University</span>
+      <span class="client-card-type">University</span>
+    </div>
+  </div>
+</section>
 
-  </div>
-</div>
-<!-- IMPACT STATS SECTION -->
-<div class="stats-section">
-  <div class="stat-item">
-    <div class="stat-number">500+</div>
-    <div class="stat-label">Orders Fulfilled</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">15+</div>
-    <div class="stat-label">Departments Served</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">50+</div>
-    <div class="stat-label">Product Categories</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">7+</div>
-    <div class="stat-label">Years of Experience</div>
-  </div>
-</div>
-
-<!-- TRUST BADGES -->
-<div class="trust-badges">
-  <div class="trust-badge-item">
-    <div class="trust-badge-icon">🏛️</div>
-    <div class="trust-badge-text">
+<div class="cert-strip">
+  <div class="cert-item">
+    <img class="cert-logo" src="images/gemLogo.png" alt="GeM" />
+    <div class="cert-text">
       <strong>GeM Registered</strong>
       <span>Government e-Marketplace</span>
     </div>
   </div>
-  <div class="trust-badge-item">
-    <div class="trust-badge-icon">🏢</div>
-    <div class="trust-badge-text">
+  <div class="cert-item">
+    <img class="cert-logo" src="images/msmeLogo.png" alt="MSME" />
+    <div class="cert-text">
       <strong>MSME Certified</strong>
       <span>Ministry of MSME, India</span>
     </div>
   </div>
-  <div class="trust-badge-item">
-    <div class="trust-badge-icon">✅</div>
-    <div class="trust-badge-text">
-      <strong>Verified Supplier</strong>
+  <div class="cert-item">
+    <img class="cert-logo" src="images/verifiedLogo.png" alt="Verified" />
+    <div class="cert-text">
+      <strong style="color:#FF6B00;">Verified Supplier</strong>
       <span>Quality Assured Products</span>
     </div>
   </div>
 </div>
 
-<div id="i3owk-2-2-2-3" class="pwb-anchor"></div><div id="injpw-2" class="pwb-flex-grid-wrap"></div><div id="injpw" class="pwb-flex-grid-wrap">                <div id="i1lwz-4" class="pwb-flex-grid-wrap"><div id="i1lwz-2-5" class="pwb-flex-grid-wrap"><h4 id="ispyh-2-2-3">Ready to Establish a <span id="i20jsj" style="color:#FF6B00">Supply Partnership</span>?</h4><div id="i1lwz-2-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap" onclick="window.open('https://wa.me/917006252334', '_blank')" style="cursor: pointer;"><div id="ispyh-2-3-2-2-2-2-2">Chat on WhatsApp</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-2" class="pw-image-style"></div></div></div><div id="i1lwz-2-4-2-3-3-4-4" class="pwb-flex-grid-wrap"><div id="i1hfpg" class="pw-block-style"></div><div id="i1lwz-2-4-2-2-3-4-5-4" class="pwb-flex-grid-wrap"><div id="ipkvji-4-5-4-3" class="pw-block-style"><div id="i1lwz-3-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWithText.svg" loading="lazy" class="mdf-logo-full"></div><div id="i1lwz-2-3-2-2" class="pwb-flex-grid-wrap"><h3 id="ispyh-2-3-2-3-3-2-2-2" class="pw-user-text-style-c0d0ba18-0dc2-4422-8d4b-5cfd589e5cf3">Streamline your next <br id="i768yz">major procurement today.<br id="i5ctmj"></h3><div id="iq4gp4" class="pw-embed-style pwb-embed"><!-- Copy-to-clipboard Email (Desktop underline -> tooltip, Mobile underline -> text) -->
+
+<div id="i3owk-2-2-2-3" class="pwb-anchor"></div><div id="injpw-2" class="pwb-flex-grid-wrap"></div><div id="injpw" class="pwb-flex-grid-wrap">                <div id="i1lwz-4" class="pwb-flex-grid-wrap"><div id="i1lwz-2-5" class="pwb-flex-grid-wrap"><h4 id="ispyh-2-2-3">Ready to Establish a <span id="i20jsj" style="color:#FF6B00">Supply Partnership</span>?</h4><div id="i1lwz-2-2-2-2-2-2-2" data-has-states="1" class="pwb-flex-grid-wrap" onclick="window.open('https://wa.me/917006252334', '_blank')" style="cursor: pointer;"><div id="ispyh-2-3-2-2-2-2-2">Chat on WhatsApp</div><img src="fonts/group-1597882162.svg" loading="lazy" id="igs5df-2" class="pw-image-style"></div></div></div><div id="i1lwz-2-4-2-3-3-4-4" class="pwb-flex-grid-wrap"><div id="i1hfpg" class="pw-block-style"></div><div id="i1lwz-2-4-2-2-3-4-5-4" class="pwb-flex-grid-wrap"><div id="ipkvji-4-5-4-3" class="pw-block-style"><div id="i1lwz-3-3" class="pwb-flex-grid-wrap"><img src="images/mdfLogoWtext.svg" loading="lazy" class="mdf-logo-full"></div><div id="i1lwz-2-3-2-2" class="pwb-flex-grid-wrap"><h3 id="ispyh-2-3-2-3-3-2-2-2" class="pw-user-text-style-c0d0ba18-0dc2-4422-8d4b-5cfd589e5cf3">Streamline your next <br id="i768yz">major procurement today.<br id="i5ctmj"></h3><div id="iq4gp4" class="pw-embed-style pwb-embed"><!-- Copy-to-clipboard Email (Desktop underline -> tooltip, Mobile underline -> text) -->
 <button class="copy-email pw-user-text-style-c0d0ba18-0dc2-4422-8d4b-5cfd589e5cf3" type="button" data-copy="mdfenterprisesjk@gmail.com">
   <span class="copy-email__text">mdfenterprisesjk@gmail.com</span>
 
@@ -849,10 +1580,11 @@ html, body {
     });
   })();
 </script>
-</div></div></div><div id="ipkvji-4-3-4-4-3" class="pw-block-style"><div id="ipkvji-4-3-4-4-3-2" class="pw-block-style"><p id="ispyh-2-2-2-4-4-2-4-4-4-2">Quick Links</p><div id="ipkvji-4-3-4-4-3-2-3" class="pw-block-style"><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-3" data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">About</p><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-3-2" data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Clients</p><p data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Capabilities</p><p data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Contact</p></div></div></div></div>
+</div></div></div><div id="ipkvji-4-3-4-4-3" class="pw-block-style"><div id="ipkvji-4-3-4-4-3-2" class="pw-block-style"><p id="ispyh-2-2-2-4-4-2-4-4-4-2">Quick Links</p><div id="ipkvji-4-3-4-4-3-2-3" class="pw-block-style"><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-3" data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">About</p><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-3-2" data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Our Clients</p><p data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Our Clients</p><p data-has-states="1" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">Contact</p></div></div></div></div>
 
 <!-- FOOTER EXPANSION -->
-<div class="footer-extra">
+<div id="footer-extra" class="footer-extra">
+
   <div class="footer-col">
     <h6>Contact</h6>
     <a href="mailto:mdfenterprisesjk@gmail.com">mdfenterprisesjk@gmail.com</a>
@@ -878,89 +1610,131 @@ html, body {
 <div id="i1lwz-2-4-2-3-3-4-4-2" class="pwb-flex-grid-wrap"><div id="i1lwz-2-4-2-2-3-4-5-4-2" class="pwb-flex-grid-wrap"><div id="i1hfpg-2" class="pw-block-style"></div><div id="ipkvji-4-3-4-4-3-2-4-2" class="pw-block-style"><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-2-2-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a">© 2026 MDF Enterprises. All rights reserved.</p><div id="ipkvji-4-3-4-4-3-2-3-2-2" class="pw-block-style" style="display: flex; flex-direction: column; align-items: flex-end;"><p id="ispyh-2-2-2-4-4-2-4-4-4-2-3-2-2" class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a" style="margin-bottom: 5px;">mdfenterprisesjk@gmail.com</p><p class="pw-user-text-style-0ce81189-3af1-4e76-a606-5aac001d2c5a" style="color: rgba(255,255,255,0.7);">+91 70062 52334</p></div></div></div></div></div></div><div id="i3owk-2-2-2-2" class="pwb-anchor"></div>
         </div>
         </div>
-        <div id="pwb-loading-wrap"><div id="im3p5" class="pwb-flex-grid-wrap"><div id="ipfgh7" class="pw-block-style" style="display:flex; justify-content:center; align-items:center;">
-          <div class="loader">
-            <div class="box1"></div>
-            <div class="box2"></div>
-            <div class="box3"></div>
+        <div id="pwb-loading-wrap"><div id="im3p5" class="pwb-flex-grid-wrap"><div id="ipfgh7" class="pw-block-style" style="display:flex; flex-direction: column; justify-content:center; align-items:center; gap: 32px;">
+
+          <!-- MDF Logo on loader -->
+          <img src="images/mdfLogoWtext.svg" alt="MDF Enterprises" style="height: 180px; opacity: 0.95; margin-bottom: 24px;">
+
+
+          <div class="loadingspinner">
+            <div id="square1"></div>
+            <div id="square2"></div>
+            <div id="square3"></div>
+            <div id="square4"></div>
+            <div id="square5"></div>
           </div>
+
 <style>
-.loader {
-  width: 112px;
-  height: 112px;
+.loadingspinner {
+  --square: 26px;
+  --offset: 30px;
+  --duration: 2.4s;
+  --delay: 0.2s;
+  --timing-function: ease-in-out;
+  --in-duration: 0.4s;
+  --in-delay: 0.1s;
+  --in-timing-function: ease-out;
+  width: calc( 3 * var(--offset) + var(--square));
+  height: calc( 2 * var(--offset) + var(--square));
+  padding: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  position: relative;
 }
-
-.box1,
-.box2,
-.box3 {
-  background-color: #c1c1c1;
-  border-radius: 10px;
-  box-sizing: border-box;
+.loadingspinner div {
+  display: inline-block;
+  background: darkorange;
+  border: none;
+  border-radius: 2px;
+  width: var(--square);
+  height: var(--square);
   position: absolute;
-  display: block;
+  padding: 0px;
+  margin: 0px;
+  font-size: 6pt;
+  color: black;
 }
-
-.box1 {
-  width: 112px;
-  height: 48px;
-  margin-top: 64px;
-  margin-left: 0px;
-  animation: abox1 3s 1s forwards ease-in-out infinite;
+.loadingspinner #square1 {
+  left: calc( 0 * var(--offset) );
+  top: calc( 0 * var(--offset) );
+  animation: square1 var(--duration) var(--delay) var(--timing-function) infinite,
+             squarefadein var(--in-duration) calc(1 * var(--in-delay)) var(--in-timing-function) both;
 }
-
-.box2 {
-  width: 48px;
-  height: 48px;
-  margin-top: 0px;
-  margin-left: 0px;
-  animation: abox2 3s 1s forwards ease-in-out infinite;
+.loadingspinner #square2 {
+  left: calc( 0 * var(--offset) );
+  top: calc( 1 * var(--offset) );
+  animation: square2 var(--duration) var(--delay) var(--timing-function) infinite,
+             squarefadein var(--in-duration) calc(1 * var(--in-delay)) var(--in-timing-function) both;
 }
-
-.box3 {
-  width: 48px;
-  height: 48px;
-  margin-top: 0px;
-  margin-left: 64px;
-  animation: abox3 3s 1s forwards ease-in-out infinite;
+.loadingspinner #square3 {
+  left: calc( 1 * var(--offset) );
+  top: calc( 1 * var(--offset) );
+  animation: square3 var(--duration) var(--delay) var(--timing-function) infinite,
+             squarefadein var(--in-duration) calc(2 * var(--in-delay)) var(--in-timing-function) both;
 }
-
-@keyframes abox1 {
-  0% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  12.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  25% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
-  75% { width: 48px; height: 112px; margin-top: 0px; margin-left: 0px; }
-  87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+.loadingspinner #square4 {
+  left: calc( 2 * var(--offset) );
+  top: calc( 1 * var(--offset) );
+  animation: square4 var(--duration) var(--delay) var(--timing-function) infinite,
+             squarefadein var(--in-duration) calc(3 * var(--in-delay)) var(--in-timing-function) both;
 }
-
-@keyframes abox2 {
-  0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  25% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  37.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  50% { width: 112px; height: 48px; margin-top: 0px; margin-left: 0px; }
-  62.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
-  75% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
-  87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
-  100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+.loadingspinner #square5 {
+  left: calc( 3 * var(--offset) );
+  top: calc( 1 * var(--offset) );
+  animation: square5 var(--duration) var(--delay) var(--timing-function) infinite,
+             squarefadein var(--in-duration) calc(4 * var(--in-delay)) var(--in-timing-function) both;
 }
-
-@keyframes abox3 {
-  0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
-  12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
-  25% { width: 48px; height: 112px; margin-top: 0px; margin-left: 64px; }
-  37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
-  50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
-  62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
-  75% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
-  87.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
-  100% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
+@keyframes square1 {
+  0% { left: calc(0 * var(--offset)); top: calc(0 * var(--offset)); }
+  8.333% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square2 {
+  0% { left: calc(0 * var(--offset)); top: calc(1 * var(--offset)); }
+  8.333% { left: calc(0 * var(--offset)); top: calc(2 * var(--offset)); }
+  16.67% { left: calc(1 * var(--offset)); top: calc(2 * var(--offset)); }
+  25.00% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  83.33% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  91.67% { left: calc(1 * var(--offset)); top: calc(0 * var(--offset)); }
+  100% { left: calc(0 * var(--offset)); top: calc(0 * var(--offset)); }
+}
+@keyframes square3 {
+  0%,100% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  16.67% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+  25.00% { left: calc(1 * var(--offset)); top: calc(0 * var(--offset)); }
+  33.33% { left: calc(2 * var(--offset)); top: calc(0 * var(--offset)); }
+  41.67% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  66.67% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  75.00% { left: calc(2 * var(--offset)); top: calc(2 * var(--offset)); }
+  83.33% { left: calc(1 * var(--offset)); top: calc(2 * var(--offset)); }
+  91.67% { left: calc(1 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square4 {
+  0% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  33.33% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  41.67% { left: calc(2 * var(--offset)); top: calc(2 * var(--offset)); }
+  50.00% { left: calc(3 * var(--offset)); top: calc(2 * var(--offset)); }
+  58.33% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes square5 {
+  0% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  50.00% { left: calc(3 * var(--offset)); top: calc(1 * var(--offset)); }
+  58.33% { left: calc(3 * var(--offset)); top: calc(0 * var(--offset)); }
+  66.67% { left: calc(2 * var(--offset)); top: calc(0 * var(--offset)); }
+  75.00% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+  100% { left: calc(2 * var(--offset)); top: calc(1 * var(--offset)); }
+}
+@keyframes squarefadein {
+  0% { transform: scale(0.75); opacity: 0.0; }
+  100% { transform: scale(1.0); opacity: 1.0; }
 }
 </style>
+
 </div></div></div></div>
+
         
 
        <!-- Waterfall optimization -->
@@ -980,3 +1754,5 @@ html, body {
         
       
     </body></html>
+
+
