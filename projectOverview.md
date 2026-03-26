@@ -68,3 +68,4 @@ overlay.webp
 4. Design Philosophy
 The project aims for "Engineered Reliability." Everything on the screen—from the magnetic hover effects to the specific 1.8s scroll duration—is tuned to make the company look sturdy, weighted, and technologically advanced.
 
+
