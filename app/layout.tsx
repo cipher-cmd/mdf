@@ -10,6 +10,7 @@ import { ThemeProvider }  from '@/providers/ThemeProvider'
 import { CustomCursor }   from '@/components/ui/CustomCursor'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
 import { StickyCtaBand }  from '@/components/ui/StickyCtaBand'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -289,6 +290,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </LenisProvider>
           <WhatsAppButton />
           <StickyCtaBand />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
