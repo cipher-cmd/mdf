@@ -1,0 +1,16 @@
+import nextConfig from 'eslint-config-next';
+
+const eslintConfig = [
+  {
+    ignores: [
+      '**/.gstack/**',
+      '**/.next/**',
+      '**/out/**',
+      '**/build/**',
+      '**/next-env.d.ts',
+    ],
+  },
+  ...nextConfig,
+];
+
+export default eslintConfig;

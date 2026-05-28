@@ -15,7 +15,10 @@ const WA_SVG = (
 export function CtaBand() {
   const shouldReduce = useReducedMotion()
   const [isMob, setIsMob] = useState(false)
-  useEffect(() => { setIsMob(window.innerWidth < 1024) }, [])
+  useEffect(() => {
+    const handle = requestAnimationFrame(() => setIsMob(window.innerWidth < 1024))
+    return () => cancelAnimationFrame(handle)
+  }, [])
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const bgY = useTransform(scrollYProgress, [0, 1], (shouldReduce || isMob) ? [0, 0] : [-40, 40])

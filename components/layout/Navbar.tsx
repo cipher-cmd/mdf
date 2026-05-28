@@ -39,8 +39,8 @@ export function Navbar() {
 
   useEffect(() => {
     if (pathname !== '/') {
-      setActiveSection('')
-      return
+      const handle = requestAnimationFrame(() => setActiveSection(''))
+      return () => cancelAnimationFrame(handle)
     }
     const sectionIds = ['about', 'categories', 'brands', 'who-we-serve', 'process', 'clients', 'contact']
     const observer = new IntersectionObserver(

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { EASE } from '@/lib/animation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { products, type Product } from '@/lib/data/products'
 
@@ -122,12 +123,12 @@ export function FeaturedProducts() {
               Featured Products<span className="text-[#FF6B00]">.</span>
             </h2>
           </div>
-          <a
+          <Link
             href="/products"
             className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/40 hover:text-[#FF6B00] transition-colors flex items-center gap-2 shrink-0"
           >
             View All Products <ArrowUpRight size={14} />
-          </a>
+          </Link>
         </div>
 
         {/* Filter chips */}

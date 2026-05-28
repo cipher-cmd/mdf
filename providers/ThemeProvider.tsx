@@ -25,8 +25,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem('mdf-theme') as Theme | null
     const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
     const initial = stored ?? preferred
-    setTheme(initial)
-    document.documentElement.setAttribute('data-theme', initial)
+    const handle = requestAnimationFrame(() => {
+      setTheme(initial)
+      document.documentElement.setAttribute('data-theme', initial)
+    })
+    return () => cancelAnimationFrame(handle)
   }, [])
 
   function toggleTheme() {

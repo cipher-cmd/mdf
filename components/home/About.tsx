@@ -27,7 +27,8 @@ export function About() {
   const shouldReduce = useReducedMotion()
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
-    setIsMobile(window.innerWidth < 1024)
+    const handle = requestAnimationFrame(() => setIsMobile(window.innerWidth < 1024))
+    return () => cancelAnimationFrame(handle)
   }, [])
   const imgRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: imgRef, offset: ['start end', 'end start'] })

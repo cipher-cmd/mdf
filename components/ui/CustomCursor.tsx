@@ -22,8 +22,10 @@ export function CustomCursor() {
   const smooth = useRef({ x: -300, y: -300 })
   const rafId  = useRef<number>(0)
   const angle  = useRef(0)
-
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    const handle = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(handle)
+  }, [])
 
   useEffect(() => {
     if (!mounted) return
