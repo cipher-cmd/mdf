@@ -42,7 +42,7 @@ export function Footer() {
             {/* Wordmark */}
             <Link href="/" className="flex items-center gap-3 group mb-6 w-fit">
               <div className="relative h-11 w-11 flex-shrink-0">
-                <Image src="/images/mdfFavicon.png" alt="MDF Enterprises" fill className="object-contain" />
+                <Image src="/images/mdfFavicon.png" alt="MDF Enterprises" fill className="object-contain" sizes="44px" />
               </div>
               <div className="flex flex-col leading-none">
                 <span
@@ -181,7 +181,7 @@ export function Footer() {
             © {new Date().getFullYear()} MDF Enterprises, Srinagar. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
-            <p className="text-[11px] text-white/40 tracking-[0.12em] uppercase">
+            <p className="text-[11px] text-white/60 tracking-[0.12em] uppercase">
               Sports · Fitness · Music · Awards
             </p>
           </div>

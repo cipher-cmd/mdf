@@ -37,7 +37,7 @@ export function BrandPartners() {
               Authorised Stock<span className="text-[#C89B5E]">.</span>
             </h2>
           </div>
-          <p className="text-white/40 text-[14px] leading-relaxed max-w-[280px]">
+          <p className="text-white/60 text-[14px] leading-relaxed max-w-[280px]">
             Authorised dealers for India&apos;s most trusted sports, fitness and equipment brands — genuine stock, every time.
           </p>
         </div>

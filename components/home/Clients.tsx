@@ -70,7 +70,7 @@ export function Clients() {
             Trusted by Institutions<br />
             &amp; Departments<span className="text-[#C89B5E]">.</span>
           </h2>
-          <p className="text-white/40 text-[15px] mt-4 max-w-[520px] mx-auto leading-relaxed">
+          <p className="text-white/60 text-[15px] mt-4 max-w-[520px] mx-auto leading-relaxed">
             From J&K Police to universities, government hospitals to defence forces — institutions across the valley rely on MDF.
           </p>
         </div>

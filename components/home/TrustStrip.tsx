@@ -124,7 +124,7 @@ export function TrustStrip() {
         <InfiniteMarquee speed={45} pauseOnHover={false} className="py-0">
           {tickerItems.map((item, i) => (
             <span key={i} className="flex items-center gap-5 px-6">
-              <span className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/25 whitespace-nowrap">
+              <span className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/50 whitespace-nowrap">
                 {item.text}
               </span>
               <span className="w-[3px] h-[3px] rounded-full bg-[#C89B5E]/35 flex-shrink-0" aria-hidden />

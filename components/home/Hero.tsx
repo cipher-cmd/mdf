@@ -52,6 +52,7 @@ export function Hero() {
           muted
           loop
           playsInline
+          preload="none"
           className="absolute inset-0 w-full h-full object-cover"
         />
         {/* Heavy overlay so text stays readable */}
@@ -181,6 +182,7 @@ export function Hero() {
             muted
             loop
             playsInline
+            preload="none"
             className="absolute inset-0 w-full h-full object-cover"
           />
         </motion.div>

@@ -116,7 +116,7 @@ export function Categories() {
           </div>
           <Link
             href="/products"
-            className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/40 hover:text-[#FF6B00] transition-colors flex items-center gap-2 shrink-0"
+            className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/60 hover:text-white transition-colors flex items-center gap-2 shrink-0"
           >
             Browse All Products <ArrowUpRight size={14} />
           </Link>

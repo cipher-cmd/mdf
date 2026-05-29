@@ -88,6 +88,7 @@ export function Navbar() {
               alt="MDF"
               fill
               className="object-contain"
+              sizes="44px"
               priority
             />
           </div>
