@@ -42,24 +42,7 @@ export function BrandPartners() {
           </p>
         </div>
 
-        {/* Brand logo marquee — subtle scrolling strip */}
-        <div className="mb-12 -mx-6 md:-mx-12">
-          <InfiniteMarquee speed={30} pauseOnHover={false} className="py-5 border-y border-white/[0.05] bg-[#0a0a0a]">
-            {[...brands, ...brands].map((brand, i) => (
-              <div key={i} className="flex items-center gap-10 px-8">
-                <div className="relative h-8 w-20 opacity-30 hover:opacity-60 transition-opacity duration-300 flex-shrink-0">
-                  <Image
-                    src={brand.logo}
-                    alt={brand.name}
-                    fill
-                    className="object-contain"
-                    sizes="80px"
-                  />
-                </div>
-              </div>
-            ))}
-          </InfiniteMarquee>
-        </div>
+
 
         {/* Brand grid — 2 col mobile, 4 col desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
@@ -88,12 +71,7 @@ export function BrandPartners() {
                   aria-hidden
                 />
 
-                {/* Top accent bar — brand color, full opacity always */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-[3px] transition-opacity duration-300"
-                  style={{ background: accentColor, opacity: 0.7 }}
-                  aria-hidden
-                />
+
 
                 {/* Stronger glow on hover */}
                 <div

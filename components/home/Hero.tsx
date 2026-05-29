@@ -62,7 +62,7 @@ export function Hero() {
       </div>
 
       {/* ── LEFT: Content — fixed 48% width, no overlap ── */}
-      <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] flex-shrink-0 px-6 md:px-12 lg:pl-[8%] lg:pr-12 pt-28 pb-28 lg:py-0 min-h-screen lg:min-h-0">
+      <div className="relative z-10 flex flex-col w-full lg:w-[48%] flex-shrink-0 px-6 md:px-12 lg:pl-[8%] lg:pr-12 pt-36 lg:pt-[160px] pb-20 lg:pb-0 min-h-screen lg:min-h-0">
 
         {/* Eyebrow */}
         <motion.p
