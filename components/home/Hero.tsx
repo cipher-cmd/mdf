@@ -69,7 +69,7 @@ export function Hero() {
           className="overline-gold mb-8"
           initial={shouldReduce ? {} : { opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.12, duration: 0.6 }}
+          transition={{ duration: 0.6 }}
         >
           J&K&apos;s Premier Equipment Hub · Est. 1997
         </motion.p>
@@ -118,7 +118,7 @@ export function Hero() {
           className="text-white/50 text-[14px] md:text-[15px] leading-[1.72] mb-10 max-w-[420px]"
           initial={shouldReduce ? {} : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.5 }}
+          transition={{ duration: 0.5 }}
         >
           Srinagar&apos;s trusted supplier of sports goods, fitness equipment, musical instruments &amp; custom awards — serving institutions and clubs across J&amp;K.
         </motion.p>
@@ -128,7 +128,7 @@ export function Hero() {
           className="flex flex-wrap gap-4 items-center mb-12"
           initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.06, duration: 0.55, ease: EASE }}
+          transition={{ delay: 0, duration: 0.55, ease: EASE }}
         >
           <MagneticButton as="a" href="/products" className="btn-orange gap-2">
             Explore Products <ArrowRight size={15} />

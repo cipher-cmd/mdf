@@ -57,7 +57,7 @@ function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; i
             alt={cat.label}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-[1.07]"
-            sizes={featured ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, 25vw'}
+            sizes={featured ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'}
           />
 
           {/* Gradient overlay */}
