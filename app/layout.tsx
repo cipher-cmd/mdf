@@ -9,7 +9,6 @@ import { LenisProvider }  from '@/providers/LenisProvider'
 import { ThemeProvider }  from '@/providers/ThemeProvider'
 import { CustomCursor }   from '@/components/ui/CustomCursor'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
-import { StickyCtaBand }  from '@/components/ui/StickyCtaBand'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({
