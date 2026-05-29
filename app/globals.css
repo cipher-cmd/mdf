@@ -219,6 +219,14 @@
     mix-blend-mode: overlay;
   }
 
+  /* Marquee keyframes — GPU-accelerated, replaces framer-motion for InfiniteMarquee */
+  @keyframes mdf-marquee-left  { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  @keyframes mdf-marquee-right { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+  .mdf-marquee-hover:hover { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) {
+    .mdf-marquee { animation: none !important; }
+  }
+
   /* Court-line sports texture — ~600 bytes inline, opacity 0.025 */
   .court-texture {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='none'/%3E%3Ccircle cx='100' cy='100' r='60' stroke='%23C89B5E' stroke-width='1' fill='none'/%3E%3Cline x1='0' y1='100' x2='200' y2='100' stroke='%23C89B5E' stroke-width='0.5'/%3E%3Crect x='20' y='30' width='160' height='140' stroke='%23C89B5E' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");

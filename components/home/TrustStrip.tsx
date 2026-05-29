@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
 
@@ -78,12 +77,8 @@ export function TrustStrip() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-0">
         <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.05]">
           {badges.map((b, i) => (
-            <motion.div
+            <div
               key={b.title}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.09, duration: 0.5 }}
               className="flex items-center gap-4 px-6 py-6"
             >
               {/* Logo or big number */}
@@ -114,7 +109,7 @@ export function TrustStrip() {
                 <p className="text-[13px] font-semibold text-white leading-tight">{b.title}</p>
                 <p className="text-[11px] text-white/35 mt-0.5 leading-tight">{b.sub}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

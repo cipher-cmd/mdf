@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
-import { Navbar }         from '@/components/layout/Navbar'
-import { Footer }         from '@/components/layout/Footer'
-import { Preloader }      from '@/components/layout/Preloader'
-import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
-import { LenisProvider }  from '@/providers/LenisProvider'
-import { ThemeProvider }  from '@/providers/ThemeProvider'
-import { CustomCursor }   from '@/components/ui/CustomCursor'
-import { ScrollProgress } from '@/components/ui/ScrollProgress'
+import { Navbar }       from '@/components/layout/Navbar'
+import { Footer }       from '@/components/layout/Footer'
+import { ClientShell }  from '@/components/layout/ClientShell'
+import { LenisProvider } from '@/providers/LenisProvider'
+import { ThemeProvider } from '@/providers/ThemeProvider'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({
@@ -279,15 +276,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-[#050505] text-white antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <div className="noise-overlay" aria-hidden />
-          <ScrollProgress />
-          <CustomCursor />
-          <Preloader />
+          <ClientShell />
           <LenisProvider>
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
           </LenisProvider>
-          <WhatsAppButton />
           <SpeedInsights />
         </ThemeProvider>
       </body>

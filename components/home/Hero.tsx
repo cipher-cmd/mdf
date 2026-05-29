@@ -27,11 +27,11 @@ export function Hero() {
 
   const headVar: Variants = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.14, delayChildren: shouldReduce ? 0 : 0.35 } },
+    show: { transition: { staggerChildren: 0.1, delayChildren: shouldReduce ? 0 : 0.15 } },
   }
   const wordVar: Variants = {
-    hidden: { opacity: 0, y: shouldReduce ? 0 : 68 },
-    show:   { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE } },
+    hidden: { opacity: 0, y: shouldReduce ? 0 : 48 },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
   }
 
   return (
@@ -67,9 +67,9 @@ export function Hero() {
         {/* Eyebrow */}
         <motion.p
           className="overline-gold mb-8"
-          initial={shouldReduce ? {} : { opacity: 0, x: -16 }}
+          initial={shouldReduce ? {} : { opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.45 }}
         >
           J&K&apos;s Premier Equipment Hub · Est. 1997
         </motion.p>
@@ -103,7 +103,7 @@ export function Hero() {
           className="flex items-center gap-3 mb-8"
           initial={shouldReduce ? {} : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.88, duration: 0.55 }}
+          transition={{ delay: 0.3, duration: 0.45 }}
         >
           {services.map((label, i) => (
             <span key={label} className="flex items-center gap-3">
@@ -149,7 +149,7 @@ export function Hero() {
           className="flex flex-wrap items-center gap-x-6 md:gap-x-8 gap-y-3 pt-7 border-t border-white/[0.07]"
           initial={shouldReduce ? {} : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.18, duration: 0.55 }}
+          transition={{ delay: 0.45, duration: 0.5 }}
         >
           {stats.map((s, i) => (
             <div key={s.value} className="flex flex-col">

@@ -10,7 +10,7 @@ export function Preloader() {
   const shouldReduce = useReducedMotion()
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(false), shouldReduce ? 200 : 2000)
+    const t = setTimeout(() => setVisible(false), shouldReduce ? 0 : 350)
     return () => clearTimeout(t)
   }, [shouldReduce])
 
