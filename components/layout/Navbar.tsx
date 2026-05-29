@@ -8,7 +8,7 @@ import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { EASE } from '@/lib/animation'
 import { cn } from '@/lib/utils'
-import { ThemeToggle } from '@/components/layout/ThemeToggle'
+
 
 const navLinks = [
   { label: 'Home',     href: '/' },
@@ -138,7 +138,7 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
-          <ThemeToggle />
+
           <a
             href="https://wa.me/917006252334"
             target="_blank"

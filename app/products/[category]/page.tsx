@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { products } from '@/lib/data/products'
 import { categories } from '@/lib/data/categories'
+
+const BASE_URL = 'https://mdfenterprisesjk.in'
 
 interface Props { params: Promise<{ category: string }> }
 
@@ -17,8 +19,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cat = categories.find(c => c.id === category)
   if (!cat) return {}
   return {
-    title: cat.label,
-    description: `Browse ${cat.label} from MDF Enterprises. Genuine products, institutional pricing, WhatsApp enquiry.`,
+    title: `${cat.label} — Sports Equipment Srinagar J&K | MDF Enterprises`,
+    description: `Buy ${cat.label} in Srinagar, J&K from MDF Enterprises — GeM-registered, MSME-certified. Authorized dealer for 25+ premium brands. Genuine stock, institutional pricing. Enquire via WhatsApp.`,
+    alternates: { canonical: `${BASE_URL}/products/${category}` },
+    openGraph: {
+      url: `${BASE_URL}/products/${category}`,
+      title: `${cat.label} — MDF Enterprises Srinagar`,
+      description: `Genuine ${cat.label} from MDF Enterprises, Srinagar J&K. Authorized dealer for SG, YONEX, NIVIA and 25+ brands. GeM-registered supplier.`,
+    },
   }
 }
 
@@ -35,19 +43,66 @@ export default async function CategoryPage({ params }: Props) {
 
   const categoryProducts = products.filter(p => p.category === category)
 
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${BASE_URL}/products/${category}#itemlist`,
+    name: cat.label,
+    description: cat.tagline,
+    url: `${BASE_URL}/products/${category}`,
+    numberOfItems: categoryProducts.length,
+    itemListOrder: 'https://schema.org/ItemListUnordered',
+    itemListElement: categoryProducts.map((p, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Product',
+        name: p.name,
+        description: p.description,
+        brand: { '@type': 'Brand', name: p.brand },
+        image: `${BASE_URL}${p.image}`,
+        url: `${BASE_URL}/products/${category}`,
+        offers: {
+          '@type': 'Offer',
+          availability: 'https://schema.org/InStock',
+          areaServed: { '@type': 'State', name: 'Jammu & Kashmir' },
+          seller: { '@type': 'Organization', '@id': `${BASE_URL}/#organization` },
+        },
+      },
+    })),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',     item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${BASE_URL}/products` },
+      { '@type': 'ListItem', position: 3, name: cat.label,  item: `${BASE_URL}/products/${category}` },
+    ],
+  }
+
   return (
     <main className="bg-[#050505] min-h-screen pt-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-16">
 
-        <Link href="/products" className="inline-flex items-center gap-2 text-[12px] font-bold uppercase text-white/40 hover:text-[#C89B5E] transition-colors mb-10">
-          <ArrowLeft size={13} /> All Products
-        </Link>
+        <nav aria-label="Breadcrumb" className="mb-10">
+          <Link href="/products" className="inline-flex items-center gap-2 text-[12px] font-bold uppercase text-white/40 hover:text-[#C89B5E] transition-colors">
+            <ArrowLeft size={13} /> All Products
+          </Link>
+        </nav>
 
         <p className="overline-gold mb-5">{cat.tagline}</p>
-        <h1 className="text-[48px] md:text-[60px] font-medium text-white leading-[1.0] mb-14"
+        <h1 className="text-[48px] md:text-[60px] font-medium text-white leading-[1.0] mb-4"
           style={{ fontFamily: 'var(--font-cormorant), serif' }}>
           {cat.label}<span className="text-[#C89B5E]">.</span>
         </h1>
+        <p className="text-white/45 text-[15px] mb-14">
+          Genuine {cat.label.toLowerCase()} from MDF Enterprises, Srinagar — authorised dealer for 25+ premium brands. GeM-registered supplier for J&K institutions.
+        </p>
 
         {categoryProducts.length === 0 ? (
           <div className="text-center py-24 border border-white/[0.06] rounded-2xl">
@@ -71,7 +126,7 @@ export default async function CategoryPage({ params }: Props) {
                 </div>
                 <div className="p-5">
                   <p className="text-[10px] text-white/30 font-bold tracking-[0.15em] uppercase mb-1">{p.brand}</p>
-                  <h3 className="text-[15px] font-semibold text-white mb-2 leading-snug">{p.name}</h3>
+                  <h2 className="text-[15px] font-semibold text-white mb-2 leading-snug">{p.name}</h2>
                   <p className="text-[12px] text-white/40 leading-relaxed mb-4">{p.description}</p>
                   <a
                     href={`https://wa.me/917006252334?text=${encodeURIComponent(p.whatsappText)}`}

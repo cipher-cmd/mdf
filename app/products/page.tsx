@@ -5,8 +5,10 @@ import { ArrowUpRight } from 'lucide-react'
 import { categories } from '@/lib/data/categories'
 
 export const metadata: Metadata = {
-  title: 'Products',
-  description: 'Sports goods, fitness equipment, musical instruments, custom awards & trophies. Browse our full catalogue.',
+  title: 'Sports Equipment, Fitness & Music Products — MDF Enterprises Srinagar J&K',
+  description: 'Sports goods, fitness equipment, musical instruments, custom awards & trophies from MDF Enterprises, Srinagar. GeM-registered supplier, MSME-certified. 25+ premium brands. Browse our full catalogue.',
+  alternates: { canonical: 'https://mdfenterprisesjk.in/products' },
+  openGraph: { url: 'https://mdfenterprisesjk.in/products' },
 }
 
 export default function ProductsPage() {

@@ -19,30 +19,16 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark')
-
   useEffect(() => {
-    const stored = localStorage.getItem('mdf-theme') as Theme | null
-    const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-    const initial = stored ?? preferred
-    const handle = requestAnimationFrame(() => {
-      setTheme(initial)
-      document.documentElement.setAttribute('data-theme', initial)
-    })
-    return () => cancelAnimationFrame(handle)
+    document.documentElement.setAttribute('data-theme', 'dark')
   }, [])
 
   function toggleTheme() {
-    setTheme(prev => {
-      const next = prev === 'dark' ? 'light' : 'dark'
-      document.documentElement.setAttribute('data-theme', next)
-      localStorage.setItem('mdf-theme', next)
-      return next
-    })
+    // No-op, we are forcing dark mode
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: 'dark', toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   )

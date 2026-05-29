@@ -4,7 +4,7 @@ export interface BlogPost {
   title: string
   excerpt: string
   coverImage: string
-  category: 'sports' | 'fitness' | 'awards' | 'gem-guides' | 'news'
+  category: 'sports' | 'fitness' | 'music' | 'awards' | 'gem-guides' | 'news'
   readTime: number
   publishedAt: string
   featured: boolean
@@ -53,7 +53,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'best-cricket-equipment-brands-india-2026',
     title: 'Best Cricket Equipment Brands in India 2026',
     excerpt: 'SS, SG, TON or COSCO — a practical guide to choosing the right cricket equipment brand for your team, budget and playing level.',
-    coverImage: '/images/sportsGoods.webp',
+    coverImage: '/images/SportsGoodsNew.webp',
     category: 'sports',
     readTime: 5,
     publishedAt: '2026-05-10',
@@ -78,7 +78,7 @@ export const blogPosts: BlogPost[] = [
     title: 'Setting Up a Music Lab in a J&K School: What It Costs',
     excerpt: 'A realistic breakdown of what a school music lab costs in 2026 — instruments, installation, acoustic treatment and ongoing maintenance.',
     coverImage: '/images/music.webp',
-    category: 'fitness',
+    category: 'music',
     readTime: 6,
     publishedAt: '2026-03-05',
     featured: false,

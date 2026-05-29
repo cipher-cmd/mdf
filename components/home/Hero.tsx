@@ -47,14 +47,15 @@ export function Hero() {
       {/* ── Mobile video background — absolute, behind content ── */}
       <div className="absolute inset-0 lg:hidden z-0" aria-hidden>
         <video
-          src="/heroVideo.mp4"
           autoPlay
           muted
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        >
+          <source src="/hero.webm" type="video/webm" />
+        </video>
         {/* Heavy overlay so text stays readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-black/85" />
         {/* Gold accent at bottom */}
@@ -63,6 +64,9 @@ export function Hero() {
 
       {/* ── LEFT: Content — fixed 48% width, no overlap ── */}
       <div className="relative z-10 flex flex-col w-full lg:w-[48%] flex-shrink-0 px-6 md:px-12 lg:pl-[8%] lg:pr-12 pt-36 lg:pt-[160px] pb-20 lg:pb-0 min-h-screen lg:min-h-0">
+
+        {/* Screen-reader H1 with target keywords — visible H1 below is decorative brand copy */}
+        <h1 className="sr-only">Sports Equipment Supplier in Srinagar, J&K — MDF Enterprises | GeM Registered, MSME Certified</h1>
 
         {/* Eyebrow */}
         <motion.p
@@ -74,14 +78,15 @@ export function Hero() {
           J&K&apos;s Premier Equipment Hub · Est. 1997
         </motion.p>
 
-        {/* H1 */}
-        <motion.h1
+        {/* Visual display heading — decorative brand copy, aria-hidden since sr-only H1 above carries the semantics */}
+        <motion.div
+          role="presentation"
+          aria-hidden
           variants={headVar}
           initial="hidden"
           animate="show"
           className="mb-8 overflow-hidden"
           style={{ fontFamily: 'var(--font-cormorant), serif' }}
-          aria-label="Field Ready."
         >
           <motion.span
             variants={wordVar}
@@ -96,7 +101,7 @@ export function Hero() {
           >
             READY.
           </motion.span>
-        </motion.h1>
+        </motion.div>
 
         {/* Service line — no icons, clean typographic */}
         <motion.div
@@ -177,14 +182,15 @@ export function Hero() {
           transition={{ delay: 0.25, duration: 2.2, ease: EASE }}
         >
           <video
-            src="/heroVideo.mp4"
             autoPlay
             muted
             loop
             playsInline
-            preload="none"
+            preload="metadata"
             className="absolute inset-0 w-full h-full object-cover"
-          />
+          >
+          <source src="/hero.webm" type="video/webm" />
+          </video>
         </motion.div>
 
         {/* Cinematic overlays */}

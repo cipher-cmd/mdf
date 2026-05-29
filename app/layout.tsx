@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: '%s | MDF Enterprises — Srinagar',
   },
   description:
-    "J&K's premier sports equipment supplier since 1997. Cricket gear, fitness equipment, musical instruments, custom trophies & awards. GeM-registered, MSME-certified. Supply, installation and AMC service across Jammu & Kashmir — Srinagar, Jammu, Baramulla, Anantnag, Kupwara.",
+    "J&K's premier sports equipment supplier since 1997. Cricket gear, fitness equipment, musical instruments & custom awards. GeM-registered, MSME-certified. Serving all districts of Jammu & Kashmir.",
   keywords: [
     'sports equipment Srinagar',
     'sports goods Srinagar',
@@ -71,9 +71,9 @@ export const metadata: Metadata = {
     url: BASE_URL,
     images: [
       {
-        url: `${BASE_URL}/images/mdfFavicon.png`,
-        width: 800,
-        height: 800,
+        url: `${BASE_URL}/images/SportsGoodsNew.webp`,
+        width: 1200,
+        height: 630,
         alt: 'MDF Enterprises — Sports, Fitness, Music & Awards — Srinagar J&K',
       },
     ],
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     title: 'MDF Enterprises | Sports Equipment Supplier J&K',
     description:
       "J&K's premier sports equipment supplier since 1997. GeM-registered, MSME-certified. Cricket, fitness, music, awards.",
-    images: [`${BASE_URL}/images/mdfFavicon.png`],
+    images: [`${BASE_URL}/images/SportsGoodsNew.webp`],
   },
   robots: {
     index: true,
@@ -105,7 +105,8 @@ export const metadata: Metadata = {
     shortcut: '/images/mdfFavicon.png',
   },
   verification: {
-    google: '',   // add Google Search Console verification token here
+    google: '',        // TODO: add Google Search Console HTML tag token
+    other: { 'msvalidate.01': '' }, // TODO: add Bing Webmaster Tools token
   },
 }
 
@@ -116,11 +117,16 @@ const localBusinessSchema = {
   '@type': ['Store', 'LocalBusiness', 'SportingGoodsStore'],
   '@id': `${BASE_URL}/#organization`,
   name: 'MDF Enterprises',
+  legalName: 'MDF Enterprises',
   alternateName: 'MDF Enterprises Srinagar',
-  description:
-    "J&K's premier sports equipment, fitness gear, musical instruments and custom awards supplier. GeM-registered, MSME-certified. Founded 1997 in Srinagar.",
+  description: "J&K's premier sports equipment, fitness gear, musical instruments and custom awards supplier since 1997. GeM-registered government supplier, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",
   url: BASE_URL,
-  logo: `${BASE_URL}/images/mdfFavicon.png`,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${BASE_URL}/images/mdfFavicon.png`,
+    width: 512,
+    height: 512,
+  },
   image: `${BASE_URL}/images/SportsGoodsNew.webp`,
   telephone: '+917006252334',
   email: 'mdfenterprisesjk@gmail.com',
@@ -141,6 +147,23 @@ const localBusinessSchema = {
     latitude: 34.0836,
     longitude: 74.7973,
   },
+  hasMap: 'https://maps.google.com/?q=34.0836,74.7973',
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      telephone: '+917006252334',
+      contactType: 'sales',
+      areaServed: 'IN',
+      availableLanguage: ['English', 'Hindi', 'Urdu', 'Kashmiri'],
+    },
+    {
+      '@type': 'ContactPoint',
+      telephone: '+917006252334',
+      contactType: 'customer service',
+      areaServed: 'IN',
+      availableLanguage: ['English', 'Hindi', 'Urdu', 'Kashmiri'],
+    },
+  ],
   areaServed: [
     { '@type': 'State', name: 'Jammu & Kashmir' },
     { '@type': 'City',  name: 'Srinagar' },
@@ -169,7 +192,28 @@ const localBusinessSchema = {
       { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Custom Awards & Trophies' } },
     ],
   },
-  award: ['GeM Registered Supplier', 'MSME Certified'],
+  hasCredential: [
+    {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'GeM Registered Supplier',
+      credentialCategory: 'Government Registration',
+      recognizedBy: {
+        '@type': 'Organization',
+        name: 'Government e-Marketplace (GeM)',
+        url: 'https://gem.gov.in',
+      },
+    },
+    {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'MSME Certified',
+      credentialCategory: 'Government Certification',
+      recognizedBy: {
+        '@type': 'Organization',
+        name: 'Ministry of Micro, Small and Medium Enterprises',
+        url: 'https://msme.gov.in',
+      },
+    },
+  ],
   knowsAbout: [
     'Sports Equipment Supply',
     'GeM Portal Procurement',
@@ -177,7 +221,27 @@ const localBusinessSchema = {
     'Gymnasium Installation',
     'Sports Court Installation',
     'Music Lab Setup',
+    'Annual Maintenance Contract (AMC)',
   ],
+  // Add your verified profiles below — each URL boosts AI entity recognition
+  sameAs: [
+    // 'https://maps.app.goo.gl/YOUR_GOOGLE_MAPS_LINK',
+    // 'https://www.linkedin.com/company/mdf-enterprises-srinagar',
+    // 'https://www.facebook.com/mdfenterprisesjk',
+    // 'https://www.indiamart.com/mdf-enterprises-srinagar',
+    // 'https://mkp.gem.gov.in/seller/YOUR_GEM_SELLER_ID',
+  ],
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${BASE_URL}/#website`,
+  name: 'MDF Enterprises',
+  url: BASE_URL,
+  description: "J&K's premier sports equipment, fitness gear, musical instruments and custom awards supplier since 1997.",
+  publisher: { '@id': `${BASE_URL}/#organization` },
+  inLanguage: 'en-IN',
 }
 
 const faqSchema = {
@@ -232,16 +296,38 @@ const faqSchema = {
         text: 'For bulk orders, contact MDF Enterprises on WhatsApp at +91 70062 52334 or email mdfenterprisesjk@gmail.com. We handle bulk procurement for government departments, schools, clubs, and private organisations across J&K.',
       },
     },
-  ],
-}
-
-const breadcrumbSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-    { '@type': 'ListItem', position: 2, name: 'Products', item: `${BASE_URL}/products` },
-    { '@type': 'ListItem', position: 3, name: 'Blog', item: `${BASE_URL}/blog` },
+    {
+      '@type': 'Question',
+      name: 'What sports equipment does MDF Enterprises supply?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'MDF Enterprises supplies cricket equipment (bats, balls, pads, helmets), football, badminton, volleyball, hockey, athletics gear, table tennis, and multi-sport equipment for schools, clubs, and government institutions across J&K.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does MDF Enterprises offer AMC (Annual Maintenance Contract) for fitness equipment?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. MDF Enterprises offers Annual Maintenance Contracts (AMC) for gymnasium and fitness equipment installed across J&K. AMC covers preventive maintenance, breakdown service, and spare parts supply.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can MDF Enterprises participate in J&K government tenders for sports equipment?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. MDF Enterprises participates in J&K government tenders including JKTENDERS, L1 procurement, and GeM portal orders. As an MSME-certified and GeM-registered supplier, MDF qualifies for government sports equipment tenders across all districts of J&K.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does MDF Enterprises supply to districts outside Srinagar in J&K?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. MDF Enterprises delivers sports goods and fitness equipment to all districts of Jammu & Kashmir including Baramulla, Anantnag, Kupwara, Sopore, Jammu, and Leh. We serve 1000+ institutions across the entire union territory.',
+      },
+    },
   ],
 }
 
@@ -251,27 +337,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" className={`${inter.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
+        {/* Performance: preconnect for external origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://va.vercel-scripts.com" />
+
         {/* Geo targeting */}
         <meta name="geo.region"    content="IN-JK" />
         <meta name="geo.placename" content="Srinagar, Jammu & Kashmir, India" />
         <meta name="geo.position"  content="34.0836;74.7973" />
         <meta name="ICBM"          content="34.0836, 74.7973" />
 
-        {/* Schema: LocalBusiness */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-        />
-        {/* Schema: FAQ (AEO) */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-        {/* Schema: Breadcrumb */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        />
+        {/* Schema: LocalBusiness + SportingGoodsStore */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+        {/* Schema: WebSite entity */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+        {/* Schema: FAQ — AEO + AI citation */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </head>
       <body className="bg-[#050505] text-white antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>

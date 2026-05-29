@@ -129,13 +129,14 @@ export function About() {
           {/* Right: image */}
           <div ref={imgRef} className="relative overflow-hidden rounded-2xl lg:sticky lg:top-28">
             <motion.div style={{ y: yImg }}>
-              <div className="relative w-full aspect-[4/3] md:aspect-[4/3] lg:aspect-[3/4]">
+              <div className="relative w-full aspect-[4/3] md:aspect-[4/3] lg:aspect-[3/4] bg-[#111]">
                 <Image
                   src="/images/SportsGoodsNew.webp"
-                  alt="MDF Enterprises — sports goods and equipment display"
+                  alt="MDF Enterprises — sports goods and equipment display, Srinagar J&K"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 420px"
+                  loading="eager"
                 />
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />

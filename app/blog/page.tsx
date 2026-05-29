@@ -5,12 +5,14 @@ import { ArrowUpRight, Clock } from 'lucide-react'
 import { blogPosts } from '@/lib/data/blog'
 
 export const metadata: Metadata = {
-  title: 'Blog — Sports & Procurement Insights',
-  description: 'Tips, guides and insights on sports equipment procurement, GeM portal, gymnasium setup, and sports culture in J&K.',
+  title: 'Blog — Sports Equipment & GeM Procurement Insights | MDF Enterprises J&K',
+  description: 'Tips, guides and insights on sports equipment procurement, GeM portal, gymnasium setup, cricket equipment and sports culture in Jammu & Kashmir.',
+  alternates: { canonical: 'https://mdfenterprisesjk.in/blog' },
+  openGraph: { url: 'https://mdfenterprisesjk.in/blog' },
 }
 
 const categoryLabel: Record<string, string> = {
-  sports: 'Sports', fitness: 'Fitness', awards: 'Awards',
+  sports: 'Sports', fitness: 'Fitness', music: 'Music', awards: 'Awards',
   'gem-guides': 'GeM Guides', news: 'News',
 }
 
