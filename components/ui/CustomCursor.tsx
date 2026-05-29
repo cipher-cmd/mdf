@@ -115,6 +115,7 @@ export function CustomCursor() {
       <div
         ref={wrapRef}
         aria-hidden
+        className="hidden md:flex"
         style={{
           position: 'fixed',
           top: 0, left: 0,
@@ -176,6 +177,7 @@ export function CustomCursor() {
       <div
         ref={dotRef}
         aria-hidden
+        className="hidden md:block"
         style={{
           position: 'fixed',
           top: 0, left: 0,
