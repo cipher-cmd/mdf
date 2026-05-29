@@ -16,6 +16,9 @@ const brandAccent: Record<string, string> = {
   ss:      '#c8a217',
   stag:    '#1b3f8f',
   netco:   '#2e7d32',
+  gm:      '#ffffff',
+  nova:    '#ff4500',
+  bdm:     '#1b3f8f',
 }
 
 export function BrandPartners() {

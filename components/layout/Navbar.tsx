@@ -142,7 +142,7 @@ export function Navbar() {
             href="https://wa.me/917006252334"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#25d366] hover:bg-[#1fba5c] text-white text-[12px] font-bold tracking-[0.06em] uppercase rounded-md transition-all duration-200 shadow-[0_0_18px_rgba(37,211,102,0.18)] hover:shadow-[0_0_28px_rgba(37,211,102,0.32)]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#25d366] hover:bg-[#1fba5c] text-[#050505] text-[12px] font-bold tracking-[0.06em] uppercase rounded-md transition-all duration-200 shadow-[0_0_18px_rgba(37,211,102,0.18)] hover:shadow-[0_0_28px_rgba(37,211,102,0.32)]"
           >
             {WA_SVG} WhatsApp
           </a>

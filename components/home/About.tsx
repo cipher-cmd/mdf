@@ -131,7 +131,7 @@ export function About() {
             <motion.div style={{ y: yImg }}>
               <div className="relative w-full aspect-[4/3] md:aspect-[4/3] lg:aspect-[3/4]">
                 <Image
-                  src="/images/sports.png"
+                  src="/images/SportsGoodsNew.webp"
                   alt="MDF Enterprises — sports goods and equipment display"
                   fill
                   className="object-cover"

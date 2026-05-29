@@ -30,14 +30,14 @@ interface Badge {
 
 const badges: Badge[] = [
   {
-    logo:    '/images/gemLogo.png',
+    logo:    '/images/gemLogo.webp',
     logoAlt: 'GeM Registered',
     logoW:   56,
     title:   'GeM Registered',
     sub:     'Government e-Marketplace',
   },
   {
-    logo:    '/images/msmeLogo.png',
+    logo:    '/images/msmeLogo.webp',
     logoAlt: 'MSME Certified',
     logoW:   64,
     title:   'MSME Certified',

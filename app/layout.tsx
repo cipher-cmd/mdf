@@ -125,7 +125,7 @@ const localBusinessSchema = {
     "J&K's premier sports equipment, fitness gear, musical instruments and custom awards supplier. GeM-registered, MSME-certified. Founded 1997 in Srinagar.",
   url: BASE_URL,
   logo: `${BASE_URL}/images/mdfFavicon.png`,
-  image: `${BASE_URL}/images/sports.png`,
+  image: `${BASE_URL}/images/SportsGoodsNew.webp`,
   telephone: '+917006252334',
   email: 'mdfenterprisesjk@gmail.com',
   foundingDate: '1997',
@@ -289,7 +289,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </LenisProvider>
           <WhatsAppButton />
-          <StickyCtaBand />
           <SpeedInsights />
         </ThemeProvider>
       </body>

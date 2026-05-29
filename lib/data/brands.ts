@@ -6,13 +6,16 @@ export interface Brand {
 }
 
 export const brands: Brand[] = [
-  { id: 'jonex',   name: 'JONEX',   logo: '/images/brands/jonexLogo.png',   category: 'sports' },
-  { id: 'yonex',   name: 'YONEX',   logo: '/images/brands/yonexlogo.png',   category: 'sports' },
-  { id: 'cosco',   name: 'COSCO',   logo: '/images/brands/coscoLogo.png',   category: 'sports' },
-  { id: 'nivia',   name: 'NIVIA',   logo: '/images/brands/niviaLogo.png',   category: 'sports' },
-  { id: 'sg',      name: 'SG',      logo: '/images/brands/sglogo.png',      category: 'sports' },
-  { id: 'spartan', name: 'SPARTAN', logo: '/images/brands/spartanlogo.png', category: 'sports' },
-  { id: 'ss',      name: 'SS',      logo: '/images/brands/ssLogo.png',      category: 'sports' },
-  { id: 'stag',    name: 'STAG',    logo: '/images/brands/staglogo.png',    category: 'sports' },
-  { id: 'netco',   name: 'NETCO',   logo: '/images/brands/netcoLogo.png',   category: 'sports' },
+  { id: 'jonex',   name: 'JONEX',   logo: '/images/brands/jonexLogo.webp',   category: 'sports' },
+  { id: 'yonex',   name: 'YONEX',   logo: '/images/brands/yonexlogo.webp',   category: 'sports' },
+  { id: 'cosco',   name: 'COSCO',   logo: '/images/brands/coscoLogo.webp',   category: 'sports' },
+  { id: 'nivia',   name: 'NIVIA',   logo: '/images/brands/niviaLogo.webp',   category: 'sports' },
+  { id: 'sg',      name: 'SG',      logo: '/images/brands/sglogo.webp',      category: 'sports' },
+  { id: 'spartan', name: 'SPARTAN', logo: '/images/brands/spartanlogo.webp', category: 'sports' },
+  { id: 'ss',      name: 'SS',      logo: '/images/brands/ssLogo.webp',      category: 'sports' },
+  { id: 'stag',    name: 'STAG',    logo: '/images/brands/staglogo.webp',    category: 'sports' },
+  { id: 'netco',   name: 'NETCO',   logo: '/images/brands/netcoLogo.webp',   category: 'sports' },
+  { id: 'gm',      name: 'GM',      logo: '/images/brands/gmLogo.webp',      category: 'sports' },
+  { id: 'nova',    name: 'NOVA FITNESS', logo: '/images/brands/novaFitnessLogo.webp', category: 'fitness' },
+  { id: 'bdm',     name: 'BDM',     logo: '/images/brands/bdmlogo.webp',     category: 'sports' },
 ]

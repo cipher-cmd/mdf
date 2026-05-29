@@ -35,10 +35,10 @@ export function Footer() {
       <div className="h-px bg-gradient-to-r from-transparent via-[#C89B5E]/30 to-transparent" aria-hidden />
 
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 pt-16 pb-12 md:pt-20 md:pb-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-14">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 lg:gap-8 mb-14">
 
           {/* ── Brand column ── */}
-          <div className="lg:col-span-1">
+          <div className="col-span-2 lg:col-span-1">
             {/* Wordmark */}
             <Link href="/" className="flex items-center gap-3 group mb-6 w-fit">
               <div className="relative h-11 w-11 flex-shrink-0">
@@ -57,7 +57,7 @@ export function Footer() {
               </div>
             </Link>
 
-            <p className="text-white/35 text-[13px] leading-[1.75] mb-7 max-w-[240px]">
+            <p className="text-white/60 text-[13px] leading-[1.75] mb-7 max-w-[280px]">
               Sports. Fitness. Music. Awards. Complete supply, installation and service across J&K since 1997.
             </p>
 
@@ -65,7 +65,7 @@ export function Footer() {
             <div className="flex items-center gap-4 mb-7">
               <div className="relative h-8 w-[56px]">
                 <Image
-                  src="/images/gemLogo.png"
+                  src="/images/gemLogo.webp"
                   alt="GeM Registered"
                   fill
                   className="object-contain opacity-55 hover:opacity-90 transition-opacity duration-200"
@@ -74,7 +74,7 @@ export function Footer() {
               </div>
               <div className="relative h-7 w-[60px]">
                 <Image
-                  src="/images/msmeLogo.png"
+                  src="/images/msmeLogo.webp"
                   alt="MSME Certified"
                   fill
                   className="object-contain opacity-55 hover:opacity-90 transition-opacity duration-200"
@@ -95,16 +95,16 @@ export function Footer() {
           </div>
 
           {/* ── Products ── */}
-          <div>
-            <h4 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
+          <div className="col-span-1">
+            <h2 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
               Products
-            </h4>
+            </h2>
             <ul className="flex flex-col gap-3">
               {products.map(l => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-[13px] text-white/40 hover:text-white/90 transition-colors duration-200"
+                    className="text-[13px] text-white/70 hover:text-white/90 transition-colors duration-200"
                   >
                     {l.label}
                   </Link>
@@ -114,38 +114,38 @@ export function Footer() {
           </div>
 
           {/* ── Company ── */}
-          <div>
-            <h4 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
+          <div className="col-span-1">
+            <h2 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
               Company
-            </h4>
+            </h2>
             <ul className="flex flex-col gap-3 mb-8">
               {company.map(l => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-[13px] text-white/40 hover:text-white/90 transition-colors duration-200"
+                    className="text-[13px] text-white/70 hover:text-white/90 transition-colors duration-200"
                   >
                     {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            <h4 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-4">
+            <h2 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-4">
               We Serve
-            </h4>
+            </h2>
             <ul className="flex flex-col gap-2.5">
               {weServe.map(s => (
-                <li key={s} className="text-[12.5px] text-white/30">{s}</li>
+                <li key={s} className="text-[12.5px] text-white/60">{s}</li>
               ))}
             </ul>
           </div>
 
           {/* ── Contact ── */}
-          <div>
-            <h4 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
+          <div className="col-span-2 lg:col-span-1">
+            <h2 className="text-[9.5px] font-bold text-[#C89B5E] tracking-[0.22em] uppercase mb-5">
               Contact
-            </h4>
-            <address className="not-italic text-[13px] text-white/40 leading-[1.85]">
+            </h2>
+            <address className="not-italic text-[13px] text-white/70 leading-[1.85]">
               <p className="mb-3">
                 SDA Shopping Complex,<br />
                 Opp. Iqbal Park<br />
@@ -167,9 +167,9 @@ export function Footer() {
 
             {/* Business hours */}
             <div className="mt-6 pt-5 border-t border-white/[0.05]">
-              <p className="text-[9.5px] font-bold text-white/20 tracking-[0.18em] uppercase mb-2">Hours</p>
-              <p className="text-[12px] text-white/30">Mon – Sat · 10am – 7pm</p>
-              <p className="text-[12px] text-white/30">Sunday · Closed</p>
+              <p className="text-[9.5px] font-bold text-white/50 tracking-[0.18em] uppercase mb-2">Hours</p>
+              <p className="text-[12px] text-white/60">Mon – Sat · 10am – 7pm</p>
+              <p className="text-[12px] text-white/60">Sunday · Closed</p>
             </div>
           </div>
 
@@ -177,11 +177,11 @@ export function Footer() {
 
         {/* ── Bottom bar ── */}
         <div className="border-t border-white/[0.05] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] text-white/20">
+          <p className="text-[11px] text-white/50">
             © {new Date().getFullYear()} MDF Enterprises, Srinagar. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
-            <p className="text-[11px] text-white/15 tracking-[0.12em] uppercase">
+            <p className="text-[11px] text-white/40 tracking-[0.12em] uppercase">
               Sports · Fitness · Music · Awards
             </p>
           </div>

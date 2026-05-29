@@ -41,7 +41,7 @@ export function StickyCtaBand() {
             href="https://wa.me/917006252334"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 bg-[#25d366] hover:bg-[#1fba5c] text-white text-[11px] font-bold tracking-[0.06em] uppercase px-4 py-2 rounded-md flex-shrink-0 transition-colors duration-200"
+            className="flex items-center gap-2 bg-[#25d366] hover:bg-[#1fba5c] text-[#050505] text-[11px] font-bold tracking-[0.06em] uppercase px-4 py-2 rounded-md flex-shrink-0 transition-colors duration-200"
           >
             {WA_SVG} WhatsApp
           </a>
