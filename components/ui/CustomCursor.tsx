@@ -6,11 +6,12 @@ import { useReducedMotion } from 'framer-motion'
 type CursorState = 'default' | 'hover' | 'text'
 
 export function CustomCursor() {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const [state, setState]     = useState<CursorState>('default')
   const [clicking, setClicking] = useState(false)
   const [visible, setVisible]   = useState(false)
   const [mounted, setMounted]   = useState(false)
+  const [isTouch, setIsTouch]   = useState(false)
 
   // DOM refs — position written directly via RAF, never through React state
   const wrapRef  = useRef<HTMLDivElement>(null)  // ring position wrapper
@@ -23,6 +24,7 @@ export function CustomCursor() {
   const rafId  = useRef<number>(0)
   const angle  = useRef(0)
   useEffect(() => {
+    setIsTouch(window.matchMedia('(hover: none) and (pointer: coarse)').matches)
     const handle = requestAnimationFrame(() => setMounted(true))
     return () => cancelAnimationFrame(handle)
   }, [])
@@ -100,7 +102,7 @@ export function CustomCursor() {
     }
   }, [mounted])
 
-  if (!mounted || shouldReduce) return null
+  if (!mounted || shouldReduce || isTouch) return null
 
   const isHover = state === 'hover'
   const isText  = state === 'text'
@@ -115,7 +117,6 @@ export function CustomCursor() {
       <div
         ref={wrapRef}
         aria-hidden
-        className="hidden md:flex"
         style={{
           position: 'fixed',
           top: 0, left: 0,
@@ -177,7 +178,6 @@ export function CustomCursor() {
       <div
         ref={dotRef}
         aria-hidden
-        className="hidden md:block"
         style={{
           position: 'fixed',
           top: 0, left: 0,

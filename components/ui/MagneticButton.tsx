@@ -26,7 +26,7 @@ export function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null)
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
 
   const rawX = useMotionValue(0)
   const rawY = useMotionValue(0)

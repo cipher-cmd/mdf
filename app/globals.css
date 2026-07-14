@@ -223,9 +223,7 @@
   @keyframes mdf-marquee-left  { from { transform: translateX(0) } to { transform: translateX(-50%) } }
   @keyframes mdf-marquee-right { from { transform: translateX(-50%) } to { transform: translateX(0) } }
   .mdf-marquee-hover:hover { animation-play-state: paused; }
-  @media (prefers-reduced-motion: reduce) {
-    .mdf-marquee { animation: none !important; }
-  }
+  /* Reduced motion check removed to ensure marquee always flows */
 
   /* Court-line sports texture — ~600 bytes inline, opacity 0.025 */
   .court-texture {
@@ -233,5 +231,35 @@
     background-size: 200px 200px;
     background-repeat: repeat;
     opacity: 0.025;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .glass-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #ffffff, #a3a3a3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-gradient-gold {
+    background: linear-gradient(to right, #f3d5a4, #C89B5E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

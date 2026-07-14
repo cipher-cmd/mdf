@@ -45,7 +45,7 @@ const panels = [
 ]
 
 export function WhoWeServe() {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const containerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
 

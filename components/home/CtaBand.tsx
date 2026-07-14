@@ -13,7 +13,7 @@ const WA_SVG = (
 )
 
 export function CtaBand() {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const [isMob, setIsMob] = useState(false)
   useEffect(() => {
     const handle = requestAnimationFrame(() => setIsMob(window.innerWidth < 1024))

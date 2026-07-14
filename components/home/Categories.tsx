@@ -16,7 +16,7 @@ const catIcons: Record<string, React.ElementType> = {
 }
 
 function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; index: number; featured?: boolean }) {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const cardRef = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
   const Icon = catIcons[cat.id] ?? ArrowUpRight
@@ -42,11 +42,11 @@ function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; i
       className={featured ? 'row-span-2' : ''}
     >
       <Link href={cat.href} className="group block h-full">
-        <div
+          <div
           ref={cardRef}
           onMouseMove={onMove}
           onMouseLeave={onLeave}
-          className="relative w-full overflow-hidden bg-[#0f0f0f] border border-white/[0.06] group-hover:border-[#FF6B00]/25 transition-colors duration-500 rounded-2xl"
+          className="relative w-full overflow-hidden glass-card group-hover:border-[#C89B5E]/30 transition-colors duration-500 rounded-2xl"
           style={{ height: featured ? '100%' : '260px', minHeight: featured ? '540px' : '260px' }}
         >
           {/* Spotlight layer */}
@@ -66,11 +66,11 @@ function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; i
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[-10] transition-all duration-500" />
 
           {/* Top sweep line */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C89B5E] to-[#FF6B00] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C89B5E] to-[#f3d5a4] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
 
           {/* Category pill - top left */}
           <div className="absolute top-5 left-5 z-20">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/60">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/70 shadow-sm">
               <Icon size={10} className="text-[#C89B5E]" strokeWidth={2} />
               {cat.tagline}
             </span>
@@ -84,7 +84,7 @@ function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; i
             >
               {cat.label}
             </h3>
-            <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.12em] uppercase text-white/40 group-hover:text-[#FF6B00] transition-colors duration-300">
+            <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.12em] uppercase text-white/40 group-hover:text-[#C89B5E] transition-colors duration-300">
               Explore Range
               <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
             </div>
@@ -100,18 +100,18 @@ export function Categories() {
   const [featured, ...rest] = enabled
 
   return (
-    <section id="categories" className="bg-[#050505] py-20 md:py-28">
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12">
+    <section id="categories" className="bg-[#050505] py-20 md:py-28 relative">
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 relative z-10">
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <p className="overline-gold mb-5">Categories We Deal In</p>
             <h2
-              className="text-[36px] md:text-[52px] font-medium text-white leading-[1.05]"
+              className="text-[36px] md:text-[52px] font-medium leading-[1.05]"
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
-              Everything You Need,<br />
-              For Every Purpose<span className="text-[#C89B5E]">.</span>
+              <span className="text-white/90 drop-shadow-sm">Everything You Need,</span><br />
+              <span className="text-gradient-gold drop-shadow-sm">For Every Purpose.</span>
             </h2>
           </div>
           <Link

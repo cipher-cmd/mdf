@@ -18,7 +18,7 @@ export function AnimatedSection({
   y = 40,
   once = true,
 }: AnimatedSectionProps) {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
 
   return (
     <motion.div

@@ -56,61 +56,63 @@ const badges: Badge[] = [
 
 export function TrustStrip() {
   return (
-    <section className="relative bg-[#0f0f0f] border-y border-white/[0.06] overflow-hidden">
-      {/* Sliding gold sheen */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'linear-gradient(90deg, transparent 0%, rgba(200,155,94,0.10) 50%, transparent 100%)',
-          animation: 'trustBeam 9s linear infinite',
-        }}
-        aria-hidden
-      />
-      <style>{`
-        @keyframes trustBeam {
-          0%   { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-      `}</style>
+    <section className="relative bg-[#050505] overflow-hidden py-10 z-20">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="glass-card rounded-2xl overflow-hidden relative">
+          {/* Sliding gold sheen */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(90deg, transparent 0%, rgba(200,155,94,0.15) 50%, transparent 100%)',
+              animation: 'trustBeam 7s linear infinite',
+            }}
+            aria-hidden
+          />
+          <style>{`
+            @keyframes trustBeam {
+              0%   { transform: translateX(-100%); }
+              100% { transform: translateX(200%); }
+            }
+          `}</style>
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-0">
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.05]">
-          {badges.map((b, i) => (
-            <div
-              key={b.title}
-              className="flex items-center gap-4 px-6 py-6"
-            >
-              {/* Logo or big number */}
-              {b.logo ? (
-                <div
-                  className="flex-shrink-0 relative"
-                  style={{ width: b.logoW ?? 56, height: 36 }}
-                >
-                  <Image
-                    src={b.logo}
-                    alt={b.logoAlt ?? b.title}
-                    fill
-                    className="object-contain"
-                    sizes={`${b.logoW ?? 56}px`}
-                  />
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.05]">
+            {badges.map((b, i) => (
+              <div
+                key={b.title}
+                className="flex items-center gap-4 px-6 py-8 group hover:bg-white/[0.02] transition-colors duration-500"
+              >
+                {/* Logo or big number */}
+                {b.logo ? (
+                  <div
+                    className="flex-shrink-0 relative grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                    style={{ width: b.logoW ?? 56, height: 36 }}
+                  >
+                    <Image
+                      src={b.logo}
+                      alt={b.logoAlt ?? b.title}
+                      fill
+                      className="object-contain drop-shadow-sm"
+                      sizes={`${b.logoW ?? 56}px`}
+                    />
+                  </div>
+                ) : (
+                  <span
+                    className="text-[28px] font-bold text-gradient-gold leading-none flex-shrink-0 drop-shadow-sm"
+                    style={{ fontFamily: 'var(--font-cormorant), serif' }}
+                  >
+                    {b.bigNum}
+                  </span>
+                )}
+
+                {/* Text */}
+                <div className="min-w-0">
+                  <p className="text-[13px] font-semibold text-white/90 leading-tight tracking-wide">{b.title}</p>
+                  <p className="text-[11px] text-white/40 mt-1 leading-tight font-light">{b.sub}</p>
                 </div>
-              ) : (
-                <span
-                  className="text-[26px] font-bold text-[#C89B5E] leading-none flex-shrink-0"
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {b.bigNum}
-                </span>
-              )}
-
-              {/* Text */}
-              <div className="min-w-0">
-                <p className="text-[13px] font-semibold text-white leading-tight">{b.title}</p>
-                <p className="text-[11px] text-white/35 mt-0.5 leading-tight">{b.sub}</p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

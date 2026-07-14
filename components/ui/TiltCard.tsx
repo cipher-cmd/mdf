@@ -11,7 +11,7 @@ interface TiltCardProps {
 
 export function TiltCard({ children, className, intensity = 8 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
 
   const rawX = useMotionValue(0)
   const rawY = useMotionValue(0)

@@ -63,50 +63,44 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        scrolled
-          ? 'bg-[#050505]/95 backdrop-blur-[24px] shadow-[0_1px_0_rgba(255,255,255,0.06)] py-3'
-          : 'bg-gradient-to-b from-black/80 via-black/35 to-transparent py-5'
+        'fixed left-1/2 -translate-x-1/2 z-50 w-full max-w-[1200px] px-4 md:px-6 transition-all duration-500',
+        scrolled ? 'top-4 md:top-6' : 'top-6 md:top-8'
       )}
     >
-      {/* Gold top accent when scrolled */}
-      <div
-        className={cn(
-          'absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#C89B5E]/40 to-transparent transition-opacity duration-500',
-          scrolled ? 'opacity-100' : 'opacity-0'
-        )}
-        aria-hidden
-      />
-
-      <div className="mx-auto max-w-[1440px] px-6 md:px-12 flex items-center justify-between gap-8">
+      <div className={cn(
+        'flex items-center justify-between gap-8 mx-auto w-full transition-all duration-500',
+        scrolled 
+          ? 'px-6 py-3 rounded-2xl bg-[#0a0a0a]/80 backdrop-blur-[20px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+          : 'px-2 py-2 bg-transparent'
+      )}>
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3.5 select-none group flex-shrink-0">
-          <div className="relative h-11 w-11 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+          <div className="relative h-9 w-9 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
             <Image
               src="/images/mdfFavicon.png"
               alt="MDF"
               fill
               className="object-contain"
-              sizes="44px"
+              sizes="36px"
               priority
             />
           </div>
           <div className="flex flex-col leading-none">
             <span
-              className="text-white font-bold text-[19px] tracking-[0.02em] group-hover:text-white transition-colors"
+              className="text-white font-bold text-[18px] tracking-[0.02em] group-hover:text-white transition-colors"
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
               MDF
             </span>
-            <span className="text-[#C89B5E] text-[8px] font-bold tracking-[0.34em] uppercase mt-[2px]">
+            <span className="text-[#C89B5E] text-[7.5px] font-bold tracking-[0.34em] uppercase mt-[3px]">
               ENTERPRISES
             </span>
           </div>
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-1 flex-1 justify-center">
+        <div className="hidden md:flex items-center gap-1.5 flex-1 justify-center">
           {navLinks.map(link => {
             const sectionId = link.href.replace('/#', '')
             const isHashLink = link.href.includes('#')
@@ -115,22 +109,24 @@ export function Navbar() {
               (isHashLink && pathname === '/' && activeSection === sectionId) ||
               (!isHashLink && link.href !== '/' && pathname.startsWith(link.href)) ||
               (link.href === pathname && !isHashLink)
+            
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'relative px-4 py-2 text-[13.5px] font-medium tracking-[0.025em] transition-colors duration-200 group',
-                  isActive ? 'text-white' : 'text-white/50 hover:text-white'
+                  'relative px-4 py-2 text-[13px] font-medium tracking-[0.03em] transition-colors duration-300 group rounded-full',
+                  isActive ? 'text-white' : 'text-white/60 hover:text-white hover:bg-white/[0.03]'
                 )}
               >
-                {link.label}
-                <span
-                  className={cn(
-                    'absolute bottom-1.5 left-4 right-4 h-[1px] bg-[#C89B5E] transition-all duration-300 origin-left',
-                    isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                  )}
-                />
+                {isActive && (
+                  <motion.div
+                    layoutId="navbar-active"
+                    className="absolute inset-0 bg-white/[0.08] rounded-full border border-white/[0.04]"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{link.label}</span>
               </Link>
             )
           })}
@@ -138,30 +134,30 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
-
+          <Link
+            href="/#contact"
+            className="px-5 py-2.5 text-white/70 hover:text-white text-[12px] font-bold tracking-[0.06em] uppercase transition-all duration-300 relative group overflow-hidden rounded-full"
+          >
+            <span className="relative z-10">Get Quote</span>
+            <div className="absolute inset-0 bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+          </Link>
           <a
             href="https://wa.me/917006252334"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#25d366] hover:bg-[#1fba5c] text-[#050505] text-[12px] font-bold tracking-[0.06em] uppercase rounded-md transition-all duration-200 shadow-[0_0_18px_rgba(37,211,102,0.18)] hover:shadow-[0_0_28px_rgba(37,211,102,0.32)]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#C89B5E] hover:bg-[#D7AE75] text-[#050505] text-[12px] font-bold tracking-[0.06em] uppercase rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(200,155,94,0.15)] hover:shadow-[0_0_25px_rgba(200,155,94,0.3)] transform hover:-translate-y-0.5"
           >
             {WA_SVG} WhatsApp
           </a>
-          <Link
-            href="/#contact"
-            className="px-5 py-2.5 border border-white/12 hover:border-[#C89B5E]/55 text-white/55 hover:text-[#C89B5E] text-[12px] font-bold tracking-[0.06em] uppercase rounded-md transition-all duration-200"
-          >
-            Get Quote
-          </Link>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-white p-2.5 rounded-md hover:bg-white/[0.07] transition-colors"
+          className="md:hidden text-white p-2.5 rounded-full hover:bg-white/[0.07] transition-colors"
           onClick={() => setMenuOpen(v => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 

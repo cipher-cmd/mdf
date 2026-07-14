@@ -23,7 +23,7 @@ const WA_SVG = (
 )
 
 export function Hero() {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false // Fix hydration mismatch
 
   const headVar: Variants = {
     hidden: {},
@@ -78,7 +78,7 @@ export function Hero() {
           J&K&apos;s Premier Equipment Hub · Est. 1997
         </motion.p>
 
-        {/* Visual display heading — decorative brand copy, aria-hidden since sr-only H1 above carries the semantics */}
+        {/* Visual display heading */}
         <motion.div
           role="presentation"
           aria-hidden
@@ -90,20 +90,19 @@ export function Hero() {
         >
           <motion.span
             variants={wordVar}
-            className="block text-[68px] sm:text-[82px] lg:text-[88px] xl:text-[106px] font-bold leading-[0.87] tracking-tight"
-            style={{ color: 'transparent', WebkitTextStroke: '1.5px rgba(255,255,255,0.45)' }}
+            className="block text-[72px] sm:text-[86px] lg:text-[92px] xl:text-[112px] font-bold leading-[0.85] tracking-tight text-white/90 drop-shadow-sm"
           >
             FIELD
           </motion.span>
           <motion.span
             variants={wordVar}
-            className="block text-[68px] sm:text-[82px] lg:text-[88px] xl:text-[106px] font-bold leading-[0.87] tracking-tight text-[#FF6B00]"
+            className="block text-[72px] sm:text-[86px] lg:text-[92px] xl:text-[112px] font-bold leading-[0.85] tracking-tight text-gradient-gold drop-shadow-md"
           >
             READY.
           </motion.span>
         </motion.div>
 
-        {/* Service line — no icons, clean typographic */}
+        {/* Service line */}
         <motion.div
           className="flex items-center gap-3 mb-8"
           initial={shouldReduce ? {} : { opacity: 0 }}
@@ -112,15 +111,15 @@ export function Hero() {
         >
           {services.map((label, i) => (
             <span key={label} className="flex items-center gap-3">
-              <span className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/45">{label}</span>
-              {i < services.length - 1 && <span className="text-[#C89B5E]/35 text-[8px]">·</span>}
+              <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/50">{label}</span>
+              {i < services.length - 1 && <span className="text-white/20 text-[10px]">·</span>}
             </span>
           ))}
         </motion.div>
 
         {/* Tagline */}
         <motion.p
-          className="text-white/50 text-[14px] md:text-[15px] leading-[1.72] mb-10 max-w-[420px]"
+          className="text-white/60 text-[15px] md:text-[16px] leading-[1.8] mb-12 max-w-[440px] font-medium"
           initial={shouldReduce ? {} : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -130,22 +129,26 @@ export function Hero() {
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-wrap gap-4 items-center mb-12"
+          className="flex flex-wrap gap-5 items-center mb-14"
           initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0, duration: 0.55, ease: EASE }}
+          transition={{ delay: 0.1, duration: 0.55, ease: EASE }}
         >
-          <MagneticButton as="a" href="/products" className="btn-orange gap-2">
-            Explore Products <ArrowRight size={15} />
+          <MagneticButton 
+            as="a" 
+            href="/products" 
+            className="btn-gold px-8 py-4 text-[13px] rounded-full shadow-[0_0_20px_rgba(200,155,94,0.15)] hover:shadow-[0_0_30px_rgba(200,155,94,0.3)] transition-all duration-300"
+          >
+            Explore Products <ArrowRight size={16} />
           </MagneticButton>
           <MagneticButton
             as="a"
             href="https://wa.me/917006252334"
             target="_blank"
             rel="noreferrer"
-            className="btn-ghost-dark gap-2"
+            className="btn-ghost-dark px-8 py-4 text-[13px] rounded-full border-white/10 hover:border-white/30 hover:bg-white/[0.03] transition-all duration-300"
           >
-            {WA_SVG} WhatsApp Us
+            {WA_SVG} <span className="ml-2">WhatsApp Us</span>
           </MagneticButton>
         </motion.div>
 

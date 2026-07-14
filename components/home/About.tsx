@@ -24,7 +24,7 @@ const pillars = [
 ]
 
 export function About() {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const handle = requestAnimationFrame(() => setIsMobile(window.innerWidth < 1024))
@@ -51,16 +51,15 @@ export function About() {
               About MDF Enterprises
             </motion.p>
             <motion.h2
-              className="text-[40px] md:text-[56px] lg:text-[64px] font-medium text-white leading-[1.0] tracking-tight"
+              className="text-[40px] md:text-[56px] lg:text-[64px] font-medium leading-[1.0] tracking-tight"
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.08, duration: 0.6 }}
             >
-              One Supplier.<br />
-              <span className="text-white/40">Every</span> Need
-              <span className="text-[#C89B5E]">.</span>
+              <span className="text-white/90 drop-shadow-sm">One Supplier.</span><br />
+              <span className="text-gradient-gold drop-shadow-sm">Every Need.</span>
             </motion.h2>
           </div>
           <motion.p
@@ -167,7 +166,7 @@ export function About() {
 
         {/* ── Founder spotlight ── */}
         <motion.div
-          className="mt-12 mb-12 relative overflow-hidden rounded-2xl border border-[#C89B5E]/15 bg-gradient-to-r from-[#C89B5E]/[0.04] via-[#C89B5E]/[0.07] to-[#C89B5E]/[0.04] px-8 py-8 md:px-12 md:py-10"
+          className="mt-12 mb-12 relative overflow-hidden rounded-2xl glass-card border-t border-[#C89B5E]/20 px-8 py-8 md:px-12 md:py-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}

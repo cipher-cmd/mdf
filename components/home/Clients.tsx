@@ -7,7 +7,7 @@ import { EASE } from '@/lib/animation'
 import { clients } from '@/lib/data/clients'
 
 function ClientCard({ client, index }: { client: (typeof clients)[0]; index: number }) {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const ref = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
 

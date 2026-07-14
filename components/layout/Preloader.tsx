@@ -7,7 +7,7 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 export function Preloader() {
   const [visible, setVisible] = useState(true)
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(false), shouldReduce ? 0 : 350)

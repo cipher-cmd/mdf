@@ -21,7 +21,7 @@ const filters = [
 ]
 
 function ProductCard({ p, index }: { p: Product; index: number }) {
-  const shouldReduce = useReducedMotion()
+  const shouldReduce = false /* fix hydration */
   const rawX = useMotionValue(0)
   const rawY = useMotionValue(0)
   const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [5, -5]), { stiffness: 300, damping: 30 })
@@ -49,24 +49,24 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
       onMouseLeave={onLeave}
       className="group"
     >
-      <div className="bg-[#0f0f0f] border border-white/[0.06] group-hover:border-[#C89B5E]/25 transition-colors duration-400 rounded-xl overflow-hidden h-full flex flex-col">
+      <div className="glass-card group-hover:border-[#C89B5E]/30 transition-colors duration-400 rounded-xl overflow-hidden h-full flex flex-col">
         {/* Image */}
         <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#111] flex-shrink-0">
           <Image
             src={p.image}
             alt={p.name}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           {/* Category badge */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 z-10">
             <span
-              className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded backdrop-blur-sm border"
+              className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded backdrop-blur-md border shadow-sm"
               style={{
-                background: `${categoryColor}22`,
+                background: `${categoryColor}15`,
                 color: categoryColor,
-                borderColor: `${categoryColor}33`,
+                borderColor: `${categoryColor}25`,
               }}
             >
               {p.category === 'sports' ? 'Sports' : p.category}
@@ -74,25 +74,27 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
           </div>
           {/* Gold line on hover */}
           <div
-            className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+            className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 z-10"
             style={{ background: categoryColor }}
           />
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col flex-1">
-          <p className="text-[10px] text-white/30 font-bold tracking-[0.15em] uppercase mb-1">{p.brand}</p>
-          <h3 className="text-[15px] font-semibold text-white mb-2 leading-snug">{p.name}</h3>
-          <p className="text-[12px] text-white/40 leading-relaxed mb-4 flex-1">{p.description}</p>
+        <div className="p-6 flex flex-col flex-1">
+          <p className="text-[10px] text-white/40 font-bold tracking-[0.15em] uppercase mb-1.5">{p.brand}</p>
+          <h3 className="text-[16px] font-medium text-white mb-2 leading-snug group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/60 transition-all duration-300">{p.name}</h3>
+          <p className="text-[12.5px] text-white/50 leading-relaxed mb-5 flex-1 font-light">{p.description}</p>
 
           {/* WhatsApp Enquire button */}
           <a
             href={waUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.08em] uppercase bg-[#25d366]/10 hover:bg-[#25d366] border border-[#25d366]/30 hover:border-[#25d366] text-[#25d366] hover:text-white px-4 py-2.5 rounded transition-all duration-300 w-full justify-center"
+            className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.08em] uppercase bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/80 hover:text-white px-4 py-3 rounded transition-all duration-300 w-full justify-center group/btn"
           >
-            {WA_SVG}
+            <span className="text-[#25d366] group-hover/btn:scale-110 transition-transform duration-300">{WA_SVG}</span>
             Enquire on WhatsApp
           </a>
         </div>
@@ -109,25 +111,25 @@ export function FeaturedProducts() {
   )
 
   return (
-    <section id="products" className="bg-[#050505] py-20 md:py-28">
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12">
+    <section id="products" className="bg-[#050505] py-20 md:py-28 relative">
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 relative z-10">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <p className="overline-gold mb-5">What We Have In Stock</p>
             <h2
-              className="text-[36px] md:text-[48px] font-medium text-white leading-[1.05]"
+              className="text-[36px] md:text-[48px] font-medium leading-[1.05]"
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
-              Featured Products<span className="text-[#FF6B00]">.</span>
+              <span className="text-white/90 drop-shadow-sm">Featured Products</span><span className="text-[#C89B5E]">.</span>
             </h2>
           </div>
           <Link
             href="/products"
-            className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/40 hover:text-[#FF6B00] transition-colors flex items-center gap-2 shrink-0"
+            className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/40 hover:text-[#C89B5E] transition-colors flex items-center gap-2 shrink-0 group"
           >
-            View All Products <ArrowUpRight size={14} />
+            View All Products <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
           </Link>
         </div>
 
