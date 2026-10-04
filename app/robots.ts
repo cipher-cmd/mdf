@@ -17,5 +17,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'Bytespider',      allow: '/' },
     ],
     sitemap: 'https://mdfenterprisesjk.in/sitemap.xml',
+    host: 'https://mdfenterprisesjk.in',
   }
 }

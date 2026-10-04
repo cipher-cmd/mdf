@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { EASE } from '@/lib/animation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from '@phosphor-icons/react'
 import { products, type Product } from '@/lib/data/products'
 
 const WA_SVG = (

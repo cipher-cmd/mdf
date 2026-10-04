@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon } from '@phosphor-icons/react'
 import { useTheme } from '@/providers/ThemeProvider'
 
 export function ThemeToggle() {

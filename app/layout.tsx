@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 import { Navbar }       from '@/components/layout/Navbar'
@@ -12,7 +12,7 @@ const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 const cormorant = Cormorant_Garamond({
@@ -104,10 +104,20 @@ export const metadata: Metadata = {
     apple: '/images/mdfFavicon.png',
     shortcut: '/images/mdfFavicon.png',
   },
+  // Set these env vars once the properties are created (empty values would render empty meta tags)
   verification: {
-    google: '',        // TODO: add Google Search Console HTML tag token
-    other: { 'msvalidate.01': '' }, // TODO: add Bing Webmaster Tools token
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#FAF8F5',
 }
 
 // ── Structured data ─────────────────────────────────────────────────────────
@@ -355,7 +365,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Schema: FAQ — AEO + AI citation */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </head>
-      <body className="bg-[#050505] text-white antialiased min-h-screen flex flex-col" suppressHydrationWarning>
+      <body className="bg-[#FAF8F5] text-[#141414] antialiased min-h-screen flex flex-col selection:bg-[#C59B27] selection:text-white" suppressHydrationWarning>
         <ThemeProvider>
           <div className="noise-overlay" aria-hidden />
           <ClientShell />

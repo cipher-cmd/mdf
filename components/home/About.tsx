@@ -1,244 +1,202 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { useCallback, useState } from 'react'
+import { motion } from 'framer-motion'
+import { EASE } from '@/lib/animation'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { CountUp } from '@/components/ui/CountUp'
-
-const stats = [
-  { target: 28,   suffix: '+', label: 'Years of Excellence' },
-  { target: 1000, suffix: '+', label: 'Institutions Served' },
-  { target: 500,  suffix: '+', label: 'Installations Done' },
-  { target: 25,   suffix: '+', label: 'Trusted Brands' },
-]
+import { JourneyModal } from './JourneyModal'
+import {
+  ArrowRight,
+  Package,
+  Wrench,
+  FileText,
+  Compass,
+  Medal,
+  Headset,
+} from '@phosphor-icons/react'
 
 const pillars = [
-  { num: '01', title: 'Retail & Bulk Orders',   desc: 'Serving individual buyers and large-scale institutional procurement with equal dedication.' },
-  { num: '02', title: 'GeM & Tender Ready',     desc: 'Full support for Government e-Marketplace, L1 procurement, and J&K state tenders.' },
-  { num: '03', title: 'Top Brand Dealerships',  desc: 'Authorised dealer for SG, YONEX, NIVIA, COSCO, STAG and 20+ premium brands.' },
-  { num: '04', title: 'Expert Installation',    desc: 'In-house team for gymnasium fit-outs, music labs, sports courts and multi-activity zones.' },
-  { num: '05', title: 'J&K-Wide Coverage',      desc: 'Delivering to institutions, schools, and government departments across every district of J&K.' },
-  { num: '06', title: 'After-Sales Support',    desc: 'AMC and service contracts that keep your equipment running long after delivery.' },
+  {
+    icon: Package,
+    title: 'Retail & Bulk Orders',
+    desc: 'Individual and institutional supply',
+  },
+  {
+    icon: Wrench,
+    title: 'Expert Installation',
+    desc: 'In-house team for setup',
+  },
+  {
+    icon: FileText,
+    title: 'GeM & Tender Ready',
+    desc: 'Support for GeM and state tenders',
+  },
+  {
+    icon: Compass,
+    title: 'J&K-Wide Coverage',
+    desc: 'Serving institutions across J&K',
+  },
+  {
+    icon: Medal,
+    title: 'Top Brand Dealerships',
+    desc: 'Authorised stock from 25+ leading brands',
+  },
+  {
+    icon: Headset,
+    title: 'After-Sales Support',
+    desc: 'AMC and service contracts',
+  },
 ]
 
 export function About() {
-  const shouldReduce = false /* fix hydration */
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => setIsMobile(window.innerWidth < 1024))
-    return () => cancelAnimationFrame(handle)
-  }, [])
-  const imgRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: imgRef, offset: ['start end', 'end start'] })
-  const yImg = useTransform(scrollYProgress, [0, 1], (shouldReduce || isMobile) ? [0, 0] : [-20, 20])
+  const [journeyOpen, setJourneyOpen] = useState(false)
+  const closeJourney = useCallback(() => setJourneyOpen(false), [])
 
   return (
-    <section id="about" className="bg-[#080808] py-24 md:py-32">
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12">
+    <section id="about" className="relative w-full overflow-hidden bg-[#FAF8F5] pt-8 sm:pt-10 md:pt-12 pb-12 sm:pb-16">
+      
+      {/* ── Background: foundedByBg.png flowing from below Founded By towards the top ── */}
+      <div className="absolute inset-0 pointer-events-none z-0 bg-feather">
+        <Image
+          src="/BG/foundedByBg.png"
+          alt="MDF Enterprises Heritage Landscape"
+          fill
+          className="object-cover object-bottom opacity-90 select-none"
+          sizes="100vw"
+        />
+      </div>
 
-        {/* ── Section header ── */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 md:mb-20">
-          <div>
-            <motion.p
-              className="overline-gold mb-5"
-              initial={{ opacity: 0, x: -16 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55 }}
-            >
-              About MDF Enterprises
-            </motion.p>
-            <motion.h2
-              className="text-[40px] md:text-[56px] lg:text-[64px] font-medium leading-[1.0] tracking-tight"
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.08, duration: 0.6 }}
-            >
-              <span className="text-white/90 drop-shadow-sm">One Supplier.</span><br />
-              <span className="text-gradient-gold drop-shadow-sm">Every Need.</span>
-            </motion.h2>
-          </div>
-          <motion.p
-            className="text-white/45 text-[15px] leading-[1.78] max-w-[380px]"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            Founded in 1997 in Srinagar, MDF Enterprises has spent 28+ years becoming J&K&apos;s most trusted equipment partner — from a single cricket bat to a 500-unit gymnasium order through GeM.
-          </motion.p>
-        </div>
-
-        {/* ── Main grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-start mb-16">
-
-          {/* Left: pillars */}
-          <div>
-            <motion.p
-              className="text-white/50 text-[15px] leading-[1.78] mb-10 max-w-[540px]"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.55 }}
-            >
-              Sports goods, fitness equipment, musical instruments, custom awards — all under one roof. Genuine products, authorised dealerships, and an in-house installation team that stays with you from procurement to commissioning.
-            </motion.p>
-
-            {/* Pillars — clean list style, no icon boxes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-0 gap-x-10 mb-10">
-              {pillars.map((p, i) => (
-                <motion.div
-                  key={p.title}
-                  className="flex items-start gap-5 py-5 border-b border-white/[0.05]"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 * i, duration: 0.5 }}
-                >
-                  <span
-                    className="text-[11px] font-bold text-[#C89B5E]/45 flex-shrink-0 pt-[3px] tabular-nums"
-                    style={{ fontFamily: 'var(--font-cormorant), serif', letterSpacing: '0.06em' }}
-                  >
-                    {p.num}
-                  </span>
-                  <div>
-                    <p className="text-[14px] font-semibold text-white mb-1 leading-tight">{p.title}</p>
-                    <p className="text-[12.5px] text-white/40 leading-[1.6]">{p.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <Link href="/products" className="btn-gold inline-flex gap-2">
-                Browse Our Products <ArrowRight size={15} />
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Right: image */}
-          <div ref={imgRef} className="relative overflow-hidden rounded-2xl lg:sticky lg:top-28">
-            <motion.div style={{ y: yImg }}>
-              <div className="relative w-full aspect-[4/3] md:aspect-[4/3] lg:aspect-[3/4] bg-[#111]">
-                <Image
-                  src="/images/SportsGoodsNew.webp"
-                  alt="MDF Enterprises — sports goods and equipment display, Srinagar J&K"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 420px"
-                  loading="eager"
-                />
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-              </div>
-            </motion.div>
-
-            {/* Corner accents */}
-            <div className="absolute top-4 right-4 w-10 h-10 border-t-[1.5px] border-r-[1.5px] border-[#C89B5E]/30 pointer-events-none" aria-hidden />
-            <div className="absolute bottom-4 left-4 w-10 h-10 border-b-[1.5px] border-l-[1.5px] border-[#C89B5E]/30 pointer-events-none" aria-hidden />
-
-            {/* Floating established badge */}
-            <div className="absolute bottom-5 right-5 bg-black/80 backdrop-blur-md border border-[#C89B5E]/20 rounded-xl px-5 py-3.5">
-              <p className="text-[10px] text-white/35 uppercase tracking-[0.18em] mb-0.5">Established</p>
-              <p
-                className="text-[22px] font-bold text-[#C89B5E]"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              >
-                1997
-              </p>
-            </div>
-
-            {/* Category label bottom-left */}
-            <div className="absolute bottom-5 left-5 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2">
-              <p className="text-[10px] text-white/50 uppercase tracking-[0.18em]">Srinagar, J&K</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Founder spotlight ── */}
+      {/* ── Content Container ── */}
+      <div className="relative z-10 max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
+        
+        {/* ── 1. ABOUT: Individual Floating Card with dedicated aboutBg.png ── */}
         <motion.div
-          className="mt-12 mb-12 relative overflow-hidden rounded-2xl glass-card border-t border-[#C89B5E]/20 px-8 py-8 md:px-12 md:py-10"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.9, ease: EASE }}
+          className="relative rounded-[22px] md:rounded-[28px] border border-[#E2D8C7] shadow-[0_20px_50px_-12px_rgba(20,20,20,0.10),0_1px_3px_rgba(0,0,0,0.03)] mb-8 sm:mb-12 overflow-hidden"
         >
-          {/* Decorative corner marks */}
-          <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-[#C89B5E]/25 pointer-events-none" aria-hidden />
-          <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-[#C89B5E]/25 pointer-events-none" aria-hidden />
+          {/* Dedicated aboutBg.png inside the About card */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <Image
+              src="/BG/aboutBg.png"
+              alt="MDF Enterprises Dal Lake About"
+              fill
+              className="object-cover object-center select-none"
+              sizes="(max-width: 1380px) 100vw, 1380px"
+            />
+            {/* Soft mist on left to ensure high contrast & legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/92 via-[#FAF8F5]/65 to-[#FAF8F5]/15 md:to-transparent" />
+          </div>
 
-          <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
-            {/* Gold monogram */}
-            <div className="flex-shrink-0 w-16 h-16 rounded-full bg-[#C89B5E]/10 border border-[#C89B5E]/25 flex items-center justify-center">
-              <span
-                className="text-[28px] font-bold text-[#C89B5E]"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                aria-hidden
+          {/* Card Content Grid */}
+          <div className="relative z-10 p-6 sm:p-8 md:p-10 lg:p-11 grid grid-cols-1 lg:grid-cols-[46%_54%] gap-8 lg:gap-10 items-center">
+            
+            {/* Left: About Text */}
+            <div className="max-w-[480px]">
+              <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
+                — ABOUT MDF ENTERPRISES
+              </p>
+              <h2
+                className="text-[32px] sm:text-[38px] lg:text-[42px] font-bold text-[#141414] leading-[1.06] mb-3.5 font-serif-heading"
               >
-                SM
-              </span>
+                One Supplier.<br />
+                Every Need.
+              </h2>
+              <p className="text-[#3E3831] text-[15px] sm:text-[14px] leading-[1.6] mb-6 font-medium">
+                Founded in 1997 in Srinagar, MDF Enterprises has been J&amp;K&apos;s trusted equipment partner for 28+ years — supplying sports goods, fitness equipment, musical instruments, awards and custom solutions across institutions, clubs and communities.
+              </p>
+              <button
+                type="button"
+                onClick={() => setJourneyOpen(true)}
+                className="inline-flex items-center gap-2 pl-5 pr-2 py-2 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] font-semibold text-[13px] rounded-full shadow-[0_8px_20px_-10px_rgba(204,165,82,0.9)] hover:shadow-[0_12px_26px_-10px_rgba(204,165,82,1)] transition-all group"
+              >
+                <span>Our Journey</span>
+                <span className="w-7 h-7 rounded-full bg-[#1E170A]/10 flex items-center justify-center group-hover:bg-[#1E170A] group-hover:text-[#CCA552] transition-colors">
+                  <ArrowRight size={13} weight="bold" className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </button>
             </div>
 
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#C89B5E] mb-2">
-                Founded By
-              </p>
-              <h3
-                className="text-[26px] md:text-[32px] font-medium text-white leading-tight mb-1"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              >
-                Mr. Syed Mumtaz
-              </h3>
-              <p className="text-[13px] text-white/40 leading-relaxed max-w-[560px]">
-                A lifelong passion for sport and education led Mr. Syed Mumtaz to establish MDF Enterprises in 1997 — from a small Srinagar storefront to J&amp;K&apos;s most trusted institutional equipment partner, serving 1000+ institutions across the valley and beyond.
-              </p>
+            {/* Right: 6-Pillars in a Clean White Floating Sub-Card */}
+            <div className="bg-white/94 backdrop-blur-md rounded-[18px] md:rounded-[22px] border border-[#EAE3D6] shadow-[0_8px_30px_rgba(0,0,0,0.05)] p-5 sm:p-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 sm:gap-x-7 gap-y-4 sm:gap-y-4.5">
+                {pillars.map((p, i) => {
+                  const Icon = p.icon
+                  return (
+                    <motion.div
+                      key={p.title}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.7, delay: 0.25 + i * 0.07, ease: EASE }}
+                      className="flex items-start gap-3.5"
+                    >
+                      <div className="w-10 h-10 rounded-full border border-[#D1AE6C]/70 bg-[#FAF5EB] flex items-center justify-center text-[#9E7422] flex-shrink-0 mt-0.5 shadow-2xs">
+                        <Icon size={19} weight="duotone" />
+                      </div>
+                      <div>
+                        <h4 className="text-[13px] sm:text-[13.5px] font-bold text-[#141414] leading-snug">
+                          {p.title}
+                        </h4>
+                        <p className="text-[11.5px] sm:text-[12px] text-[#554E46] leading-snug mt-0.5">
+                          {p.desc}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
             </div>
 
-            <div className="flex-shrink-0 text-right hidden md:block">
-              <p
-                className="text-[48px] font-bold text-[#C89B5E]/15 leading-none"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                aria-hidden
-              >
-                1997
-              </p>
-              <p className="text-[10px] text-white/20 tracking-[0.2em] uppercase -mt-1">Est.</p>
-            </div>
           </div>
         </motion.div>
 
-        {/* ── Stats bar ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/[0.05] border border-white/[0.05] rounded-2xl overflow-hidden">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              className="bg-[#080808] hover:bg-[#0d0d0d] px-8 py-8 text-center group transition-colors duration-300"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.09, duration: 0.55 }}
-            >
-              <div
-                className="text-[40px] font-bold text-white leading-none mb-2 group-hover:text-[#C89B5E] transition-colors duration-400"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              >
-                <CountUp target={s.target} suffix={s.suffix} />
+        {/* ── 2. FOUNDED BY: At the bottom in its own place on foundedByBg ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.9, ease: EASE }}
+          className="relative flex items-center justify-between pt-2 pb-4 sm:pb-6 px-2 sm:px-4"
+        >
+          
+          {/* Left Founder Profile Row */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 max-w-[780px]">
+            {/* Monogram Avatar Circle */}
+            <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#B58B38] text-white font-bold text-[22px] sm:text-[24px] flex items-center justify-center flex-shrink-0 shadow-md border-2 border-white/90 font-serif select-none">
+              SM
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10.5px] font-bold text-[#8B6B23] uppercase tracking-[0.2em]">
+                  FOUNDED BY
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#CCA552]" />
               </div>
-              <div className="text-[10px] text-white/30 tracking-[0.15em] uppercase font-medium">{s.label}</div>
-            </motion.div>
-          ))}
-        </div>
+              <h3 className="text-[22px] sm:text-[26px] font-bold text-[#141414] leading-snug mb-1 font-serif-heading">
+                Mr. Syed Mumtaz
+              </h3>
+              <p className="text-[#4E4841] text-[15px] sm:text-[14px] leading-[1.6] max-w-[540px]">
+                A lifelong passion for sport and education led Mr. Syed Mumtaz to establish MDF Enterprises in 1997 — from a small Srinagar storefront to J&amp;K&apos;s most trusted institutional equipment partner, serving 1000+ institutions across the valley and beyond.
+              </p>
+            </div>
+          </div>
+
+          {/* Vintage 1997 Watermark on right */}
+          <div className="hidden lg:block pointer-events-none select-none text-right opacity-[0.16] pr-4">
+            <span className="text-[100px] xl:text-[120px] font-bold text-[#8B6B23] font-serif-heading leading-none select-none">
+              1997
+            </span>
+          </div>
+
+        </motion.div>
 
       </div>
+
+      <JourneyModal open={journeyOpen} onClose={closeJourney} />
     </section>
   )
 }

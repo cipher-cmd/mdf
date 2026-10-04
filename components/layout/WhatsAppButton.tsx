@@ -11,17 +11,26 @@ const WA_SVG = (
 
 export function WhatsAppButton() {
   const [showTooltip, setShowTooltip] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      setShowTooltip(true)
-      setTimeout(() => setShowTooltip(false), 5000)
-    }, 30000)
-    return () => clearTimeout(t)
+    // Hidden near the top and while a pinned, full-screen section ([data-hide-fab]) owns the viewport
+    const onScroll = () => {
+      const mid = window.innerHeight / 2
+      const inPinned = Array.from(document.querySelectorAll('[data-hide-fab]')).some(el => {
+        const r = el.getBoundingClientRect()
+        return r.top <= mid && r.bottom >= mid
+      })
+      setScrolled(window.scrollY > 350 && !inPinned)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  if (!scrolled) return null
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <div className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex flex-col items-end gap-2">
       <AnimatePresence>
         {showTooltip && (
           <motion.div

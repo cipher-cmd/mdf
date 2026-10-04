@@ -1,7 +1,8 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ReactNode } from 'react'
+import { EASE } from '@/lib/animation'
 
 interface AnimatedSectionProps {
   children: ReactNode
@@ -15,17 +16,15 @@ export function AnimatedSection({
   children,
   className,
   delay = 0,
-  y = 40,
+  y = 24,
   once = true,
 }: AnimatedSectionProps) {
-  const shouldReduce = false /* fix hydration */
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: shouldReduce ? 0 : y }}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: '-80px' }}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      viewport={{ once, margin: '-60px' }}
+      transition={{ duration: 0.8, delay, ease: EASE }}
       className={className}
     >
       {children}

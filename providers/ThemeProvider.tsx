@@ -20,15 +20,15 @@ export function useTheme() {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', 'dark')
+    document.documentElement.setAttribute('data-theme', 'light')
   }, [])
 
   function toggleTheme() {
-    // No-op, we are forcing dark mode
+    // light theme default
   }
 
   return (
-    <ThemeContext.Provider value={{ theme: 'dark', toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: 'light', toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   )

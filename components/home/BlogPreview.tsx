@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Clock } from 'lucide-react'
+import { ArrowUpRight, Clock } from '@phosphor-icons/react'
 import { blogPosts } from '@/lib/data/blog'
 import { FEATURES } from '@/lib/config/features'
 

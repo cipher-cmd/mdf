@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Clock } from 'lucide-react'
+import { ArrowUpRight, Clock } from '@phosphor-icons/react/dist/ssr'
 import { blogPosts } from '@/lib/data/blog'
 
 export const metadata: Metadata = {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Clock } from 'lucide-react'
+import { ArrowLeft, Clock } from '@phosphor-icons/react/dist/ssr'
 import { blogPosts } from '@/lib/data/blog'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'

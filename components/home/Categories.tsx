@@ -1,139 +1,227 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
-import { EASE } from '@/lib/animation'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useInView, useMotionValueEvent, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Dumbbell, Activity, Music2, Trophy } from 'lucide-react'
-import { categories } from '@/lib/data/categories'
+import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
+import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
+import { getLenis } from '@/lib/scroll'
 
-const catIcons: Record<string, React.ElementType> = {
-  sports:  Dumbbell,
-  fitness: Activity,
-  music:   Music2,
-  awards:  Trophy,
-}
+const departments = [
+  {
+    title: 'Sports Goods',
+    tagline: 'Equip. Perform. Excel.',
+    items: 'Cricket · Football · Badminton · Volleyball · Athletics',
+    href: '/products/sports',
+    video: '/videos/departments/sports.mp4',
+    poster: '/videos/departments/sports.webp',
+  },
+  {
+    title: 'Fitness Equipment',
+    tagline: 'Stronger every day.',
+    items: 'Gym machines · Free weights · Cardio · Flooring',
+    href: '/products/fitness',
+    video: '/videos/departments/fitness.mp4',
+    poster: '/videos/departments/fitness.webp',
+  },
+  {
+    title: 'Musical Instruments',
+    tagline: 'Sound that inspires.',
+    items: 'Percussion · Strings · Keys · Band sets',
+    href: '/products/music',
+    video: '/videos/departments/music.mp4',
+    poster: '/videos/departments/music.webp',
+  },
+  {
+    title: 'Awards & Trophies',
+    tagline: 'Celebrate excellence.',
+    items: 'Trophies · Medals · Mementos · Engraving',
+    href: '/products/awards',
+    video: '/videos/departments/awards.mp4',
+    poster: '/videos/departments/awards.webp',
+  },
+]
 
-function CategoryCard({ cat, index, featured }: { cat: (typeof categories)[0]; index: number; featured?: boolean }) {
-  const shouldReduce = false /* fix hydration */
-  const cardRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const Icon = catIcons[cat.id] ?? ArrowUpRight
+// Kinetic band: what the categories cover, without committing to stock on hand
+const disciplines = [
+  'Cricket', 'Gymnasiums', 'Football', 'Tabla & Harmonium', 'Badminton', 'Trophies',
+  'Volleyball', 'Music Labs', 'Athletics', 'Medals', 'Table Tennis', 'Sports Courts',
+]
 
-  function onMove(e: React.MouseEvent) {
-    if (shouldReduce || !cardRef.current || !glowRef.current) return
-    const r = cardRef.current.getBoundingClientRect()
-    const x = e.clientX - r.left
-    const y = e.clientY - r.top
-    glowRef.current.style.background =
-      `radial-gradient(circle 220px at ${x}px ${y}px, rgba(255,107,0,0.1), transparent)`
-  }
-  function onLeave() {
-    if (glowRef.current) glowRef.current.style.background = 'transparent'
-  }
+const N = departments.length
+const STEP_VH = 80   // scroll distance per card
+const DWELL = 0.9    // last 10% of the track holds the final card before release
+const PEEK = 12      // px of each buried card left showing at the top of the deck
+
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
+const easeOut = (e: number) => 1 - Math.pow(1 - e, 3)
+
+type Dept = (typeof departments)[number]
+
+/** One card in the deck. `t` runs 0 → N-1: card i slides in while t goes i-1 → i, then sinks as later cards land on it. */
+function DeptCard({ dep, index, t, videoRef }: { dep: Dept; index: number; t: MotionValue<number>; videoRef: (el: HTMLVideoElement | null) => void }) {
+  const y = useTransform(t, v => `${index === 0 ? 0 : (1 - easeOut(clamp01(v - (index - 1)))) * 115}%`)
+  const depth = useTransform(t, v => Math.min(N - 1 - index, Math.max(0, v - index)))
+  const scale = useTransform(depth, d => 1 - d * 0.05)
+  const dim = useTransform(depth, d => Math.min(0.6, d * 0.4))
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ delay: index * 0.1, duration: 0.7, ease: EASE }}
-      className={featured ? 'row-span-2' : ''}
+      style={{ y, scale, top: index * PEEK, zIndex: index, height: `calc(100% - ${(N - 1) * PEEK}px)` }}
+      className="absolute inset-x-0 origin-top rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#0E0B07] shadow-[0_-18px_40px_-20px_rgba(20,14,6,0.55)] will-change-transform"
     >
-      <Link href={cat.href} className="group block h-full">
-          <div
-          ref={cardRef}
-          onMouseMove={onMove}
-          onMouseLeave={onLeave}
-          className="relative w-full overflow-hidden glass-card group-hover:border-[#C89B5E]/30 transition-colors duration-500 rounded-2xl"
-          style={{ height: featured ? '100%' : '260px', minHeight: featured ? '540px' : '260px' }}
-        >
-          {/* Spotlight layer */}
-          <div ref={glowRef} className="absolute inset-0 z-10 pointer-events-none transition-none rounded-2xl" aria-hidden />
+      {/* Phones: blurred scene fills the tall card, the clip sits in a wide band so most of the frame stays visible */}
+      <div className="sm:hidden absolute inset-0">
+        <Image src={dep.poster} alt="" fill className="object-cover scale-125 blur-2xl opacity-70" sizes="50vw" />
+        <div className="absolute inset-0 bg-black/35" />
+      </div>
 
-          <Image
-            src={cat.image}
-            alt={cat.label}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.07]"
-            sizes={featured ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'}
-          />
+      <video
+        ref={videoRef}
+        src={dep.video}
+        poster={dep.poster}
+        muted
+        playsInline
+        preload="none"
+        aria-hidden
+        className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 w-[165%] max-w-none aspect-video object-cover
+          [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]
+          sm:[mask-image:none] sm:inset-0 sm:left-0 sm:top-0 sm:translate-x-0 sm:translate-y-0 sm:w-full sm:h-full sm:aspect-auto"
+      />
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-          {/* Hover overlay brighten */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[-10] transition-all duration-500" />
+      {/* Shade only where text sits */}
+      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
 
-          {/* Top sweep line */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C89B5E] to-[#f3d5a4] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
-
-          {/* Category pill - top left */}
-          <div className="absolute top-5 left-5 z-20">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/70 shadow-sm">
-              <Icon size={10} className="text-[#C89B5E]" strokeWidth={2} />
-              {cat.tagline}
-            </span>
-          </div>
-
-          {/* Bottom content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-            <h3
-              className={`font-medium text-white leading-tight mb-3 group-hover:text-white transition-colors ${featured ? 'text-[36px] md:text-[40px]' : 'text-[24px] md:text-[26px]'}`}
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-            >
-              {cat.label}
-            </h3>
-            <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.12em] uppercase text-white/40 group-hover:text-[#C89B5E] transition-colors duration-300">
-              Explore Range
-              <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-            </div>
-          </div>
+      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="max-w-[560px]">
+          <p className="text-[11px] font-semibold tracking-[0.22em] text-white/70 mb-2 tabular-nums">0{index + 1} / 0{N}</p>
+          <p className="text-[#E9CF94] text-[15px] sm:text-[17px] mb-0.5" style={{ fontFamily: 'var(--font-cormorant), serif', fontStyle: 'italic' }}>
+            {dep.tagline}
+          </p>
+          <h3 className="text-[34px] sm:text-[48px] lg:text-[58px] font-bold text-white leading-[0.98] tracking-[-0.01em] font-serif-heading">
+            {dep.title}
+          </h3>
+          <p className="text-[13px] sm:text-[13.5px] text-white/75 mt-2">{dep.items}</p>
         </div>
-      </Link>
+        <Link
+          href={dep.href}
+          className="self-start sm:self-end inline-flex items-center gap-2 pl-4 pr-1.5 min-h-[44px] rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white text-[13px] font-semibold transition-colors group/cta flex-shrink-0"
+        >
+          Explore {dep.title.split(' ')[0]}
+          <span className="w-8 h-8 rounded-full bg-[#CCA552] text-[#1E170A] flex items-center justify-center">
+            <ArrowUpRight size={14} weight="bold" className="transition-transform duration-300 group-hover/cta:rotate-45" />
+          </span>
+        </Link>
+      </div>
+
+      {/* Buried cards dim as the deck grows */}
+      <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-[#0E0B07] pointer-events-none" />
     </motion.div>
   )
 }
 
+/** Header progress segment for card i */
+function Segment({ t, index, onClick, label }: { t: MotionValue<number>; index: number; onClick: () => void; label: string }) {
+  const fill = useTransform(t, v => (index === 0 ? 1 : clamp01(v - (index - 1))))
+  return (
+    <button onClick={onClick} aria-label={`Go to ${label}`} className="w-8 sm:w-12 py-3 -my-3">
+      <span className="block h-[3px] rounded-full bg-[#E2D8C4] overflow-hidden">
+        <motion.span style={{ scaleX: fill }} className="block h-full bg-[#B8923F] origin-left" />
+      </span>
+    </button>
+  )
+}
+
 export function Categories() {
-  const enabled = categories.filter(c => c.enabled)
-  const [featured, ...rest] = enabled
+  const trackRef = useRef<HTMLDivElement>(null)
+  const deckRef = useRef<HTMLDivElement>(null)
+  const videos = useRef<(HTMLVideoElement | null)[]>([])
+  const [active, setActive] = useState(0)
+  const visible = useInView(deckRef, { margin: '-10% 0px' })
+
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start start', 'end end'] })
+  const t = useTransform(scrollYProgress, v => Math.min(N - 1, (v / DWELL) * (N - 1)))
+  useMotionValueEvent(t, 'change', v => {
+    const next = Math.min(N - 1, Math.floor(v + 0.5))
+    setActive(prev => (prev === next ? prev : next))
+  })
+
+  // The top card plays from the start, so its scene lights up as it lands; the next one preloads
+  useEffect(() => {
+    videos.current.forEach((v, i) => {
+      if (!v) return
+      if (i <= active + 1 && v.preload !== 'auto') v.preload = 'auto'
+      if (i === active && visible) {
+        v.currentTime = 0
+        v.play().catch(() => {})
+      } else {
+        v.pause()
+      }
+    })
+  }, [active, visible])
+
+  const goTo = (i: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const top = track.getBoundingClientRect().top + window.scrollY
+    const y = top + (track.offsetHeight - window.innerHeight) * ((i / (N - 1)) * DWELL)
+    const lenis = getLenis()
+    if (lenis) lenis.scrollTo(y, { duration: 1.1 })
+    else window.scrollTo({ top: y, behavior: 'smooth' })
+  }
 
   return (
-    <section id="categories" className="bg-[#050505] py-20 md:py-28 relative">
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 relative z-10">
+    <section id="categories" className="relative w-full bg-[#FAF8F5]">
+      <div ref={trackRef} data-hide-fab className="relative" style={{ height: `calc(100svh + ${((N - 1) * STEP_VH) / DWELL}svh)` }}>
+        <div className="sticky top-0 h-[100svh] overflow-hidden flex flex-col pt-[72px] sm:pt-[84px] pb-3 sm:pb-6 px-3 sm:px-6 md:px-12">
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <p className="overline-gold mb-5">Categories We Deal In</p>
-            <h2
-              className="text-[36px] md:text-[52px] font-medium leading-[1.05]"
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-            >
-              <span className="text-white/90 drop-shadow-sm">Everything You Need,</span><br />
-              <span className="text-gradient-gold drop-shadow-sm">For Every Purpose.</span>
-            </h2>
+          {/* Heading + deck progress */}
+          <div className="max-w-[1400px] w-full mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 px-2 sm:px-0 mb-4 sm:mb-6">
+            <div>
+              <p className="mb-1 text-[10.5px] sm:text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Categories We Deal In</p>
+              <h2 className="text-[26px] sm:text-[34px] lg:text-[40px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
+                Everything You Need, For Every Purpose.
+              </h2>
+            </div>
+            <div className="flex items-center gap-4 sm:gap-5 flex-shrink-0">
+              <div className="flex items-center gap-1.5">
+                {departments.map((dep, i) => (
+                  <Segment key={dep.title} t={t} index={i} onClick={() => goTo(i)} label={dep.title} />
+                ))}
+              </div>
+              <Link href="/products" className="hidden sm:inline-flex items-center gap-1.5 py-1 text-[13px] font-semibold text-[#8B6B23] hover:text-[#A47E28] transition-colors group">
+                All Products
+                <ArrowRight size={13} weight="bold" className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </div>
-          <Link
-            href="/products"
-            className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/60 hover:text-white transition-colors flex items-center gap-2 shrink-0"
-          >
-            Browse All Products <ArrowUpRight size={14} />
-          </Link>
-        </div>
 
-        {/* Magazine bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Top row: featured left, one right */}
-          <div className="grid grid-cols-1 gap-4 md:row-span-2">
-            <CategoryCard cat={featured} index={0} featured />
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            {rest.map((cat, i) => (
-              <CategoryCard key={cat.id} cat={cat} index={i + 1} />
+          {/* The deck */}
+          <div ref={deckRef} className="relative flex-1 min-h-0 max-w-[1400px] w-full mx-auto">
+            {departments.map((dep, i) => (
+              <DeptCard key={dep.title} dep={dep} index={i} t={t} videoRef={el => { videos.current[i] = el }} />
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Kinetic band of disciplines — a light breath before About */}
+      <div className="relative py-10 sm:py-12 lg:py-14" aria-label="Disciplines we equip">
+        <InfiniteMarquee speed={60} pauseOnHover={false}>
+          {disciplines.map((word, i) => (
+            <span key={word} className="flex items-center">
+              <span
+                className={`px-5 sm:px-7 text-[34px] sm:text-[44px] lg:text-[52px] leading-none whitespace-nowrap font-serif-heading ${
+                  i % 2 ? 'italic text-[#C8A45A]' : 'font-bold text-[#1E1A14]'
+                }`}
+              >
+                {word}
+              </span>
+              <span className="text-[#CCA552] text-[14px]" aria-hidden>✦</span>
+            </span>
+          ))}
+        </InfiniteMarquee>
       </div>
     </section>
   )

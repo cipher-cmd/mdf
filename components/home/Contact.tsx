@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { EASE } from '@/lib/animation'
-import { Send, Phone, MapPin } from 'lucide-react'
+import { PaperPlaneTilt, Phone, MapPin } from '@phosphor-icons/react'
 
 const WA_SVG = (
   <svg className="w-4 h-4 text-[#C89B5E]" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -157,7 +157,7 @@ export function Contact() {
             </div>
 
             <button type="submit" className="btn-gold w-full justify-center py-4 text-[13px]">
-              <Send size={15} />
+              <PaperPlaneTilt size={15} weight="bold" />
               Send via WhatsApp
             </button>
 

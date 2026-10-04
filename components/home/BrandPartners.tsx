@@ -1,138 +1,76 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { EASE } from '@/lib/animation'
-import { brands } from '@/lib/data/brands'
 import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
+import { AnimatedSection } from '@/components/ui/AnimatedSection'
 
-const brandAccent: Record<string, string> = {
-  jonex:   '#e63312',
-  yonex:   '#0033a0',
-  cosco:   '#e84b2f',
-  nivia:   '#1565c0',
-  sg:      '#c8102e',
-  spartan: '#888888',
-  ss:      '#c8a217',
-  stag:    '#1b3f8f',
-  netco:   '#2e7d32',
-  gm:      '#ffffff',
-  nova:    '#ff4500',
-  bdm:     '#1b3f8f',
+const brandList = [
+  { id: 'jonex',   name: 'Jonex',       logo: '/images/brands/jonexLogo.webp' },
+  { id: 'yonex',   name: 'Yonex',       logo: '/images/brands/yonexlogo.webp' },
+  { id: 'cosco',   name: 'Cosco',       logo: '/images/brands/coscoLogo.webp' },
+  { id: 'nivia',   name: 'Nivia',       logo: '/images/brands/niviaLogo.webp' },
+  { id: 'sg',      name: 'SG',          logo: '/images/brands/sglogo.webp' },
+  { id: 'spartan', name: 'Spartan',     logo: '/images/brands/spartanlogo.webp' },
+  { id: 'ss',      name: 'SS',          logo: '/images/brands/ssLogo.webp' },
+  { id: 'stag',    name: 'Stag Global', logo: '/images/brands/staglogo.webp' },
+  { id: 'netco',   name: 'Netco',       logo: '/images/brands/netcoLogo.webp' },
+  { id: 'gm',      name: 'GM',          logo: '/images/brands/gmLogo.webp' },
+  { id: 'novas',   name: 'Novas',       logo: '/images/brands/novaFitnessLogo.webp' },
+  { id: 'bdm',     name: 'BDM Cricket', logo: '/images/brands/bdmlogo.webp' },
+]
+
+function BrandTile({ brand }: { brand: (typeof brandList)[number] }) {
+  return (
+    <div className="group mx-2 sm:mx-2.5 w-[148px] sm:w-[192px] h-[78px] sm:h-[96px] flex-shrink-0 bg-white/90 rounded-[16px] sm:rounded-[20px] border border-[#EAE3D6] px-5 flex items-center justify-center shadow-[0_2px_10px_rgba(60,45,20,0.04)] hover:shadow-[0_10px_26px_-8px_rgba(60,45,20,0.16)] hover:border-[#D9C9A6] transition-all duration-300">
+      <div className="relative w-full h-10 sm:h-12">
+        <Image
+          src={brand.logo}
+          alt={`${brand.name} authorised dealer`}
+          fill
+          className="object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+          sizes="192px"
+          loading="eager"
+        />
+      </div>
+    </div>
+  )
 }
 
 export function BrandPartners() {
   return (
-    <section id="brands" className="bg-[#0f0f0f] py-20 md:py-28">
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12">
+    <section id="brands" className="relative bg-[#FAF8F5] py-12 sm:py-14 md:py-16 overflow-hidden">
+      {/* Soft gold glow — a quiet interlude between the two image-heavy sections */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 60% 70% at 50% 55%, rgba(204,165,82,0.10), transparent 70%)' }}
+        aria-hidden
+      />
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+      <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
+        <AnimatedSection className="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-8 mb-8 sm:mb-10">
           <div>
-            <p className="overline-gold mb-5">Brands We Deal In</p>
-            <h2
-              className="text-[36px] md:text-[48px] font-medium text-white leading-[1.05]"
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-            >
-              25+ Premium Brands,<br />
-              Authorised Stock<span className="text-[#C89B5E]">.</span>
+            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
+              — OUR TRUSTED BRANDS
+            </p>
+            <h2 className="text-[28px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] font-serif-heading">
+              Genuine Stock from{' '}<br className="hidden sm:block" />India&apos;s Leading Brands.
             </h2>
           </div>
-          <p className="text-white/60 text-[14px] leading-relaxed max-w-[280px]">
-            Authorised dealers for India&apos;s most trusted sports, fitness and equipment brands — genuine stock, every time.
+          <p className="text-[#6B6359] text-[15px] md:text-[13.5px] md:text-right max-w-[420px] leading-relaxed">
+            Authorised dealership for 25+ trusted sports, fitness and equipment brands — sourced direct, every time.
           </p>
-        </div>
-
-
-
-        {/* Brand grid — 2 col mobile, 4 col desktop */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
-          {brands.map((brand, i) => {
-            const accentColor = brandAccent[brand.id] ?? '#C89B5E'
-            return (
-              <motion.div
-                key={brand.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ delay: i * 0.06, duration: 0.45, ease: EASE }}
-                whileHover={{ y: -10, scale: 1.06, zIndex: 10 }}
-                className="group relative bg-white rounded-2xl overflow-hidden cursor-default"
-                style={{
-                  boxShadow: `0 4px 20px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)`,
-                  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
-                }}
-              >
-                {/* Permanent subtle brand color tint at bottom */}
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 120%, ${accentColor}18 0%, transparent 65%)`,
-                  }}
-                  aria-hidden
-                />
-
-
-
-                {/* Stronger glow on hover */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 100%, ${accentColor}28 0%, transparent 70%)`,
-                    boxShadow: `inset 0 0 0 1.5px ${accentColor}30`,
-                  }}
-                  aria-hidden
-                />
-
-                <div className="px-6 py-7 flex flex-col items-center gap-3">
-                  {/* Logo — always full color */}
-                  <div className="relative h-16 w-full">
-                    <Image
-                      src={brand.logo}
-                      alt={`${brand.name} — authorised dealer MDF Enterprises`}
-                      fill
-                      className="object-contain group-hover:scale-105 transition-transform duration-400"
-                      sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 200px"
-                    />
-                  </div>
-                  {/* Brand name */}
-                  <span
-                    className="text-[10px] font-bold tracking-[0.22em] uppercase transition-colors duration-300"
-                    style={{ color: accentColor, opacity: 0.75 }}
-                  >
-                    {brand.name}
-                  </span>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
-
-        {/* Partner CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border border-[#C89B5E]/15 bg-[#C89B5E]/[0.04] rounded-2xl px-8 py-7"
-        >
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-[#C89B5E] mb-2">For Brand Partners</p>
-            <p className="text-white/75 text-[16px] font-medium leading-snug">
-              Interested in authorised dealership in J&K?
-            </p>
-            <p className="text-white/35 text-[13px] mt-1">We distribute across the Kashmir Valley and Ladakh region.</p>
-          </div>
-          <a
-            href={`https://wa.me/917006252334?text=${encodeURIComponent('Hi MDF Enterprises, I am interested in a dealer partnership. Could you share more details?')}`}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-gold shrink-0"
-          >
-            Partner With Us
-          </a>
-        </motion.div>
-
+        </AnimatedSection>
       </div>
+
+      {/* Two continuously moving strips, all 12 brands in each, offset so the same logo never lines up */}
+      <AnimatedSection delay={0.1} className="relative flex flex-col gap-3 sm:gap-4">
+        <InfiniteMarquee pauseOnHover={false} speed={45}>
+          {brandList.map(b => <BrandTile key={b.id} brand={b} />)}
+        </InfiniteMarquee>
+        <InfiniteMarquee pauseOnHover={false} speed={52} direction="right">
+          {[...brandList.slice(6), ...brandList.slice(0, 6)].map(b => <BrandTile key={b.id} brand={b} />)}
+        </InfiniteMarquee>
+      </AnimatedSection>
     </section>
   )
 }

@@ -23,7 +23,10 @@ export function InfiniteMarquee({
   return (
     <div
       className={cn('overflow-hidden', className)}
-      style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
+      style={{
+        maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+      }}
     >
       <div
         className={cn('flex w-max mdf-marquee', pauseOnHover && 'mdf-marquee-hover')}

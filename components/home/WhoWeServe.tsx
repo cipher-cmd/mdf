@@ -1,221 +1,176 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion'
 import { EASE } from '@/lib/animation'
-import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight, Storefront, GraduationCap, Bank, Wrench } from '@phosphor-icons/react'
 
-const panels = [
+const personas = [
   {
-    num: '01',
-    label: 'For Retail',
-    headline: 'Walk In.\nWalk Out Equipped.',
-    body: 'Visit our Srinagar showroom or browse our full catalogue. Wide product range, competitive pricing, and immediate availability on most items.',
-    cta: 'Enquire on WhatsApp',
-    href: 'https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20would%20like%20to%20visit%20your%20showroom%20and%20enquire%20about%20your%20products.',
-    external: true,
+    title: 'For Retail',
+    desc: 'For individuals & enthusiasts.',
+    icon: Storefront,
+    tags: ['Walk-in showroom', 'Genuine brands'],
+    cta: 'Explore Products',
+    href: '/products',
+    image: '/images/custom_sports_gear.jpg',
   },
   {
-    num: '02',
-    label: 'For Institutions',
-    headline: 'Built for Schools,\nColleges & Academies.',
-    body: 'Bulk supply with institutional pricing, complete tender documentation support, and a dedicated account manager for educational and sports bodies.',
+    title: 'For Institutions',
+    desc: 'Schools, colleges, clubs & educational institutions.',
+    icon: GraduationCap,
+    tags: ['Bulk pricing', 'Delivery & setup'],
     cta: 'Get a Quote',
     href: '/#contact',
-    external: false,
+    image: '/images/heritage_university.jpg',
   },
   {
-    num: '03',
-    label: 'For Government',
-    headline: 'GeM Ready.\nMSME Certified.',
-    body: 'Registered on the Government e-Marketplace. We support L1 procurement, DGS&D, and J&K state government tenders with complete documentation.',
-    cta: 'Enquire on WhatsApp',
-    href: 'https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20am%20interested%20in%20GeM%20procurement.%20Please%20share%20details.',
-    external: true,
+    title: 'For Government',
+    desc: 'Departments & public sector organisations.',
+    icon: Bank,
+    tags: ['GeM registered', 'Tender support'],
+    cta: 'Enquire Now',
+    href: 'https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20am%20enquiring%20about%20Government%20%2F%20GeM%20procurement.',
+    isExternal: true,
+    image: '/images/jk_government_building.jpg',
   },
   {
-    num: '04',
-    label: 'Installation & Service',
-    headline: "We Don't\nJust Sell.",
-    body: 'Our in-house installation team handles complete setup — gymnasium fit-outs, music labs, sports courts and multi-activity zones. AMC and after-sales support included.',
-    cta: 'Book Installation',
+    title: 'Installation & Service',
+    desc: 'Setup, training, AMC & after-sales support.',
+    icon: Wrench,
+    tags: ['In-house team', 'AMC contracts'],
+    cta: 'Our Solutions',
     href: '/#contact',
-    external: false,
+    image: '/images/gym_installation_service.jpg',
   },
 ]
 
 export function WhoWeServe() {
-  const shouldReduce = false /* fix hydration */
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const railRef = useRef<HTMLDivElement>(null)
+  const [distance, setDistance] = useState(0)
+  const [slide, setSlide] = useState(0)
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
+  // How far the card rail must travel sideways = how long the section stays pinned
+  useEffect(() => {
+    const rail = railRef.current
+    if (!rail) return
+    const measure = () => setDistance(Math.max(0, rail.scrollWidth - rail.clientWidth))
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(rail)
+    return () => ro.disconnect()
+  }, [])
+
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start start', 'end end'] })
+  const x = useTransform(scrollYProgress, v => -v * distance)
+  const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  useMotionValueEvent(scrollYProgress, 'change', v => {
+    const next = Math.min(personas.length - 1, Math.round(v * (personas.length - 1)))
+    setSlide(prev => (prev === next ? prev : next))
   })
 
-  useEffect(() => {
-    const unsub = scrollYProgress.on('change', v => {
-      setActiveIndex(Math.min(panels.length - 1, Math.floor(v * panels.length)))
-    })
-    return unsub
-  }, [scrollYProgress])
-
-  const active = panels[activeIndex]
-
   return (
-    <section
-      id="who-we-serve"
-      ref={containerRef}
-      className="relative bg-[#050505]"
-    >
-      {/* Mobile — stacked */}
-      <div className="lg:hidden py-20 px-6 md:px-12 max-w-[1440px] mx-auto space-y-16">
-        <div>
-          <p className="overline-gold mb-6">Who We Serve</p>
-          <h2
-            className="text-[40px] font-medium text-white leading-[1.05] mb-4"
-            style={{ fontFamily: 'var(--font-cormorant), serif' }}
-          >
-            One Partner. Every Buyer<span className="text-[#C89B5E]">.</span>
-          </h2>
-        </div>
-        {panels.map(p => (
-          <motion.div
-            key={p.num}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="border-l-2 border-[#C89B5E]/40 pl-6"
-          >
-            <span className="text-[11px] font-bold tracking-[0.25em] text-[#C89B5E] uppercase">{p.label}</span>
-            <h3
-              className="text-[30px] font-medium text-white mt-3 mb-3 leading-tight whitespace-pre-line"
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-            >
-              {p.headline}
-            </h3>
-            <p className="text-white/60 text-[15px] leading-relaxed mb-6">{p.body}</p>
-            <a
-              href={p.href}
-              target={p.external ? '_blank' : undefined}
-              rel={p.external ? 'noreferrer' : undefined}
-              className="btn-gold text-[11px] py-2.5 px-5 inline-flex w-full justify-center sm:w-auto sm:justify-start"
-            >
-              {p.cta} <ArrowRight size={13} className="ml-1" />
-            </a>
-          </motion.div>
-        ))}
-      </div>
+    <section id="who-we-serve" className="relative bg-[#FAF8F5]">
+      <div ref={trackRef} data-hide-fab className="relative" style={{ height: `calc(100svh + ${distance}px)` }}>
+        <div className="sticky top-0 h-[100svh] overflow-hidden flex flex-col justify-center pt-[64px] sm:pt-[76px] pb-4">
 
-      {/* Desktop — scroll-pinned */}
-      <div className="hidden lg:flex" style={{ minHeight: '400vh' }}>
-        {/* Sticky left */}
-        <div className="sticky top-0 self-start w-1/2 h-screen flex flex-col justify-center px-[8%] overflow-hidden">
-          <p className="overline-gold mb-8">Who We Serve</p>
-
-          {/* Large decorative number */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active.num}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.4, ease: EASE }}
-              className="mb-2"
-            >
-              <span
-                className="block text-[120px] font-bold leading-none select-none"
-                style={{
-                  fontFamily: 'var(--font-cormorant), serif',
-                  color: 'transparent',
-                  WebkitTextStroke: '1px rgba(200,155,94,0.25)',
-                }}
-                aria-hidden
-              >
-                {active.num}
-              </span>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Label */}
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={`${active.num}-label`}
-              className="text-[11px] font-bold tracking-[0.3em] text-[#C89B5E] uppercase mb-4"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              transition={{ duration: 0.35 }}
-            >
-              {active.label}
-            </motion.p>
-          </AnimatePresence>
-
-          {/* Headline */}
-          <AnimatePresence mode="wait">
-            <motion.h2
-              key={`${active.num}-headline`}
-              className="text-[48px] xl:text-[58px] font-medium text-white leading-[1.05] mb-5 whitespace-pre-line"
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.4, ease: EASE }}
-            >
-              {active.headline}
-            </motion.h2>
-          </AnimatePresence>
-
-          {/* Pip indicators */}
-          <div className="flex items-center gap-2 mt-6">
-            {panels.map((_, i) => (
-              <div
-                key={i}
-                className="h-[2px] rounded-full transition-all duration-400"
-                style={{
-                  width: i === activeIndex ? '32px' : '12px',
-                  background: i === activeIndex ? '#C89B5E' : 'rgba(255,255,255,0.15)',
-                }}
-              />
-            ))}
+          {/* Background sketch */}
+          <div className="absolute inset-0 z-0 pointer-events-none bg-feather">
+            <Image src="/BG/whoWeServeBg.png" alt="" fill className="object-cover object-left md:object-left-bottom opacity-35 select-none" sizes="100vw" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FAF8F5]/35 to-[#FAF8F5]/80" />
           </div>
 
-          <div className="absolute right-0 top-[20%] bottom-[20%] w-[1px] bg-gradient-to-b from-transparent via-[#C89B5E]/20 to-transparent" aria-hidden />
-        </div>
-
-        {/* Scrolling right panels */}
-        <div className="w-1/2">
-          {panels.map(p => (
-            <div key={p.num} className="h-screen flex flex-col justify-center px-16 xl:px-24">
-              <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-200px' }}
-                transition={{ duration: 0.7, ease: EASE }}
-              >
-                <span className="text-[11px] font-bold tracking-[0.25em] text-[#C89B5E] uppercase mb-5 block">
-                  {p.label}
-                </span>
-                <h3
-                  className="text-[46px] xl:text-[54px] font-medium text-white leading-[1.05] mb-6 whitespace-pre-line"
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {p.headline}
-                </h3>
-                <p className="text-white/60 text-[16px] leading-relaxed max-w-[420px] mb-8">{p.body}</p>
-                <a
-                  href={p.href}
-                  target={p.external ? '_blank' : undefined}
-                  rel={p.external ? 'noreferrer' : undefined}
-                  className="btn-gold inline-flex text-[11px] py-3 px-6"
-                >
-                  {p.cta} <ArrowRight size={13} className="ml-2" />
-                </a>
-              </motion.div>
+          {/* Heading */}
+          <div className="relative z-10 max-w-[1380px] w-full mx-auto px-5 sm:px-6 md:px-10 mb-5 sm:mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-2 lg:gap-10">
+            <div>
+              <p className="mb-1.5 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Who We Serve</p>
+              <h2 className="text-[28px] sm:text-[36px] lg:text-[42px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
+                Equipping People,<br className="hidden sm:block" /> Places and Communities.
+              </h2>
             </div>
-          ))}
+            <p className="text-[#4E4841] text-[14.5px] sm:text-[14px] leading-[1.55] max-w-[440px] lg:text-right">
+              Schools, government departments, clubs and private organisations — the right equipment with expert support, across Jammu &amp; Kashmir.
+            </p>
+          </div>
+
+          {/* Card rail: vertical scroll drives it sideways */}
+          <div ref={railRef} className="relative z-10 overflow-hidden">
+            <motion.div style={{ x }} className="flex gap-3.5 sm:gap-5 w-max px-5 sm:px-6 md:px-10 xl:px-[max(2.5rem,calc((100vw-1380px)/2+2.5rem))] will-change-transform">
+              {personas.map((item, i) => {
+                const Icon = item.icon
+                const body = (
+                  <>
+                    <span className="absolute top-0 left-6 right-6 h-[2px] rounded-full bg-[#CCA552] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" aria-hidden />
+
+                    <div className="relative aspect-[16/10] w-full rounded-[16px] md:rounded-[18px] bg-[#F5F2EB] overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
+                        sizes="(max-width: 640px) 80vw, 440px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                      <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/85 backdrop-blur-sm text-[10px] font-bold tracking-[0.16em] text-[#8B6B23]">
+                        0{i + 1} / 0{personas.length}
+                      </span>
+                    </div>
+
+                    <div className="relative -mt-7 ml-4 mb-2 w-14 h-14 rounded-full bg-white border border-[#E8DCC4] shadow-[0_6px_16px_-6px_rgba(60,45,20,0.3)] flex items-center justify-center text-[#9E7422] group-hover:bg-[#CCA552] group-hover:text-white group-hover:border-[#CCA552] transition-colors duration-300">
+                      <Icon size={24} weight="duotone" />
+                    </div>
+
+                    <div className="flex flex-col flex-1 px-2">
+                      <h3 className="text-[20px] sm:text-[22px] font-bold text-[#141414] leading-tight mb-1 font-serif-heading">{item.title}</h3>
+                      <p className="text-[14px] text-[#6B6359] leading-snug mb-3">{item.desc}</p>
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {item.tags.map(t => (
+                          <span key={t} className="px-2.5 py-1 rounded-full bg-[#F7F1E4] border border-[#EDE2CB] text-[11.5px] font-medium text-[#6B5420]">{t}</span>
+                        ))}
+                      </div>
+                      <div className="mt-auto flex items-center justify-between pt-3 border-t border-[#F0E9DC]">
+                        <span className="text-[13.5px] font-semibold text-[#141414] group-hover:text-[#8B6B23] transition-colors">{item.cta}</span>
+                        <span className="w-10 h-10 rounded-full border border-[#D9C49A] flex items-center justify-center text-[#8B6B23] group-hover:bg-[#CCA552] group-hover:border-[#CCA552] group-hover:text-[#1E170A] transition-all duration-300">
+                          <ArrowRight size={14} weight="bold" className="group-hover:translate-x-0.5 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )
+                const cardClass = 'group relative h-full bg-white rounded-[22px] md:rounded-[26px] border border-[#EAE3D6] p-2.5 pb-4 shadow-[0_2px_12px_rgba(60,45,20,0.04)] hover:shadow-[0_22px_44px_-20px_rgba(60,45,20,0.28)] hover:border-[#E0D2B4] transition-all duration-500 flex flex-col'
+                return (
+                  <motion.div
+                    key={item.title}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: i * 0.08, ease: EASE }}
+                    className="flex-shrink-0 w-[80vw] sm:w-[380px] lg:w-[440px]"
+                  >
+                    {item.isExternal ? (
+                      <a href={item.href} target="_blank" rel="noreferrer" className={cardClass}>{body}</a>
+                    ) : (
+                      <Link href={item.href} className={cardClass}>{body}</Link>
+                    )}
+                  </motion.div>
+                )
+              })}
+            </motion.div>
+          </div>
+
+          {/* Journey progress */}
+          {distance > 0 && (
+            <div className="relative z-10 max-w-[1380px] w-full mx-auto px-5 sm:px-6 md:px-10 mt-5 sm:mt-7 flex items-center gap-4">
+              <span className="text-[11px] font-semibold tracking-[0.22em] text-[#8B6B23] tabular-nums">0{slide + 1}</span>
+              <span className="relative flex-1 max-w-[320px] h-[2px] rounded-full bg-[#E5DCCB] overflow-hidden">
+                <motion.span style={{ width: bar }} className="absolute inset-y-0 left-0 bg-[#CCA552] rounded-full" />
+              </span>
+              <span className="text-[11px] font-semibold tracking-[0.22em] text-[#B5A684] tabular-nums">0{personas.length}</span>
+            </div>
+          )}
         </div>
       </div>
     </section>
