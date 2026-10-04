@@ -6,48 +6,23 @@ import { EASE } from '@/lib/animation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Storefront, GraduationCap, Bank, Wrench } from '@phosphor-icons/react'
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
-const personas = [
-  {
-    title: 'For Retail',
-    desc: 'For individuals & enthusiasts.',
-    icon: Storefront,
-    tags: ['Walk-in showroom', 'Genuine brands'],
-    cta: 'Explore Products',
-    href: '/products',
-    image: '/images/custom_sports_gear.jpg',
-  },
-  {
-    title: 'For Institutions',
-    desc: 'Schools, colleges, clubs & educational institutions.',
-    icon: GraduationCap,
-    tags: ['Bulk pricing', 'Delivery & setup'],
-    cta: 'Get a Quote',
-    href: '/#contact',
-    image: '/images/heritage_university.jpg',
-  },
-  {
-    title: 'For Government',
-    desc: 'Departments & public sector organisations.',
-    icon: Bank,
-    tags: ['GeM registered', 'Tender support'],
-    cta: 'Enquire Now',
-    href: 'https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20am%20enquiring%20about%20Government%20%2F%20GeM%20procurement.',
-    isExternal: true,
-    image: '/images/jk_government_building.jpg',
-  },
-  {
-    title: 'Installation & Service',
-    desc: 'Setup, training, AMC & after-sales support.',
-    icon: Wrench,
-    tags: ['In-house team', 'AMC contracts'],
-    cta: 'Our Solutions',
-    href: '/#contact',
-    image: '/images/gym_installation_service.jpg',
-  },
-]
+const cardIcons = [Storefront, GraduationCap, Bank, Wrench]
+const LINKS: Record<string, string> = { products: '/products', contact: '/#contact', blog: '/blog' }
 
 export function WhoWeServe() {
+  const copy = useCopy('home_who')
+  const whatsapp = useWhatsApp()
+  const personas = copy.cards.map((c, i) => ({
+    ...c,
+    icon: cardIcons[i % cardIcons.length],
+    tags: c.tags.split(',').map(t => t.trim()).filter(Boolean),
+    cta: c.button,
+    isExternal: c.link === 'whatsapp',
+    href: c.link === 'whatsapp' ? whatsapp(`Hi MDF Enterprises, I am enquiring about: ${c.title}.`) : LINKS[c.link] ?? '/#contact',
+  }))
   const trackRef = useRef<HTMLDivElement>(null)
   const railRef = useRef<HTMLDivElement>(null)
   const [distance, setDistance] = useState(0)
@@ -86,13 +61,13 @@ export function WhoWeServe() {
           {/* Heading */}
           <div className="relative z-10 max-w-[1380px] w-full mx-auto px-5 sm:px-6 md:px-10 mb-5 sm:mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-2 lg:gap-10">
             <div>
-              <p className="mb-1.5 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Who We Serve</p>
+              <p className="mb-1.5 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.eyebrow}</p>
               <h2 className="text-[28px] sm:text-[36px] lg:text-[42px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
-                Equipping People,<br className="hidden sm:block" /> Places and Communities.
+                {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
               </h2>
             </div>
             <p className="text-[#4E4841] text-[14.5px] sm:text-[14px] leading-[1.55] max-w-[440px] lg:text-right">
-              Schools, government departments, clubs and private organisations — the right equipment with expert support, across Jammu &amp; Kashmir.
+              {copy.text}
             </p>
           </div>
 
@@ -143,7 +118,7 @@ export function WhoWeServe() {
                 const cardClass = 'group relative h-full bg-white rounded-[22px] md:rounded-[26px] border border-[#EAE3D6] p-2.5 pb-4 shadow-[0_2px_12px_rgba(60,45,20,0.04)] hover:shadow-[0_22px_44px_-20px_rgba(60,45,20,0.28)] hover:border-[#E0D2B4] transition-all duration-500 flex flex-col'
                 return (
                   <motion.div
-                    key={item.title}
+                    key={i}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}

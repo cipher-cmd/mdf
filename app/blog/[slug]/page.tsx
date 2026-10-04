@@ -3,29 +3,35 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, CaretRight, WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
-import { blogPosts, categoryLabel, formatDate, readTime } from '@/lib/data/blog'
-import { waLink } from '@/lib/data/products'
+import { categoryLabel, formatDate, readTime } from '@/lib/data/blog'
+import { getPublishedPost, getPublishedPosts, getSiteCopy } from '@/lib/db/content'
+import { waHref } from '@/lib/content/copy'
 import { PostCard } from '@/components/blog/PostCard'
 import { CtaBand } from '@/components/home/CtaBand'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 
+export const revalidate = 3600
+
 interface Props {
   params: Promise<{ slug: string }>
 }
 
+// Articles published later are rendered on first visit, then cached until the next admin change
 export async function generateStaticParams() {
-  return blogPosts.map(p => ({ slug: p.slug }))
+  return (await getPublishedPosts()).map(p => ({ slug: p.slug }))
 }
+
+const abs = (src: string) => (src.startsWith('http') ? src : `${BASE_URL}${src}`)
 
 // Share images come from the sibling opengraph-image / twitter-image routes
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = blogPosts.find(p => p.slug === slug)
+  const post = await getPublishedPost(slug)
   if (!post) return {}
   return {
     title: post.title,
-    description: post.excerpt,
+    description: post.metaDescription || post.excerpt,
     alternates: { canonical: `${BASE_URL}/blog/${slug}` },
     openGraph: {
       type: 'article',
@@ -33,19 +39,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.excerpt,
       publishedTime: `${post.publishedAt}T00:00:00+05:30`,
+      ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
     },
   }
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = blogPosts.find(p => p.slug === slug)
+  const [post, allPosts, copy] = await Promise.all([getPublishedPost(slug), getPublishedPosts(), getSiteCopy()])
   if (!post) notFound()
 
   const label = categoryLabel(post.category)
   const url = `${BASE_URL}/blog/${post.slug}`
+  
   // Same topic first, then the newest of the rest
-  const related = blogPosts
+  const related = allPosts
     .filter(p => p.slug !== post.slug)
     .sort((a, b) => Number(b.category === post.category) - Number(a.category === post.category) || b.publishedAt.localeCompare(a.publishedAt))
     .slice(0, 3)
@@ -56,10 +64,10 @@ export default async function BlogPostPage({ params }: Props) {
     '@id': `${url}#article`,
     headline: post.title,
     description: post.excerpt,
-    image: `${BASE_URL}${post.coverImage}`,
+    image: abs(post.coverImage),
     url,
     datePublished: `${post.publishedAt}T00:00:00+05:30`,
-    dateModified: `${post.publishedAt}T00:00:00+05:30`,
+    dateModified: post.updatedAt ?? `${post.publishedAt}T00:00:00+05:30`,
     author: { '@type': 'Organization', '@id': `${BASE_URL}/#organization`, name: 'MDF Enterprises', url: BASE_URL },
     publisher: {
       '@type': 'Organization',
@@ -109,7 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
               <span className="relative w-7 h-7 rounded-full bg-white border border-[#E5DDD0] overflow-hidden">
                 <Image src="/images/mdfFavicon.png" alt="" fill className="object-contain p-1" sizes="28px" />
               </span>
-              MDF Editorial
+              {copy.blog_page.author}
             </span>
             <span className="text-[#C9B994]">·</span>
             <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
@@ -126,6 +134,22 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="article-body max-w-[680px] mx-auto px-4 sm:px-6 mt-12 sm:mt-16" dangerouslySetInnerHTML={{ __html: post.content }} />
 
+        {post.sources && post.sources.length > 0 && (
+          <aside className="max-w-[680px] mx-auto px-4 sm:px-6 mt-10">
+            <p className="text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase mb-3">Sources</p>
+            <ul className="space-y-1.5">
+              {post.sources.map(s => (
+                <li key={s.url} className="text-[13px] text-[#6B6359] leading-snug">
+                  <a href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#8B6B23] underline decoration-[#D9C49A] underline-offset-4">
+                    {s.title || s.url}
+                  </a>
+                  {s.source && <span className="text-[#99938B]"> · {s.source}</span>}
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+
         <footer className="max-w-[680px] mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-[#E8E2D6] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <a
             href={`https://wa.me/?text=${encodeURIComponent(`${post.title} — ${url}`)}`}
@@ -137,12 +161,12 @@ export default async function BlogPostPage({ params }: Props) {
             Share on WhatsApp
           </a>
           <a
-            href={waLink(`Hi MDF Enterprises, I just read "${post.title}" and have a question.`)}
+            href={waHref(copy.contact.whatsapp_number, `Hi ${copy.contact.business_name}, I just read "${post.title}" and have a question.`)}
             target="_blank"
             rel="noreferrer"
             className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#8B6B23] hover:text-[#A47E28] transition-colors"
           >
-            Have a question? Ask our team
+            {copy.blog_page.question_link}
             <ArrowUpRight size={13} weight="bold" className="transition-transform duration-300 group-hover:rotate-45" />
           </a>
         </footer>

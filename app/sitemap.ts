@@ -1,34 +1,14 @@
 import type { MetadataRoute } from 'next'
-import { blogPosts } from '@/lib/data/blog'
-import { categories } from '@/lib/data/categories'
+import { getCategories, getPublishedPosts } from '@/lib/db/content'
 
 const base = 'https://mdfenterprisesjk.in'
-const abs = (path: string) => `${base}${encodeURI(path).replace(/&/g, '%26')}`
+const abs = (path: string) => (path.startsWith('http') ? path : `${base}${encodeURI(path).replace(/&/g, '%26')}`)
 
-// Pages without their own date take the deploy time — the build is when their content last changed.
-const deployedAt = new Date()
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  const newestPost = blogPosts.reduce(
-    (latest, p) => (p.publishedAt > latest ? p.publishedAt : latest),
-    blogPosts[0]?.publishedAt ?? '2026-01-01',
-  )
-
-  const categoryRoutes: MetadataRoute.Sitemap = categories.map(cat => ({
-    url: `${base}/products/${cat.id}`,
-    lastModified: deployedAt,
-    changeFrequency: 'monthly',
-    priority: 0.85,
-    images: [abs(cat.image)],
-  }))
-
-  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map(post => ({
-    url: `${base}/blog/${post.slug}`,
-    lastModified: new Date(post.publishedAt),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-    images: post.coverImage ? [abs(post.coverImage)] : undefined,
-  }))
+// Rebuilt with the rest of the site whenever the admin publishes something
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [categories, posts] = await Promise.all([getCategories(), getPublishedPosts()])
+  const deployedAt = new Date()
+  const newestPost = posts[0]?.publishedAt ?? '2026-01-01'
 
   return [
     {
@@ -40,7 +20,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${base}/products`, lastModified: deployedAt, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${base}/blog`, lastModified: new Date(newestPost), changeFrequency: 'weekly', priority: 0.8 },
-    ...categoryRoutes,
-    ...blogRoutes,
+    ...categories.map(cat => ({
+      url: `${base}/products/${cat.id}`,
+      lastModified: deployedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
+      images: cat.image ? [abs(cat.image)] : undefined,
+    })),
+    ...posts.map(post => ({
+      url: `${base}/blog/${post.slug}`,
+      lastModified: new Date(post.updatedAt ?? post.publishedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+      images: post.coverImage ? [abs(post.coverImage)] : undefined,
+    })),
   ]
 }

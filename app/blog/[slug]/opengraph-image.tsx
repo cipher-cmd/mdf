@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { blogPosts, readTime } from '@/lib/data/blog'
+import { getPublishedPost } from '@/lib/db/content'
 
 // Share card generated per post — new (automated) posts get a branded preview with no extra work.
 // Kept photo-free on purpose: flat colour keeps the PNG small enough for WhatsApp previews.
@@ -17,7 +18,7 @@ const file = (p: string) => readFile(join(process.cwd(), p))
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = blogPosts.find(p => p.slug === slug)
+  const post = await getPublishedPost(slug)
   const title = post?.title ?? 'Insights from MDF Enterprises'
   const meta = post ? `${readTime(post)} min read` : 'Srinagar, J&K'
 

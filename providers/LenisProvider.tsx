@@ -2,12 +2,16 @@
 
 import Lenis from 'lenis'
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { setLenis, scrollToId } from '@/lib/scroll'
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
+  // The store-manager panel keeps native scrolling (forms, drawers, long lists)
+  const isAdmin = usePathname()?.startsWith('/admin') ?? false
+
   useEffect(() => {
     // Skip Lenis on touch/mobile — native scroll is faster there
-    if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return
+    if (isAdmin || window.matchMedia('(hover: none) and (pointer: coarse)').matches) return
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -27,7 +31,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       setLenis(null)
       lenis.destroy()
     }
-  }, [])
+  }, [isAdmin])
 
   // Same-page links ("/#about", "/") glide instead of jumping. Runs in the capture
   // phase so Next's <Link> sees defaultPrevented and skips its own instant scroll.

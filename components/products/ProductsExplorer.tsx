@@ -6,28 +6,46 @@ import Link from 'next/link'
 import { ArrowRight, X } from '@phosphor-icons/react'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FilterBar } from '@/components/ui/FilterBar'
-import { categories } from '@/lib/data/categories'
-import { products, waLink } from '@/lib/data/products'
+import { categories as defaultCategories, type Category } from '@/lib/data/categories'
+import { products as defaultProducts, type Product } from '@/lib/data/products'
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 import { ProductGrid } from './ProductGrid'
 
-const filters = [
-  { id: 'all', label: 'All', short: 'All' },
-  ...categories.map(c => ({ id: c.id, label: c.label, short: c.short })),
-].map(f => ({ ...f, count: f.id === 'all' ? products.length : products.filter(p => p.category === f.id).length }))
+export function ProductsExplorer({
+  initialProducts,
+  initialCategories
+}: {
+  initialProducts?: Product[]
+  initialCategories?: Category[]
+}) {
+  const currentProducts = initialProducts ?? defaultProducts
+  const currentCategories = initialCategories ?? defaultCategories
+  const copy = useCopy('products_page')
+  const waLink = useWhatsApp()
 
-export function ProductsExplorer() {
   const [active, setActive] = useState('all')
   const [query, setQuery] = useState('')
 
+  const filters = useMemo(() => {
+    return [
+      { id: 'all', label: 'All', short: 'All' },
+      ...currentCategories.map(c => ({ id: c.id, label: c.label, short: c.short })),
+    ].map(f => ({
+      ...f,
+      count: f.id === 'all' ? currentProducts.length : currentProducts.filter(p => p.category === f.id).length
+    }))
+  }, [currentCategories, currentProducts])
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return products
+    return currentProducts
       .filter(p => active === 'all' || p.category === active)
       .filter(p => !q || `${p.name} ${p.brand} ${p.description}`.toLowerCase().includes(q))
       .sort((a, b) => Number(b.featured) - Number(a.featured))
-  }, [active, query])
+  }, [currentProducts, active, query])
 
-  const activeCategory = categories.find(c => c.id === active)
+  const activeCategory = currentCategories.find(c => c.id === active)
   const reset = () => { setActive('all'); setQuery('') }
 
   return (
@@ -40,13 +58,13 @@ export function ProductsExplorer() {
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
         <AnimatedSection className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
           <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— The Collection</p>
+            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.section_eyebrow}</p>
             <h2 className="text-[30px] sm:text-[38px] lg:text-[44px] font-bold text-[#141414] leading-[1.04] font-serif-heading">
-              Genuine Gear,<br className="hidden sm:block" /> Hand-Picked.
+              {lines(copy.section_heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
             </h2>
           </div>
           <p className="text-[#6B6359] text-[14.5px] lg:text-[14px] lg:text-right max-w-[460px] leading-relaxed">
-            A curated selection from our Srinagar showroom. Tap any product for details, or enquire directly for sizes and live pricing.
+            {copy.section_text}
           </p>
         </AnimatedSection>
       </div>
@@ -78,9 +96,9 @@ export function ProductsExplorer() {
           <ProductGrid items={visible} />
         ) : (
           <div className="py-20 text-center max-w-[420px] mx-auto">
-            <p className="text-[26px] font-bold text-[#141414] font-serif-heading">Nothing here — yet.</p>
+            <p className="text-[26px] font-bold text-[#141414] font-serif-heading">{copy.empty_title}</p>
             <p className="mt-2 text-[14px] text-[#6B6359] leading-relaxed">
-              Our showroom stocks far more than we list online. Ask us and we&apos;ll check availability for you.
+              {copy.empty_text}
             </p>
             <div className="mt-6 flex items-center justify-center gap-3">
               <button onClick={reset} className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full border border-[#DDD3C0] text-[13px] font-semibold text-[#141414] hover:border-[#CCA552] transition-colors">

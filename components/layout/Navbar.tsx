@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { List, X, WhatsappLogo } from '@phosphor-icons/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
 
 const navLinks = [
   { label: 'Home',     href: '/' },
@@ -24,6 +25,8 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<string>('')
   const pathname = usePathname()
+  const copy = useCopy('header')
+  const whatsapp = useWhatsApp()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -71,6 +74,10 @@ export function Navbar() {
       window.removeEventListener('mdf:scrollto', onNavigate)
     }
   }, [pathname])
+
+  if (pathname?.startsWith('/admin')) {
+    return null
+  }
 
   return (
     <header
@@ -152,16 +159,16 @@ export function Navbar() {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1E170A]">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
-            <span>Get Quote</span>
+            <span>{copy.quote_button}</span>
           </Link>
           <a
-            href="https://wa.me/917006252334"
+            href={whatsapp()}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-[#FAF8F5] text-[#141414] border border-[#E2DBD0] text-[13px] font-semibold tracking-wide rounded-full transition-all duration-200 shadow-xs hover:shadow hover:scale-[1.02]"
           >
             <WhatsappLogo size={18} weight="fill" className="text-[#25D366]" />
-            <span>WhatsApp</span>
+            <span>{copy.whatsapp_button}</span>
           </a>
         </div>
 
@@ -212,7 +219,7 @@ export function Navbar() {
                   Get a Quote
                 </Link>
                 <a
-                  href="https://wa.me/917006252334"
+                  href={whatsapp()}
                   target="_blank"
                   rel="noreferrer"
                   className="btn-pill-whatsapp w-full justify-center py-3 text-center"

@@ -3,23 +3,10 @@
 import Image from 'next/image'
 import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
-const brandList = [
-  { id: 'jonex',   name: 'Jonex',       logo: '/images/brands/jonexLogo.webp' },
-  { id: 'yonex',   name: 'Yonex',       logo: '/images/brands/yonexlogo.webp' },
-  { id: 'cosco',   name: 'Cosco',       logo: '/images/brands/coscoLogo.webp' },
-  { id: 'nivia',   name: 'Nivia',       logo: '/images/brands/niviaLogo.webp' },
-  { id: 'sg',      name: 'SG',          logo: '/images/brands/sglogo.webp' },
-  { id: 'spartan', name: 'Spartan',     logo: '/images/brands/spartanlogo.webp' },
-  { id: 'ss',      name: 'SS',          logo: '/images/brands/ssLogo.webp' },
-  { id: 'stag',    name: 'Stag Global', logo: '/images/brands/staglogo.webp' },
-  { id: 'netco',   name: 'Netco',       logo: '/images/brands/netcoLogo.webp' },
-  { id: 'gm',      name: 'GM',          logo: '/images/brands/gmLogo.webp' },
-  { id: 'novas',   name: 'Novas',       logo: '/images/brands/novaFitnessLogo.webp' },
-  { id: 'bdm',     name: 'BDM Cricket', logo: '/images/brands/bdmlogo.webp' },
-]
-
-function BrandTile({ brand }: { brand: (typeof brandList)[number] }) {
+function BrandTile({ brand }: { brand: { name: string; logo: string } }) {
   return (
     <div className="group mx-2 sm:mx-2.5 w-[148px] sm:w-[192px] h-[78px] sm:h-[96px] flex-shrink-0 bg-white/90 rounded-[16px] sm:rounded-[20px] border border-[#EAE3D6] px-5 flex items-center justify-center shadow-[0_2px_10px_rgba(60,45,20,0.04)] hover:shadow-[0_10px_26px_-8px_rgba(60,45,20,0.16)] hover:border-[#D9C9A6] transition-all duration-300">
       <div className="relative w-full h-10 sm:h-12">
@@ -37,6 +24,9 @@ function BrandTile({ brand }: { brand: (typeof brandList)[number] }) {
 }
 
 export function BrandPartners() {
+  const copy = useCopy('home_brands')
+  const brandList = copy.brands
+  const half = Math.ceil(brandList.length / 2)
   return (
     <section id="brands" className="relative bg-[#FAF8F5] py-12 sm:py-14 md:py-16 overflow-hidden">
       {/* Soft gold glow — a quiet interlude between the two image-heavy sections */}
@@ -50,14 +40,14 @@ export function BrandPartners() {
         <AnimatedSection className="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-8 mb-8 sm:mb-10">
           <div>
             <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
-              — OUR TRUSTED BRANDS
+              — {copy.eyebrow}
             </p>
             <h2 className="text-[28px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] font-serif-heading">
-              Genuine Stock from{' '}<br className="hidden sm:block" />India&apos;s Leading Brands.
+              {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
             </h2>
           </div>
           <p className="text-[#6B6359] text-[15px] md:text-[13.5px] md:text-right max-w-[420px] leading-relaxed">
-            Authorised dealership for 25+ trusted sports, fitness and equipment brands — sourced direct, every time.
+            {copy.text}
           </p>
         </AnimatedSection>
       </div>
@@ -65,10 +55,10 @@ export function BrandPartners() {
       {/* Two continuously moving strips, all 12 brands in each, offset so the same logo never lines up */}
       <AnimatedSection delay={0.1} className="relative flex flex-col gap-3 sm:gap-4">
         <InfiniteMarquee pauseOnHover={false} speed={45}>
-          {brandList.map(b => <BrandTile key={b.id} brand={b} />)}
+          {brandList.map((b, i) => <BrandTile key={i} brand={b} />)}
         </InfiniteMarquee>
         <InfiniteMarquee pauseOnHover={false} speed={52} direction="right">
-          {[...brandList.slice(6), ...brandList.slice(0, 6)].map(b => <BrandTile key={b.id} brand={b} />)}
+          {[...brandList.slice(half), ...brandList.slice(0, half)].map((b, i) => <BrandTile key={i} brand={b} />)}
         </InfiniteMarquee>
       </AnimatedSection>
     </section>

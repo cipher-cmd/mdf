@@ -12,6 +12,22 @@
   --color-ink-primary:   #141414;
   --color-ink-muted:     #68645E;
 
+  /* Store-manager panel: the showroom's ledger — parchment, ink and gold leaf */
+  --color-parchment:   #FAF8F5;
+  --color-ledger:      #FFFFFF;
+  --color-vellum:      #F5F0E6;
+  --color-ink:         #141414;
+  --color-ink-soft:    #554E46;
+  --color-ink-faint:   #99938B;
+  --color-hairline:    #E8E2D6;
+  --color-gold:        #CCA552;
+  --color-gold-deep:   #8B6B23;
+  --color-gold-wash:   #FAF5EB;
+  --color-leaf:        #17713F;
+  --color-leaf-wash:   #EAF7EF;
+  --color-rust:        #B4412E;
+  --color-rust-wash:   #FBEDEA;
+
   --font-inter-variable: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-cormorant:      var(--font-cormorant), 'Cormorant Garamond', ui-serif, Georgia, serif;
 }
@@ -176,3 +192,18 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   font-size: 1.45em; line-height: 1.35; color: #141414;
 }
 @media (max-width: 640px) { .article-body { font-size: 16px; } }
+
+/* ── Store-manager panel motion ─────────────────────────────────────────── */
+@keyframes adm-rise { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes adm-slide { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes adm-pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+.adm-rise { animation: adm-rise 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+.adm-drawer[open] { animation: adm-slide 280ms cubic-bezier(0.23, 1, 0.32, 1); }
+.adm-dialog[open] { animation: adm-pop 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.adm-editor:empty::before { content: attr(data-placeholder); color: var(--color-ink-faint); }
+.adm-editor:focus { outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  .adm-rise, .adm-drawer[open], .adm-dialog[open] { animation: none; }
+}
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

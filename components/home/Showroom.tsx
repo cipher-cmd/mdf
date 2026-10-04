@@ -5,31 +5,18 @@ import { motion, useInView, useScroll, useTransform, type Variants } from 'frame
 import Image from 'next/image'
 import { MapPin, Clock, ArrowRight, WhatsappLogo } from '@phosphor-icons/react'
 import { EASE } from '@/lib/animation'
-
-const OPEN_HOUR = 10
-const CLOSE_HOUR = 19 // Mon–Sat, 10am–7pm IST
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
+import { shopStatus, type SiteCopy } from '@/lib/content/copy'
 
 /** Live open/closed status in Srinagar time. Computed on the client only, so SSR never shows a stale state. */
-function useShowroomStatus() {
+function useShowroomStatus(contact: SiteCopy['contact']) {
   const [status, setStatus] = useState<{ open: boolean; label: string } | null>(null)
   useEffect(() => {
-    const update = () => {
-      const ist = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-      const day = ist.getDay() // 0 = Sunday
-      const hour = ist.getHours() + ist.getMinutes() / 60
-      const open = day !== 0 && hour >= OPEN_HOUR && hour < CLOSE_HOUR
-      let label = 'Open now · until 7pm'
-      if (!open) {
-        const opensToday = day !== 0 && hour < OPEN_HOUR
-        const nextIsMonday = day === 6 ? hour >= CLOSE_HOUR : day === 0
-        label = opensToday ? 'Closed · opens 10am' : nextIsMonday ? 'Closed · opens Mon 10am' : 'Closed · opens 10am tomorrow'
-      }
-      setStatus({ open, label })
-    }
+    const update = () => setStatus(shopStatus(contact))
     update()
     const id = window.setInterval(update, 60_000)
     return () => window.clearInterval(id)
-  }, [])
+  }, [contact])
   return status
 }
 
@@ -46,7 +33,10 @@ const photoMask =
   '[mask-image:linear-gradient(to_bottom,transparent,#000_10%,#000_90%,transparent),linear-gradient(to_right,#000_0%,#000_55%,rgba(0,0,0,0.85)_68%,rgba(0,0,0,0.5)_80%,rgba(0,0,0,0.18)_92%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_10%,#000_90%,transparent),linear-gradient(to_right,#000_0%,#000_55%,rgba(0,0,0,0.85)_68%,rgba(0,0,0,0.5)_80%,rgba(0,0,0,0.18)_92%,transparent_100%)] [-webkit-mask-composite:source-in]'
 
 export function Showroom() {
-  const status = useShowroomStatus()
+  const copy = useCopy('home_showroom')
+  const contact = useCopy('contact')
+  const whatsapp = useWhatsApp()
+  const status = useShowroomStatus(contact)
   const sectionRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const photoY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
@@ -82,7 +72,7 @@ export function Showroom() {
             transition={{ duration: 2, ease: EASE }}
             className="absolute inset-0"
           >
-            <Image src="/images/showroom_interior.jpg" alt="MDF Enterprises Srinagar showroom" fill className="object-cover object-center" sizes="50vw" />
+            <Image src={copy.photo} alt="MDF Enterprises Srinagar showroom" fill className="object-cover object-center" sizes="50vw" />
           </motion.div>
         </motion.div>
         <div className="absolute inset-y-0 right-0 w-44 xl:w-56 bg-gradient-to-r from-transparent via-[#FAF8F5]/30 to-[#FAF8F5]" />
@@ -99,7 +89,7 @@ export function Showroom() {
             transition={{ duration: 1.1, ease: EASE }}
             className="lg:hidden relative aspect-[16/10] w-full rounded-[18px] overflow-hidden mb-6 shadow-[0_14px_34px_-14px_rgba(60,45,20,0.3)]"
           >
-            <Image src="/images/showroom_interior.jpg" alt="MDF Enterprises Srinagar showroom" fill className="object-cover" sizes="100vw" />
+            <Image src={copy.photo} alt="MDF Enterprises Srinagar showroom" fill className="object-cover" sizes="100vw" />
           </motion.div>
 
           <motion.div
@@ -110,7 +100,7 @@ export function Showroom() {
             className="max-w-[480px]"
           >
             <motion.div variants={rise} className="flex items-center gap-3 mb-2">
-              <p className="text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— OUR SHOWROOM</p>
+              <p className="text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.eyebrow}</p>
               {status && (
                 <span
                   className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold border ${
@@ -127,10 +117,10 @@ export function Showroom() {
             </motion.div>
 
             <motion.h2 variants={rise} className="text-[30px] sm:text-[34px] lg:text-[40px] font-bold text-[#141414] leading-[1.06] mb-2.5 font-serif-heading">
-              Visit Our Srinagar Showroom
+              {copy.heading}
             </motion.h2>
             <motion.p variants={rise} className="text-[#554E46] text-[15px] sm:text-[14px] leading-[1.6] mb-5">
-              Pick up a bat, test a treadmill, hear an instrument — then get honest advice on what suits your institution, club or game.
+              {copy.text}
             </motion.p>
 
             <motion.div
@@ -143,8 +133,8 @@ export function Showroom() {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.16em] uppercase text-[#A88B4F] mb-0.5">Address</p>
-                  <p className="text-[13px] font-semibold text-[#181818] leading-snug">SDA Shopping Complex, Opp. Iqbal Park</p>
-                  <p className="text-[12px] text-[#6B6359] leading-snug mt-0.5">Srinagar, J&amp;K — 190008</p>
+                  <p className="text-[13px] font-semibold text-[#181818] leading-snug">{contact.address_line1}</p>
+                  <p className="text-[12px] text-[#6B6359] leading-snug mt-0.5">{contact.address_line2}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-white/90 backdrop-blur-sm">
@@ -153,32 +143,32 @@ export function Showroom() {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.16em] uppercase text-[#A88B4F] mb-0.5">Hours</p>
-                  <p className="text-[13px] font-semibold text-[#181818] leading-snug">Mon – Sat: 10am – 7pm</p>
-                  <p className="text-[12px] text-[#6B6359] leading-snug mt-0.5">Sunday: Closed</p>
+                  <p className="text-[13px] font-semibold text-[#181818] leading-snug">{contact.hours_line1}</p>
+                  <p className="text-[12px] text-[#6B6359] leading-snug mt-0.5">{contact.hours_line2}</p>
                 </div>
               </div>
             </motion.div>
 
             <motion.div variants={rise} className="flex flex-wrap items-center gap-3">
               <a
-                href="https://maps.google.com/?q=MDF+Enterprises+SDA+Shopping+Complex+Iqbal+Park+Srinagar"
+                href={contact.maps_link}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 pl-5 pr-2 py-2 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] font-semibold text-[13px] rounded-full shadow-[0_8px_20px_-10px_rgba(204,165,82,0.9)] transition-all group"
               >
-                <span>Get Directions</span>
+                <span>{copy.button_directions}</span>
                 <span className="w-7 h-7 rounded-full bg-[#1E170A]/10 flex items-center justify-center group-hover:bg-[#1E170A] group-hover:text-[#CCA552] transition-colors">
                   <ArrowRight size={13} weight="bold" className="group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </a>
               <a
-                href="https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20would%20like%20to%20visit%20your%20Srinagar%20showroom."
+                href={whatsapp(`Hi ${contact.business_name}, I would like to visit your showroom.`)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#25D366]/40 bg-white/80 hover:bg-[#E8F8EE] text-[#0F6B42] font-semibold text-[13px] rounded-full transition-all"
               >
                 <WhatsappLogo size={16} weight="fill" className="text-[#25D366]" />
-                <span>WhatsApp Us</span>
+                <span>{copy.button_whatsapp}</span>
               </a>
             </motion.div>
           </motion.div>

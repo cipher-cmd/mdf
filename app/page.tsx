@@ -7,17 +7,20 @@ import { WhoWeServe }    from '@/components/home/WhoWeServe'
 import { Process }       from '@/components/home/Process'
 import { Clients }       from '@/components/home/Clients'
 import { Showroom }      from '@/components/home/Showroom'
+import { getCategories } from '@/lib/db/content'
 
 const CtaBand = dynamic(() => import('@/components/home/CtaBand').then(m => m.CtaBand))
 
-export default function HomePage() {
+export default async function HomePage() {
+  const departments = await getCategories()
+
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#141414] overflow-x-clip selection:bg-[#C59B27] selection:text-white">
       {/* 1. Hero with Dal lake canvas & overlapping floating stats */}
       <Hero />
 
       {/* 2. Categories & Featured Products Carousel */}
-      <Categories />
+      <Categories departments={departments} />
 
       {/* 3. About MDF Enterprises & Founder Syed Mumtaz spotlight */}
       <About />

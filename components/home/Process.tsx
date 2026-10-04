@@ -5,35 +5,14 @@ import { EASE } from '@/lib/animation'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import Image from 'next/image'
 import { FileText, Compass, Package, Wrench } from '@phosphor-icons/react'
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
-const steps = [
-  {
-    step: '01',
-    title: 'Consult',
-    desc: 'We understand your requirements.',
-    icon: FileText,
-  },
-  {
-    step: '02',
-    title: 'Source',
-    desc: 'We procure from 25+ trusted brands.',
-    icon: Compass,
-  },
-  {
-    step: '03',
-    title: 'Deliver',
-    desc: 'Pan-India delivery with careful packaging.',
-    icon: Package,
-  },
-  {
-    step: '04',
-    title: 'Install & Support',
-    desc: 'In-house installation and ongoing support.',
-    icon: Wrench,
-  },
-]
+const stepIcons = [FileText, Compass, Package, Wrench]
 
 export function Process() {
+  const copy = useCopy('home_process')
+  const steps = copy.steps.map((s, i) => ({ ...s, step: String(i + 1).padStart(2, '0'), icon: stepIcons[i % stepIcons.length] }))
   return (
     <section id="process" className="relative w-full bg-[#FAF8F5] py-12 sm:py-14 md:py-16 overflow-hidden">
       
@@ -58,15 +37,15 @@ export function Process() {
           {/* Left Column: Heading & Text */}
           <AnimatedSection className="max-w-[400px]">
             <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
-              — HOW WE WORK
+              — {copy.eyebrow}
             </p>
             <h2
               className="text-[30px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] mb-2.5 font-serif-heading"
             >
-              From Enquiry<br />to Excellence.
+              {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
             </h2>
             <p className="text-[#554E46] text-[15px] sm:text-[14px] leading-[1.6]">
-              A simple, reliable process — from understanding your needs to complete installation and support.
+              {copy.text}
             </p>
           </AnimatedSection>
 

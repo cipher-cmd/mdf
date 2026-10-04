@@ -9,16 +9,10 @@ import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FilterBar } from '@/components/ui/FilterBar'
 import { EASE } from '@/lib/animation'
 import { scrollToId } from '@/lib/scroll'
-import { blogCategories, blogPosts, categoryLabel, readTime } from '@/lib/data/blog'
+import { blogCategories, blogPosts, categoryLabel, readTime, type BlogPost } from '@/lib/data/blog'
 import { PostCard, PostMeta } from './PostCard'
-
-const newestFirst = [...blogPosts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-const featured = newestFirst.find(p => p.featured) ?? newestFirst[0]
-
-const filters = [
-  { id: 'all', label: 'All', short: 'All', count: blogPosts.length },
-  ...blogCategories.map(c => ({ ...c, count: blogPosts.filter(p => p.category === c.id).length })),
-]
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
 const isCategory = (id: string) => blogCategories.some(c => c.id === id)
 
@@ -32,9 +26,28 @@ export function selectBlogCategory(id: string) {
   window.dispatchEvent(new HashChangeEvent('hashchange'))
 }
 
-export function BlogExplorer() {
+export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
+  const posts = initialPosts ?? blogPosts
+  const copy = useCopy('blog_page')
   const [active, setActive] = useState('all')
   const [query, setQuery] = useState('')
+
+  const newestFirst = useMemo(
+    () => [...posts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)),
+    [posts]
+  )
+  const featured = useMemo(
+    () => newestFirst.find(p => p.featured) ?? newestFirst[0],
+    [newestFirst]
+  )
+
+  const filters = useMemo(
+    () => [
+      { id: 'all', label: 'All', short: 'All', count: posts.length },
+      ...blogCategories.map(c => ({ ...c, count: posts.filter(p => p.category === c.id).length })),
+    ],
+    [posts]
+  )
 
   useEffect(() => {
     const sync = () => {
@@ -57,10 +70,10 @@ export function BlogExplorer() {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     return newestFirst
-      .filter(p => !(showFeatured && p.slug === featured.slug))
+      .filter(p => !(showFeatured && p.slug === featured?.slug))
       .filter(p => active === 'all' || p.category === active)
       .filter(p => !q || `${p.title} ${p.excerpt} ${categoryLabel(p.category)}`.toLowerCase().includes(q))
-  }, [active, query, showFeatured])
+  }, [newestFirst, featured, active, query, showFeatured])
 
   return (
     <section id="articles" className="relative w-full bg-[#FAF8F5] pt-6 sm:pt-10 pb-16 sm:pb-24">
@@ -72,13 +85,13 @@ export function BlogExplorer() {
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
         <AnimatedSection className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
           <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— The Journal</p>
+            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.section_eyebrow}</p>
             <h2 className="text-[30px] sm:text-[38px] lg:text-[44px] font-bold text-[#141414] leading-[1.04] font-serif-heading">
-              Insights, Guides{' '}<br className="hidden sm:block" />&amp; Stories.
+              {lines(copy.section_heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
             </h2>
           </div>
           <p className="text-[#6B6359] text-[14.5px] lg:text-[14px] lg:text-right max-w-[460px] leading-relaxed">
-            Straightforward advice on choosing equipment, equipping institutions and the sporting life of the valley.
+            {copy.section_text}
           </p>
         </AnimatedSection>
       </div>
@@ -93,7 +106,7 @@ export function BlogExplorer() {
 
         {/* Featured story — only on the unfiltered view */}
         <AnimatePresence initial={false}>
-          {showFeatured && (
+          {showFeatured && featured && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}

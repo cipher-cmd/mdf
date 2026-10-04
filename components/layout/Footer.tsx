@@ -1,13 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Phone, EnvelopeSimple, WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
-
-const products = [
-  { label: 'Sports Goods',        href: '/products/sports' },
-  { label: 'Fitness Equipment',   href: '/products/fitness' },
-  { label: 'Musical Instruments', href: '/products/music' },
-  { label: 'Awards & Trophies',   href: '/products/awards' },
-]
+import { usePathname } from 'next/navigation'
+import { MapPin, Phone, EnvelopeSimple } from '@phosphor-icons/react/dist/ssr'
+import { useCopy, useDepartments } from '@/providers/SiteProvider'
+import { lines, telHref } from '@/lib/content/copy'
 
 const company = [
   { label: 'About Us', href: '/#about' },
@@ -16,14 +14,17 @@ const company = [
   { label: 'Contact',  href: '/#contact' },
 ]
 
-const weServe = [
-  'Government Departments',
-  'Educational Institutions',
-  'Sports Clubs & Academies',
-  'Private Organisations',
-]
-
 export function Footer() {
+  const pathname = usePathname()
+  const copy = useCopy('footer')
+  const contact = useCopy('contact')
+  const products = useDepartments().map(d => ({ label: d.label, href: d.href }))
+  const weServe = copy.we_serve
+
+  if (pathname?.startsWith('/admin')) {
+    return null
+  }
+
   return (
     <footer className="relative bg-[#FAF8F5] border-t border-[#EAE3D5] text-[#222] overflow-hidden">
       
@@ -64,8 +65,7 @@ export function Footer() {
             </Link>
 
             <p className="text-[#6B6359] text-[12px] leading-relaxed">
-              Sports. Fitness. Music. Awards.<br />
-              Serving Jammu &amp; Kashmir since 1997.
+              {lines(copy.tagline).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
             </p>
           </div>
 
@@ -123,16 +123,16 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-start gap-2 text-[12px] text-[#554E46]">
                 <MapPin size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0 mt-0.5" />
-                <span>SDA Shopping Complex, Opp. Iqbal Park, Srinagar, J&amp;K — 190008</span>
+                <span>{contact.address_line1}, {contact.address_line2}</span>
               </li>
               <li className="flex items-center gap-2 text-[12px] text-[#554E46]">
                 <Phone size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0" />
-                <a href="tel:+917006252334" className="hover:text-[#B8860B] transition-colors">+91 70062 52334</a>
+                <a href={telHref(contact.phone_display)} className="hover:text-[#B8860B] transition-colors">{contact.phone_display}</a>
               </li>
               <li className="flex items-center gap-2 text-[12px] text-[#554E46]">
                 <EnvelopeSimple size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0" />
-                <a href="mailto:mdfenterprisesjk@gmail.com" className="hover:text-[#B8860B] transition-colors truncate">
-                  mdfenterprisesjk@gmail.com
+                <a href={`mailto:${contact.email}`} className="hover:text-[#B8860B] transition-colors truncate">
+                  {contact.email}
                 </a>
               </li>
             </ul>
@@ -142,9 +142,9 @@ export function Footer() {
 
         {/* ── Bottom Bar ── */}
         <div className="pt-4 border-t border-[#EAE3D5] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#7A7369]">
-          <p>© 2026 MDF Enterprises, Srinagar. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {copy.copyright}</p>
           <div className="flex items-center gap-2 text-[11px] text-[#7A7369]">
-            <span>Sports · Fitness · Music · Awards</span>
+            <span>{copy.bottom_line}</span>
             <div className="relative w-4 h-3.5 ml-0.5 flex-shrink-0">
               <Image src="/images/mdfFavicon.png" alt="MDF" fill className="object-contain opacity-75" />
             </div>

@@ -1,22 +1,24 @@
 'use client'
 
 import { PageHero, StripItem } from '@/components/ui/PageHero'
-import { categories } from '@/lib/data/categories'
+import { useCopy, useDepartments } from '@/providers/SiteProvider'
 
 export function ProductsHero() {
+  const copy = useCopy('products_page')
+  const departments = useDepartments()
   return (
     <PageHero
       crumb="Products"
-      eyebrow="Equip. Perform. Excel."
-      title="Our Products"
-      intro="Genuine sports goods, fitness equipment, musical instruments and awards — sourced direct from 25+ leading brands for homes, schools and institutions across J&K."
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      intro={copy.intro}
       video="/BG/productsBg.mp4"
       poster="/BG/productsHeroPoster.webp"
-      cta={{ label: 'Browse the collection', target: 'collection' }}
-      badge="Authorised dealer · GeM registered"
+      cta={{ label: copy.button, target: 'collection' }}
+      badge={copy.badge}
       stripLabel="Departments"
     >
-      {categories.map((c, i) => (
+      {departments.slice(0, 4).map((c, i) => (
         <StripItem key={c.id} index={i} short={c.short} label={c.label} sub={c.tagline} href={c.href} />
       ))}
     </PageHero>

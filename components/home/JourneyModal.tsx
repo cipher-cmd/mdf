@@ -6,42 +6,13 @@ import Image from 'next/image'
 import { X, ArrowRight, MapPin } from '@phosphor-icons/react'
 import { EASE } from '@/lib/animation'
 import { getLenis, scrollToId } from '@/lib/scroll'
-
-const milestones = [
-  {
-    mark: '1997',
-    title: 'A Storefront in Srinagar',
-    text: 'Mr. Syed Mumtaz opens MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park — with a simple promise: the right equipment, honestly supplied.',
-  },
-  {
-    mark: 'The Early Years',
-    title: 'Schools, Clubs & Colleges',
-    text: 'Word spreads across the valley. Schools, colleges and sports clubs begin equipping their grounds, gyms and music rooms through MDF.',
-  },
-  {
-    mark: 'Partnerships',
-    title: 'Authorised Dealerships',
-    text: 'Dealerships with 25+ leading brands — SG, SS, Yonex, Nivia, Cosco and more — mean genuine stock at fair prices, every time.',
-  },
-  {
-    mark: 'Beyond the Counter',
-    title: 'Installation & Service',
-    text: 'An in-house team takes on gym fit-outs, courts and music labs, backed by AMC and after-sales support — 500+ installations and counting.',
-  },
-  {
-    mark: 'Public Sector',
-    title: 'GeM Registered · MSME Certified',
-    text: 'Government departments procure directly — J&K Police, CRPF, the University of Kashmir, Youth Services & Sports and many more.',
-  },
-  {
-    mark: 'Today',
-    title: '1000+ Institutions Served',
-    text: 'Four departments under one roof, supplying and installing across every district of Jammu & Kashmir.',
-  },
-]
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
 export function JourneyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const copy = useCopy('journey')
+  const milestones = copy.milestones
 
   useEffect(() => {
     if (!open) return
@@ -102,17 +73,17 @@ export function JourneyModal({ open, onClose }: { open: boolean; onClose: () => 
                 transition={{ duration: 1.6, ease: EASE }}
                 className="absolute inset-0"
               >
-                <Image src="/images/dal_lake_about.jpg" alt="Dal Lake, Srinagar" fill className="object-cover" sizes="(max-width: 768px) 100vw, 380px" />
+                <Image src={copy.image} alt="" fill className="object-cover" sizes="(max-width: 768px) 100vw, 380px" />
               </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5" />
               <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
-                <p className="text-[10.5px] font-bold tracking-[0.22em] uppercase text-[#E9CF94] mb-1.5">Our Journey</p>
+                <p className="text-[10.5px] font-bold tracking-[0.22em] uppercase text-[#E9CF94] mb-1.5">{copy.eyebrow}</p>
                 <h2 id="journey-title" className="text-[30px] sm:text-[38px] font-bold text-white leading-[1.02] font-serif-heading">
-                  28 Years.<br />One Valley.
+                  {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
                 </h2>
                 <p className="hidden md:flex items-center gap-1.5 text-[12px] text-white/75 mt-3">
                   <MapPin size={14} weight="fill" className="text-[#E9CF94]" />
-                  Srinagar, Jammu &amp; Kashmir
+                  {copy.place}
                 </p>
               </div>
             </div>
@@ -129,7 +100,7 @@ export function JourneyModal({ open, onClose }: { open: boolean; onClose: () => 
                 />
                 {milestones.map((m, i) => (
                   <motion.li
-                    key={m.title}
+                    key={i}
                     initial={{ opacity: 0, x: 18 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.7, delay: 0.3 + i * 0.1, ease: EASE }}
@@ -158,14 +129,14 @@ export function JourneyModal({ open, onClose }: { open: boolean; onClose: () => 
                   onClick={() => goTo('contact')}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] font-semibold text-[13px] rounded-full transition-colors group"
                 >
-                  Work With Us
+                  {copy.button_primary}
                   <ArrowRight size={14} weight="bold" className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => goTo('showroom')}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[#DDD5C7] hover:border-[#CCA552] text-[#141414] font-semibold text-[13px] rounded-full transition-colors"
                 >
-                  Visit the Showroom
+                  {copy.button_secondary}
                 </button>
               </motion.div>
             </div>

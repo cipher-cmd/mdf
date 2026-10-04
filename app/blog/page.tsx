@@ -2,25 +2,31 @@ import type { Metadata } from 'next'
 import { BlogHero } from '@/components/blog/BlogHero'
 import { BlogExplorer } from '@/components/blog/BlogExplorer'
 import { CtaBand } from '@/components/home/CtaBand'
-import { blogPosts } from '@/lib/data/blog'
+import { getPublishedPosts, getSiteCopy } from '@/lib/db/content'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 
-export const metadata: Metadata = {
-  title: 'Blog — Buying Guides, Procurement & Stories',
-  description:
-    'Buying guides, GeM procurement know-how and stories from the world of sport, fitness and music — from MDF Enterprises, Srinagar.',
-  alternates: { canonical: `${BASE_URL}/blog` },
-  openGraph: {
-    url: `${BASE_URL}/blog`,
-    title: 'Our Blog — MDF Enterprises Srinagar J&K',
-    description:
-      'Latest updates, expert insights, product guides and stories from the world of sports, fitness, music and institutional supply.',
-    images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
-  },
+// Hourly refresh lets scheduled articles appear on time; admin edits refresh instantly anyway
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { blog_page: copy } = await getSiteCopy()
+  return {
+    title: copy.seo_title,
+    description: copy.seo_description,
+    alternates: { canonical: `${BASE_URL}/blog` },
+    openGraph: {
+      url: `${BASE_URL}/blog`,
+      title: `${copy.title} — MDF Enterprises Srinagar J&K`,
+      description: copy.seo_description,
+      images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
+    },
+  }
 }
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getPublishedPosts()
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -35,7 +41,7 @@ export default function BlogPage() {
     '@type': 'ItemList',
     name: 'MDF Enterprises Blog Articles',
     description: 'Insights and guides on sports equipment, fitness infrastructure, music labs and procurement across J&K.',
-    itemListElement: blogPosts.map((post, idx) => ({
+    itemListElement: posts.map((post, idx) => ({
       '@type': 'ListItem',
       position: idx + 1,
       name: post.title,
@@ -45,17 +51,11 @@ export default function BlogPage() {
 
   return (
     <main className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
-      <BlogHero />
-      <BlogExplorer />
+      <BlogHero posts={posts} />
+      <BlogExplorer initialPosts={posts} />
       <CtaBand />
     </main>
   )

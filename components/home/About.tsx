@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { EASE } from '@/lib/animation'
 import Image from 'next/image'
 import { JourneyModal } from './JourneyModal'
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 import {
   ArrowRight,
   Package,
@@ -15,40 +17,11 @@ import {
   Headset,
 } from '@phosphor-icons/react'
 
-const pillars = [
-  {
-    icon: Package,
-    title: 'Retail & Bulk Orders',
-    desc: 'Individual and institutional supply',
-  },
-  {
-    icon: Wrench,
-    title: 'Expert Installation',
-    desc: 'In-house team for setup',
-  },
-  {
-    icon: FileText,
-    title: 'GeM & Tender Ready',
-    desc: 'Support for GeM and state tenders',
-  },
-  {
-    icon: Compass,
-    title: 'J&K-Wide Coverage',
-    desc: 'Serving institutions across J&K',
-  },
-  {
-    icon: Medal,
-    title: 'Top Brand Dealerships',
-    desc: 'Authorised stock from 25+ leading brands',
-  },
-  {
-    icon: Headset,
-    title: 'After-Sales Support',
-    desc: 'AMC and service contracts',
-  },
-]
+const pillarIcons = [Package, Wrench, FileText, Compass, Medal, Headset]
 
 export function About() {
+  const copy = useCopy('home_about')
+  const pillars = copy.pillars.map((p, i) => ({ ...p, icon: pillarIcons[i % pillarIcons.length] }))
   const [journeyOpen, setJourneyOpen] = useState(false)
   const closeJourney = useCallback(() => setJourneyOpen(false), [])
 
@@ -96,23 +69,22 @@ export function About() {
             {/* Left: About Text */}
             <div className="max-w-[480px]">
               <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
-                — ABOUT MDF ENTERPRISES
+                — {copy.eyebrow}
               </p>
               <h2
                 className="text-[32px] sm:text-[38px] lg:text-[42px] font-bold text-[#141414] leading-[1.06] mb-3.5 font-serif-heading"
               >
-                One Supplier.<br />
-                Every Need.
+                {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
               </h2>
               <p className="text-[#3E3831] text-[15px] sm:text-[14px] leading-[1.6] mb-6 font-medium">
-                Founded in 1997 in Srinagar, MDF Enterprises has been J&amp;K&apos;s trusted equipment partner for 28+ years — supplying sports goods, fitness equipment, musical instruments, awards and custom solutions across institutions, clubs and communities.
+                {copy.text}
               </p>
               <button
                 type="button"
                 onClick={() => setJourneyOpen(true)}
                 className="inline-flex items-center gap-2 pl-5 pr-2 py-2 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] font-semibold text-[13px] rounded-full shadow-[0_8px_20px_-10px_rgba(204,165,82,0.9)] hover:shadow-[0_12px_26px_-10px_rgba(204,165,82,1)] transition-all group"
               >
-                <span>Our Journey</span>
+                <span>{copy.button}</span>
                 <span className="w-7 h-7 rounded-full bg-[#1E170A]/10 flex items-center justify-center group-hover:bg-[#1E170A] group-hover:text-[#CCA552] transition-colors">
                   <ArrowRight size={13} weight="bold" className="group-hover:translate-x-0.5 transition-transform" />
                 </span>
@@ -126,7 +98,7 @@ export function About() {
                   const Icon = p.icon
                   return (
                     <motion.div
-                      key={p.title}
+                      key={i}
                       initial={{ opacity: 0, y: 12 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -166,21 +138,21 @@ export function About() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 max-w-[780px]">
             {/* Monogram Avatar Circle */}
             <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#B58B38] text-white font-bold text-[22px] sm:text-[24px] flex items-center justify-center flex-shrink-0 shadow-md border-2 border-white/90 font-serif select-none">
-              SM
+              {copy.founder_initials}
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[10.5px] font-bold text-[#8B6B23] uppercase tracking-[0.2em]">
-                  FOUNDED BY
+                  {copy.founder_label}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#CCA552]" />
               </div>
               <h3 className="text-[22px] sm:text-[26px] font-bold text-[#141414] leading-snug mb-1 font-serif-heading">
-                Mr. Syed Mumtaz
+                {copy.founder_name}
               </h3>
               <p className="text-[#4E4841] text-[15px] sm:text-[14px] leading-[1.6] max-w-[540px]">
-                A lifelong passion for sport and education led Mr. Syed Mumtaz to establish MDF Enterprises in 1997 — from a small Srinagar storefront to J&amp;K&apos;s most trusted institutional equipment partner, serving 1000+ institutions across the valley and beyond.
+                {copy.founder_text}
               </p>
             </div>
           </div>
@@ -188,7 +160,7 @@ export function About() {
           {/* Vintage 1997 Watermark on right */}
           <div className="hidden lg:block pointer-events-none select-none text-right opacity-[0.16] pr-4">
             <span className="text-[100px] xl:text-[120px] font-bold text-[#8B6B23] font-serif-heading leading-none select-none">
-              1997
+              {copy.founded_year}
             </span>
           </div>
 

@@ -76,3 +76,30 @@ Once configured, pushing to the `main` branch will automatically trigger a deplo
 
 ---
 *Built for MDF Enterprises.*
+
+## Store manager panel (`/admin`)
+
+Everything customers see is editable at `/admin`: products and photos, departments, every piece of website text, blog articles, and the automatic Article Writer. Saving anything refreshes the cached website instantly; normal visits never touch the database.
+
+### Environment variables (Vercel → Settings → Environment Variables)
+
+| Name | What it is |
+| --- | --- |
+| `DATABASE_URL` | Neon connection string. The database is shared; this site only uses tables starting with `mdf_`. |
+| `ADMIN_PASSWORD` | Owner's password for `/admin` (always works, even after a panel password change). |
+| `GROQ_API_KEY` | Free key from console.groq.com for the Article Writer. |
+| `CRON_SECRET` | Any long random string. Vercel sends it to `/api/cron/auto-blog`; without it nobody can trigger the writer. |
+| `ADMIN_SESSION_SECRET` | Optional. Signs admin sessions; defaults to `ADMIN_PASSWORD`. |
+
+### Database
+
+```bash
+npm run db:setup                      # create/upgrade mdf_* tables, add missing starter content (safe to re-run)
+npm run db:setup -- --reset-content   # DESTRUCTIVE: replace departments, products and articles with the built-in starter set
+```
+
+Uploaded pictures are shrunk to WebP in the browser (~100–300 KB) and stored in `mdf_media`, then served from `/media/<id>.webp` with a one-year cache, so each picture is read from the database about once.
+
+### Article Writer
+
+Vercel Cron calls `/api/cron/auto-blog` once a day (`vercel.json`, 06:00 UTC ≈ 11:30 IST). It writes at most one article per day (a unique `run_day` row is the lock), honours the panel's on/off, "every N days" and "publish or keep as draft" settings, rotates through the admin's topics, grounds each article in fresh Google News reports, then runs an anti-AI-tone pass (`lib/ai/writer.ts`; self-check: `npm run check:writer`). It uses Groq's free `openai/gpt-oss-120b` for writing and `gpt-oss-20b` for editing, so the two calls never share a rate limit.

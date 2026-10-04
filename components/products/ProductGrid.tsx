@@ -7,12 +7,25 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Check, Eye, WhatsappLogo, X } from '@phosphor-icons/react'
 import { EASE } from '@/lib/animation'
 import { getLenis } from '@/lib/scroll'
-import { categories } from '@/lib/data/categories'
-import { productEnquiry, type Product } from '@/lib/data/products'
+import type { Product } from '@/lib/data/products'
+import { useCopy, useDepartments, useWhatsApp } from '@/providers/SiteProvider'
 
-const categoryLabel = (id: string) => categories.find(c => c.id === id)?.label ?? id
+/** Department name + WhatsApp enquiry link, both from the admin's settings. */
+function useProductHelpers() {
+  const departments = useDepartments()
+  const whatsapp = useWhatsApp()
+  const copy = useCopy('products_page')
+  return {
+    copy,
+    categoryLabel: (id: string) => departments.find(c => c.id === id)?.label ?? id,
+    productEnquiry: (p: Product) =>
+      whatsapp(p.whatsappText || `Hi MDF Enterprises, I am interested in ${p.name}${p.brand ? ` (${p.brand})` : ''}. Could you share sizes, availability and pricing?`),
+  }
+}
 
 function ProductCard({ product, index, onOpen }: { product: Product; index: number; onOpen: () => void }) {
+  const { categoryLabel, productEnquiry } = useProductHelpers()
+  const inStock = (product as Product & { inStock?: boolean }).inStock !== false
   return (
     <motion.article
       layout
@@ -35,6 +48,11 @@ function ProductCard({ product, index, onOpen }: { product: Product; index: numb
           className="object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
           sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 340px"
         />
+        {!inStock && (
+          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold tracking-[0.14em] uppercase text-[#7A5E22]">
+            On order
+          </span>
+        )}
         <span className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         <span className="absolute left-1/2 bottom-4 -translate-x-1/2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/30 text-white text-[12px] font-semibold whitespace-nowrap">
           <Eye size={14} weight="bold" /> Quick view
@@ -69,6 +87,7 @@ function ProductCard({ product, index, onOpen }: { product: Product; index: numb
 
 function QuickView({ product, onClose }: { product: Product; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const { categoryLabel, productEnquiry, copy } = useProductHelpers()
 
   // Lock page scroll (Lenis + native), focus the dialog, close on Escape, restore focus after
   useEffect(() => {
@@ -138,8 +157,8 @@ function QuickView({ product, onClose }: { product: Product; onClose: () => void
           <p className="mt-3 text-[14.5px] text-[#554E46] leading-[1.65]">{product.description}</p>
 
           <ul className="mt-6 space-y-2.5 border-t border-[#E8E2D6] pt-5">
-            {product.highlights.map(h => (
-              <li key={h} className="flex items-center gap-2.5 text-[13.5px] text-[#2A251F]">
+            {product.highlights.map((h, i) => (
+              <li key={i} className="flex items-center gap-2.5 text-[13.5px] text-[#2A251F]">
                 <span className="w-5 h-5 rounded-full bg-[#F3EAD6] text-[#8B6B23] flex items-center justify-center flex-shrink-0">
                   <Check size={11} weight="bold" />
                 </span>
@@ -156,7 +175,7 @@ function QuickView({ product, onClose }: { product: Product; onClose: () => void
               className="inline-flex items-center justify-center gap-2 min-h-[50px] px-6 rounded-full bg-[#141414] hover:bg-[#2A241B] text-white text-[14px] font-semibold transition-colors"
             >
               <WhatsappLogo size={18} weight="fill" className="text-[#25D366]" />
-              Enquire on WhatsApp
+              {copy.enquire_button}
             </a>
             <Link
               href={`/products/${product.category}`}
@@ -166,7 +185,7 @@ function QuickView({ product, onClose }: { product: Product; onClose: () => void
               More in {categoryLabel(product.category)}
               <ArrowUpRight size={13} weight="bold" />
             </Link>
-            <p className="text-[11.5px] text-center text-[#99938B]">Genuine stock · GeM &amp; institutional invoicing available</p>
+            <p className="text-[11.5px] text-center text-[#99938B]">{copy.trust_line}</p>
           </div>
         </div>
       </motion.div>

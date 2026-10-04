@@ -7,6 +7,9 @@ import { ClientShell }  from '@/components/layout/ClientShell'
 import { LenisProvider } from '@/providers/LenisProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { SiteProvider } from '@/providers/SiteProvider'
+import { getSiteCopy, getCategories } from '@/lib/db/content'
+import type { SiteCopy } from '@/lib/content/copy'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -25,14 +28,15 @@ const cormorant = Cormorant_Garamond({
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getSiteCopy()
+  return {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'MDF Enterprises | Sports, Fitness, Music & Awards — Srinagar, J&K',
+    default: seo.site_title,
     template: '%s | MDF Enterprises — Srinagar',
   },
-  description:
-    "J&K's premier sports equipment supplier since 1997. Cricket gear, fitness equipment, musical instruments & custom awards. GeM-registered, MSME-certified. Serving all districts of Jammu & Kashmir.",
+  description: seo.site_description,
   keywords: [
     'sports equipment Srinagar',
     'sports goods Srinagar',
@@ -62,9 +66,8 @@ export const metadata: Metadata = {
   publisher: 'MDF Enterprises',
   category: 'Sports Equipment Retail',
   openGraph: {
-    title: 'MDF Enterprises — One Supplier. Every Need.',
-    description:
-      "J&K's one-stop supplier of sports goods, fitness equipment, musical instruments and custom awards since 1997. GeM-registered, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",
+    title: seo.share_title,
+    description: seo.share_description,
     type: 'website',
     locale: 'en_IN',
     siteName: 'MDF Enterprises',
@@ -73,9 +76,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MDF Enterprises — One Supplier. Every Need.',
-    description:
-      "J&K's premier sports equipment supplier since 1997. GeM-registered, MSME-certified. Cricket, fitness, music, awards.",
+    title: seo.share_title,
+    description: seo.share_description,
     // Image comes from app/twitter-image.jpg
   },
   robots: {
@@ -104,6 +106,7 @@ export const metadata: Metadata = {
       ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
       : undefined,
   },
+  }
 }
 
 export const viewport: Viewport = {
@@ -115,7 +118,7 @@ export const viewport: Viewport = {
 
 // ── Structured data ─────────────────────────────────────────────────────────
 
-const localBusinessSchema = {
+const localBusinessSchema = (contact: SiteCopy['contact']) => ({
   '@context': 'https://schema.org',
   '@type': ['Store', 'LocalBusiness', 'SportingGoodsStore'],
   '@id': `${BASE_URL}/#organization`,
@@ -131,8 +134,8 @@ const localBusinessSchema = {
     height: 512,
   },
   image: `${BASE_URL}/images/SportsGoodsNew.webp`,
-  telephone: '+917006252334',
-  email: 'mdfenterprisesjk@gmail.com',
+  telephone: `+${contact.phone_display.replace(/\D/g, '')}`,
+  email: contact.email,
   foundingDate: '1997',
   currenciesAccepted: 'INR',
   paymentAccepted: 'Cash, Bank Transfer, GeM Portal, UPI',
@@ -154,14 +157,14 @@ const localBusinessSchema = {
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      telephone: '+917006252334',
+      telephone: `+${contact.phone_display.replace(/\D/g, '')}`,
       contactType: 'sales',
       areaServed: 'IN',
       availableLanguage: ['English', 'Hindi', 'Urdu', 'Kashmiri'],
     },
     {
       '@type': 'ContactPoint',
-      telephone: '+917006252334',
+      telephone: `+${contact.phone_display.replace(/\D/g, '')}`,
       contactType: 'customer service',
       areaServed: 'IN',
       availableLanguage: ['English', 'Hindi', 'Urdu', 'Kashmiri'],
@@ -234,7 +237,7 @@ const localBusinessSchema = {
     // 'https://www.indiamart.com/mdf-enterprises-srinagar',
     // 'https://mkp.gem.gov.in/seller/YOUR_GEM_SELLER_ID',
   ],
-}
+})
 
 const websiteSchema = {
   '@context': 'https://schema.org',
@@ -336,7 +339,9 @@ const faqSchema = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [copy, departments] = await Promise.all([getSiteCopy(), getCategories()])
+
   return (
     <html lang="en-IN" className={`${inter.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
@@ -352,7 +357,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="ICBM"          content="34.0836, 74.7973" />
 
         {/* Schema: LocalBusiness + SportingGoodsStore */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(copy.contact)) }} />
         {/* Schema: WebSite entity */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
         {/* Schema: FAQ — AEO + AI citation */}
@@ -360,6 +365,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-[#FAF8F5] text-[#141414] antialiased min-h-screen flex flex-col selection:bg-[#C59B27] selection:text-white" suppressHydrationWarning>
         <ThemeProvider>
+          <SiteProvider value={{ copy, departments }}>
           <div className="noise-overlay" aria-hidden />
           <ClientShell />
           <LenisProvider>
@@ -368,6 +374,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </LenisProvider>
           <SpeedInsights />
+          </SiteProvider>
         </ThemeProvider>
       </body>
     </html>

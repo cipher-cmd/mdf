@@ -4,20 +4,10 @@ import { motion } from 'framer-motion'
 import { EASE } from '@/lib/animation'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import Image from 'next/image'
+import { useCopy } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
-const clients = [
-  { name: 'Department of Youth Services & Sports', sector: 'Government',      logo: '/images/clients/dysoLogo.webp' },
-  { name: 'University of Kashmir',                 sector: 'University',      logo: '/images/clients/kuLogo.webp' },
-  { name: 'J&K Police',                            sector: 'Police',          logo: '/images/clients/jkpLogo.webp' },
-  { name: 'CRPF',                                  sector: 'Armed Police',    logo: '/images/clients/crpfLogo.webp' },
-  { name: 'Govt. Medical College Srinagar',        sector: 'Medical College', logo: '/images/clients/gmcLogo.webp' },
-  { name: 'DSEK',                                  sector: 'School Education', logo: '/images/clients/dsekLogo.webp' },
-  { name: 'SKUAST-Kashmir',                        sector: 'University',      logo: '/images/clients/skaustlogo.webp' },
-  { name: 'Cluster University Srinagar',           sector: 'University',      logo: '/images/clients/clusterUniLogo.webp' },
-  { name: 'School Education Department',           sector: 'Government',      logo: '/images/clients/schoolEduLogo.webp' },
-]
-
-type Client = (typeof clients)[number]
+type Client = { name: string; sector: string; logo: string }
 
 // Stacked seal on phones, horizontal seal + name on wider screens
 function ClientCard({ item, delay }: { item: Client; delay: number }) {
@@ -43,6 +33,8 @@ function ClientCard({ item, delay }: { item: Client; delay: number }) {
 }
 
 export function Clients() {
+  const copy = useCopy('home_clients')
+  const clients = copy.clients
   return (
     <section id="clients" className="relative bg-[#FAF8F5] py-12 sm:py-14 md:py-16 overflow-hidden">
 
@@ -63,20 +55,19 @@ export function Clients() {
 
           <AnimatedSection className="max-w-[400px]">
             <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
-              — TRUSTED BY INSTITUTIONS &amp; DEPARTMENTS
+              — {copy.eyebrow}
             </p>
             <h2 className="text-[30px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] mb-2.5 font-serif-heading">
-              Serving J&amp;K&apos;s<br />
-              Institutions &amp; Communities.
+              {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
             </h2>
             <p className="text-[#554E46] text-[15px] sm:text-[14px] leading-[1.6]">
-              Proud to support the growth of sports, education and community infrastructure across Jammu &amp; Kashmir.
+              {copy.text}
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-3 gap-2 md:gap-3">
             {clients.map((item, idx) => (
-              <ClientCard key={item.name} item={item} delay={(idx % 3) * 0.06 + Math.floor(idx / 3) * 0.1} />
+              <ClientCard key={idx} item={item} delay={(idx % 3) * 0.06 + Math.floor(idx / 3) * 0.1} />
             ))}
           </div>
 

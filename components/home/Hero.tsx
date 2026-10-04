@@ -12,6 +12,8 @@ import {
 } from '@phosphor-icons/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
+import { lines } from '@/lib/content/copy'
 
 // 1:1 Outline/Rosette Icons matching MDFhome.png trust badges
 function EstBadgeIcon() {
@@ -85,14 +87,12 @@ function TrustedBadgeIcon() {
   )
 }
 
-const stats = [
-  { value: 28,   label: 'Years of Excellence', icon: SealMedalIcon },
-  { value: 1000, label: 'Institutions Served', icon: TemplePillarsIcon },
-  { value: 500,  label: 'Installations Done',  icon: InstallationIcon },
-  { value: 25,   label: 'Trusted Brands',      icon: TrustedBadgeIcon },
-]
+const statIcons = [SealMedalIcon, TemplePillarsIcon, InstallationIcon, TrustedBadgeIcon]
 
 export function Hero() {
+  const copy = useCopy('home_hero')
+  const stats = useCopy('home_stats').items.map((s, i) => ({ ...s, icon: statIcons[i % statIcons.length] }))
+  const whatsapp = useWhatsApp()
   const [videoModalOpen, setVideoModalOpen] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   // Gentle scroll parallax: scene drifts and deepens, copy lifts away
@@ -100,6 +100,10 @@ export function Hero() {
   const sceneScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
   const copyY = useTransform(scrollYProgress, [0, 1], [0, 70])
   const copyOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.15])
+
+  // The last " · part" of the eyebrow is hidden on phones, where the line would wrap
+  const eyebrowCut = copy.eyebrow.lastIndexOf(' · ')
+  const headlineLines = lines(copy.heading)
 
   useEffect(() => {
     if (!videoModalOpen) return
@@ -174,15 +178,15 @@ export function Hero() {
             >
               <span className="w-5 h-[1.5px] bg-[#8B6B23] inline-block" />
               <span className="text-[11px] md:text-[11.5px] tracking-[0.22em] font-semibold text-[#8B6B23] uppercase">
-                J&amp;K&apos;S PREMIER EQUIPMENT HUB<span className="hidden sm:inline"> · EST. 1997</span>
+                {eyebrowCut > 0 ? <>{copy.eyebrow.slice(0, eyebrowCut)}<span className="hidden sm:inline">{copy.eyebrow.slice(eyebrowCut)}</span></> : copy.eyebrow}
               </span>
             </motion.div>
 
             {/* Display Heading */}
             {/* Each line rises out of its own mask — reads as one confident motion on phones */}
             <h1 className="text-[38px] sm:text-[48px] lg:text-[54px] xl:text-[58px] font-bold tracking-tight text-[#141414] leading-[0.96] mb-3.5 font-serif-heading">
-              {['ONE SUPPLIER.', 'EVERY NEED.'].map((line, k) => (
-                <span key={line} className="block overflow-hidden pb-[0.06em] -mb-[0.06em]">
+              {headlineLines.map((line: string, k: number) => (
+                <span key={k} className="block overflow-hidden pb-[0.06em] -mb-[0.06em]">
                   <motion.span
                     className="block"
                     initial={{ y: '105%' }}
@@ -202,7 +206,7 @@ export function Hero() {
               transition={{ duration: 0.9, delay: 0.2, ease: EASE }}
               className="text-[#3F3A34] text-[16px] sm:text-[15px] leading-[1.58] mb-5 max-w-[500px]"
             >
-              Sports goods, fitness equipment, musical instruments and custom awards — supplied and installed across Jammu &amp; Kashmir for individuals and institutions.
+              {copy.subtitle}
             </motion.p>
 
             {/* CTA Button Row */}
@@ -216,7 +220,7 @@ export function Hero() {
                 href="/products"
                 className="col-span-2 justify-center flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-2.5 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] font-semibold text-[13px] rounded-full shadow-xs hover:shadow transition-all group"
               >
-                <span>Explore Products</span>
+                <span>{copy.button_primary}</span>
                 <ArrowRight size={14} weight="bold" className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
@@ -226,16 +230,16 @@ export function Hero() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-[#141414]">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
-                <span>Get a Quote</span>
+                <span>{copy.button_secondary}</span>
               </Link>
               <a
-                href="https://wa.me/917006252334?text=Hi%20MDF%20Enterprises%2C%20I%20would%20like%20to%20enquire%20about%20your%20products."
+                href={whatsapp()}
                 target="_blank"
                 rel="noreferrer"
                 className="justify-center flex items-center gap-2 px-4.5 sm:px-5 py-3 sm:py-2.5 bg-white hover:bg-[#FAF8F5] text-[#141414] border border-[#DDD5C7] font-semibold text-[13px] rounded-full shadow-xs hover:shadow transition-all"
               >
                 <WhatsappLogo size={16} weight="fill" className="text-[#25D366]" />
-                <span>WhatsApp Us</span>
+                <span>{copy.button_whatsapp}</span>
               </a>
             </motion.div>
 
@@ -306,10 +310,10 @@ export function Hero() {
           </div>
           <div className="text-left select-none">
             <p className="text-[11px] font-bold text-white tracking-[0.16em] uppercase leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
-              WATCH THE STORY
+              {copy.video_label}
             </p>
             <p className="text-[9px] font-medium text-white/90 tracking-[0.12em] uppercase mt-0.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
-              VIDEO · 00:42
+              {copy.video_length}
             </p>
           </div>
         </button>
@@ -320,8 +324,8 @@ export function Hero() {
             className="text-[26px] md:text-[32px] text-white/90 tracking-wide select-none drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
             style={{ fontFamily: 'var(--font-cormorant), cursive', fontStyle: 'italic', fontWeight: 600 }}
           >
-            Srinagar<br />
-            <span className="text-[20px] md:text-[26px] font-normal opacity-95">Jammu &amp; Kashmir</span>
+            {copy.place_line1}<br />
+            <span className="text-[20px] md:text-[26px] font-normal opacity-95">{copy.place_line2}</span>
           </p>
         </div>
 
@@ -349,7 +353,7 @@ export function Hero() {
             {stats.map((item, idx) => {
               const Icon = item.icon
               return (
-                <div key={item.label} className={`flex items-center gap-2.5 sm:gap-4 ${idx > 0 ? 'lg:pl-6' : ''}`}>
+                <div key={idx} className={`flex items-center gap-2.5 sm:gap-4 ${idx > 0 ? 'lg:pl-6' : ''}`}>
                   <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-[#C5A059] bg-[#FAF5EB]/90 backdrop-blur-xs flex items-center justify-center text-[#966F23] flex-shrink-0 shadow-2xs">
                     <Icon />
                   </div>

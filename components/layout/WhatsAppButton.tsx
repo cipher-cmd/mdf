@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useCopy, useWhatsApp } from '@/providers/SiteProvider'
 
 const WA_SVG = (
   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -12,6 +13,8 @@ const WA_SVG = (
 export function WhatsAppButton() {
   const [showTooltip, setShowTooltip] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const tip = useCopy('header').floating_whatsapp_tip
+  const whatsapp = useWhatsApp()
 
   useEffect(() => {
     // Hidden near the top and while a pinned, full-screen section ([data-hide-fab]) owns the viewport
@@ -40,13 +43,13 @@ export function WhatsAppButton() {
             transition={{ duration: 0.25 }}
             className="bg-[#0f0f0f] border border-white/[0.08] text-white text-[12px] font-medium px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap"
           >
-            Need help? Chat with us ↓
+            {tip}
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.a
-        href="https://wa.me/917006252334"
+        href={whatsapp()}
         target="_blank"
         rel="noreferrer"
         aria-label="Chat on WhatsApp"

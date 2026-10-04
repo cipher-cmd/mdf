@@ -3,25 +3,29 @@ import { ProductsHero } from '@/components/products/ProductsHero'
 import { ProductsExplorer } from '@/components/products/ProductsExplorer'
 import { BrandPartners } from '@/components/home/BrandPartners'
 import { CtaBand } from '@/components/home/CtaBand'
-import { products } from '@/lib/data/products'
+import { getProducts, getCategories, getSiteCopy } from '@/lib/db/content'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
+const abs = (src: string) => (src.startsWith('http') ? src : `${BASE_URL}${src}`)
 
-export const metadata: Metadata = {
-  title: 'Products — Sports, Fitness, Music & Awards',
-  description:
-    'A complete range of genuine sports goods, fitness equipment, musical instruments, awards and institutional supplies. GeM-registered supplier, MSME-certified. 25+ premium brands across J&K.',
-  alternates: { canonical: `${BASE_URL}/products` },
-  openGraph: {
-    url: `${BASE_URL}/products`,
-    title: 'Our Products — MDF Enterprises Srinagar J&K',
-    description:
-      'Complete range of genuine sports goods, fitness machinery, musical instruments and institutional awards. Trusted supplier across Jammu & Kashmir since 1997.',
-    images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const { products_page: copy } = await getSiteCopy()
+  return {
+    title: copy.seo_title,
+    description: copy.seo_description,
+    alternates: { canonical: `${BASE_URL}/products` },
+    openGraph: {
+      url: `${BASE_URL}/products`,
+      title: `${copy.title} — MDF Enterprises Srinagar J&K`,
+      description: copy.seo_description,
+      images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
+    },
+  }
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const [allProducts, allCategories] = await Promise.all([getProducts(), getCategories()])
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -36,29 +40,23 @@ export default function ProductsPage() {
     '@type': 'ItemList',
     name: 'MDF Enterprises Product Catalogue',
     description: 'Sports equipment, fitness equipment, musical instruments, and institutional trophies available across J&K.',
-    itemListElement: products.map((p, idx) => ({
+    itemListElement: allProducts.map((p, idx) => ({
       '@type': 'ListItem',
       position: idx + 1,
       name: p.name,
       description: p.description,
-      image: `${BASE_URL}${p.image}`,
+      image: abs(p.image),
       brand: { '@type': 'Brand', name: p.brand },
     })),
   }
 
   return (
     <main className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
       <ProductsHero />
-      <ProductsExplorer />
+      <ProductsExplorer initialProducts={allProducts} initialCategories={allCategories} />
       <BrandPartners />
       <CtaBand />
     </main>
