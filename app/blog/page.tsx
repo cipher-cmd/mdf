@@ -1,77 +1,62 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight, Clock } from '@phosphor-icons/react/dist/ssr'
+import { BlogHero } from '@/components/blog/BlogHero'
+import { BlogExplorer } from '@/components/blog/BlogExplorer'
+import { CtaBand } from '@/components/home/CtaBand'
 import { blogPosts } from '@/lib/data/blog'
 
-export const metadata: Metadata = {
-  title: 'Blog — Sports Equipment & GeM Procurement Insights | MDF Enterprises J&K',
-  description: 'Tips, guides and insights on sports equipment procurement, GeM portal, gymnasium setup, cricket equipment and sports culture in Jammu & Kashmir.',
-  alternates: { canonical: 'https://mdfenterprisesjk.in/blog' },
-  openGraph: { url: 'https://mdfenterprisesjk.in/blog', images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }] },
-}
+const BASE_URL = 'https://mdfenterprisesjk.in'
 
-const categoryLabel: Record<string, string> = {
-  sports: 'Sports', fitness: 'Fitness', music: 'Music', awards: 'Awards',
-  'gem-guides': 'GeM Guides', news: 'News',
+export const metadata: Metadata = {
+  title: 'Blog — Buying Guides, Procurement & Stories',
+  description:
+    'Buying guides, GeM procurement know-how and stories from the world of sport, fitness and music — from MDF Enterprises, Srinagar.',
+  alternates: { canonical: `${BASE_URL}/blog` },
+  openGraph: {
+    url: `${BASE_URL}/blog`,
+    title: 'Our Blog — MDF Enterprises Srinagar J&K',
+    description:
+      'Latest updates, expert insights, product guides and stories from the world of sports, fitness, music and institutional supply.',
+    images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
+  },
 }
 
 export default function BlogPage() {
-  const [hero, ...rest] = blogPosts
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${BASE_URL}/blog` },
+    ],
+  }
+
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'MDF Enterprises Blog Articles',
+    description: 'Insights and guides on sports equipment, fitness infrastructure, music labs and procurement across J&K.',
+    itemListElement: blogPosts.map((post, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: post.title,
+      url: `${BASE_URL}/blog/${post.slug}`,
+    })),
+  }
 
   return (
-    <main className="bg-[#050505] min-h-screen pt-24">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-16">
+    <main className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
 
-        <div className="mb-12">
-          <p className="overline-gold mb-5">From The Field</p>
-          <h1 className="text-[48px] md:text-[64px] font-medium text-white leading-[1.0]"
-            style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-            Sports &amp; Procurement<br />Insights<span className="text-[#C89B5E]">.</span>
-          </h1>
-        </div>
-
-        {/* Hero post */}
-        <Link href={`/blog/${hero.slug}`} className="group block mb-12">
-          <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden bg-[#111]">
-            <Image src={hero.coverImage} alt={hero.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="100vw" priority />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-8 left-8 right-8">
-              <span className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded bg-[#FF6B00]/90 text-white mb-3 inline-block">{categoryLabel[hero.category]}</span>
-              <h2 className="text-[28px] md:text-[40px] font-medium text-white leading-snug mb-2 max-w-[700px]"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}>{hero.title}</h2>
-              <div className="flex items-center gap-2 text-[12px] text-white/50">
-                <Clock size={12} /><span>{hero.readTime} min read</span>
-              </div>
-            </div>
-          </div>
-        </Link>
-
-        {/* Rest */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {rest.map(post => (
-            <Link key={post.id} href={`/blog/${post.slug}`} className="group block">
-              <div className="bg-[#0f0f0f] border border-white/[0.06] group-hover:border-[#C89B5E]/25 rounded-xl overflow-hidden transition-colors duration-300 flex gap-0 flex-col">
-                <div className="relative w-full aspect-[16/7] overflow-hidden bg-[#111]">
-                  <Image src={post.coverImage} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="50vw" />
-                  <div className="absolute top-4 left-4">
-                    <span className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded bg-[#FF6B00]/90 text-white">{categoryLabel[post.category]}</span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-1.5 text-[11px] text-white/30 mb-3"><Clock size={11} /><span>{post.readTime} min read</span></div>
-                  <h3 className="text-[20px] font-medium text-white group-hover:text-[#C89B5E] transition-colors mb-2"
-                    style={{ fontFamily: 'var(--font-cormorant), serif' }}>{post.title}</h3>
-                  <p className="text-[13px] text-white/40 leading-relaxed mb-4 line-clamp-2">{post.excerpt}</p>
-                  <div className="flex items-center gap-1 text-[11px] font-bold uppercase text-white/30 group-hover:text-[#C89B5E] transition-colors">
-                    Read Article <ArrowUpRight size={12} />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <BlogHero />
+      <BlogExplorer />
+      <CtaBand />
     </main>
   )
 }

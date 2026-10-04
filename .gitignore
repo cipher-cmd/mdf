@@ -60,3 +60,6 @@ Desktop.ini
 
 # logs
 *.log
+
+# local tool state
+ruvector.db

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { blogPosts } from '@/lib/data/blog'
+import { blogPosts, readTime } from '@/lib/data/blog'
 
 // Share card generated per post — new (automated) posts get a branded preview with no extra work.
 // Kept photo-free on purpose: flat colour keeps the PNG small enough for WhatsApp previews.
@@ -19,7 +19,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const { slug } = await params
   const post = blogPosts.find(p => p.slug === slug)
   const title = post?.title ?? 'Insights from MDF Enterprises'
-  const meta = post?.readTime ? `${post.readTime} min read` : 'Srinagar, J&K'
+  const meta = post ? `${readTime(post)} min read` : 'Srinagar, J&K'
 
   const [serif, sans, shield] = await Promise.all([
     file('assets/fonts/CormorantGaramond-Bold.woff'),

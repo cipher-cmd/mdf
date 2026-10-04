@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', '@phosphor-icons/react'],
   },
+  // Retired blog URLs that were already live — keep search traffic landing somewhere useful
+  redirects: async () => [
+    { source: '/blog/best-cricket-equipment-brands-india-2026', destination: '/blog/how-to-choose-the-right-cricket-bat', permanent: true },
+    { source: '/blog/gem-portal-sports-procurement-guide-2026', destination: '/blog/how-to-procure-sports-equipment-through-gem', permanent: true },
+    { source: '/blog/custom-trophies-awards-institutions-kashmir', destination: '/products/awards', permanent: true },
+  ],
   headers: async () => [
     {
       source: '/(.*)',
