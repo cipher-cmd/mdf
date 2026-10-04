@@ -109,7 +109,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop links - positioned over open sky area */}
-        <div className="hidden md:flex items-center gap-5 lg:gap-7 ml-8 lg:ml-12 mr-auto">
+        <div className="hidden lg:flex items-center gap-5 lg:gap-7 ml-8 lg:ml-12 mr-auto">
           {navLinks.map(link => {
             const sectionId = link.href.replace('/#', '')
             // Sections without their own nav link inherit the nearest parent link
@@ -144,7 +144,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop CTAs */}
-        <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+        <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
           <Link
             href="/#contact"
             className="flex items-center gap-2 px-5 py-2.5 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] text-[13px] font-semibold tracking-wide rounded-full transition-all duration-200 shadow-xs hover:shadow hover:scale-[1.02]"
@@ -167,7 +167,7 @@ export function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-[#141414] p-2 rounded-full hover:bg-black/[0.04] transition-colors"
+          className="lg:hidden text-[#141414] p-2 rounded-full hover:bg-black/[0.04] transition-colors"
           onClick={() => setMenuOpen(v => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
@@ -183,7 +183,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden mt-2 bg-[#FAF8F5]/95 backdrop-blur-2xl border border-[#E8E2D6] rounded-[22px] shadow-[0_24px_60px_-20px_rgba(40,28,10,0.35)] overflow-hidden mx-3 origin-top"
+            className="lg:hidden mt-2 bg-[#FAF8F5]/95 backdrop-blur-2xl border border-[#E8E2D6] rounded-[22px] shadow-[0_24px_60px_-20px_rgba(40,28,10,0.35)] overflow-hidden mx-3 origin-top"
           >
             <div className="px-5 py-4 flex flex-col">
               {navLinks.map((link, i) => (
