@@ -26,6 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${BASE_URL}/products/${category}`,
       title: `${cat.label} — MDF Enterprises Srinagar`,
       description: `Genuine ${cat.label} from MDF Enterprises, Srinagar J&K. Authorized dealer for SG, YONEX, NIVIA and 25+ brands. GeM-registered supplier.`,
+      images: [{ url: `/og/${category}.jpg`, width: 1200, height: 630, alt: `${cat.label} — MDF Enterprises, Srinagar` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${cat.label} — MDF Enterprises Srinagar`,
+      images: [`/og/${category}.jpg`],
     },
   }
 }

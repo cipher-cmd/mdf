@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Blog — Sports Equipment & GeM Procurement Insights | MDF Enterprises J&K',
   description: 'Tips, guides and insights on sports equipment procurement, GeM portal, gymnasium setup, cricket equipment and sports culture in Jammu & Kashmir.',
   alternates: { canonical: 'https://mdfenterprisesjk.in/blog' },
-  openGraph: { url: 'https://mdfenterprisesjk.in/blog' },
+  openGraph: { url: 'https://mdfenterprisesjk.in/blog', images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }] },
 }
 
 const categoryLabel: Record<string, string> = {

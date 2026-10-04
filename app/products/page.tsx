@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Sports Equipment, Fitness & Music Products — MDF Enterprises Srinagar J&K',
   description: 'Sports goods, fitness equipment, musical instruments, custom awards & trophies from MDF Enterprises, Srinagar. GeM-registered supplier, MSME-certified. 25+ premium brands. Browse our full catalogue.',
   alternates: { canonical: 'https://mdfenterprisesjk.in/products' },
-  openGraph: { url: 'https://mdfenterprisesjk.in/products' },
+  openGraph: { url: 'https://mdfenterprisesjk.in/products', images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }] },
 }
 
 export default function ProductsPage() {

@@ -54,3 +54,9 @@ Desktop.ini
 .playwright-mcp/
 .gstack/
 .claude/
+.turbo/
+.eslintcache
+.cache/
+
+# logs
+*.log

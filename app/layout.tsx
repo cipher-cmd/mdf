@@ -62,28 +62,21 @@ export const metadata: Metadata = {
   publisher: 'MDF Enterprises',
   category: 'Sports Equipment Retail',
   openGraph: {
-    title: 'MDF Enterprises — Field Ready. Every Need.',
+    title: 'MDF Enterprises — One Supplier. Every Need.',
     description:
       "J&K's one-stop supplier of sports goods, fitness equipment, musical instruments and custom awards since 1997. GeM-registered, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",
     type: 'website',
     locale: 'en_IN',
     siteName: 'MDF Enterprises',
     url: BASE_URL,
-    images: [
-      {
-        url: `${BASE_URL}/images/SportsGoodsNew.webp`,
-        width: 1200,
-        height: 630,
-        alt: 'MDF Enterprises — Sports, Fitness, Music & Awards — Srinagar J&K',
-      },
-    ],
+    // Share image comes from app/opengraph-image.jpg (1200×630) and is inherited by every route
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MDF Enterprises | Sports Equipment Supplier J&K',
+    title: 'MDF Enterprises — One Supplier. Every Need.',
     description:
       "J&K's premier sports equipment supplier since 1997. GeM-registered, MSME-certified. Cricket, fitness, music, awards.",
-    images: [`${BASE_URL}/images/SportsGoodsNew.webp`],
+    // Image comes from app/twitter-image.jpg
   },
   robots: {
     index: true,

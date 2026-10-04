@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.excerpt,
       publishedTime: `${post.publishedAt}T00:00:00+05:30`,
-      images: [{ url: `${BASE_URL}${post.coverImage}`, width: 1200, height: 630, alt: post.title }],
+      // Share card: ./opengraph-image.tsx (generated per post)
     },
   }
 }
