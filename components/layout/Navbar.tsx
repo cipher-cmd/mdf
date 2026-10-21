@@ -84,7 +84,7 @@ export function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-[#FAF8F5]/90 backdrop-blur-xl border-b border-[#E8E2D6]/80 shadow-[0_4px_24px_rgba(0,0,0,0.04)] py-3'
+          ? 'bg-[#F7F7F7]/90 backdrop-blur-xl border-b border-[#E5E5E5]/80 shadow-[0_4px_24px_rgba(0,0,0,0.04)] py-3'
           : 'bg-transparent py-4 md:py-6'
       )}
     >
@@ -92,12 +92,12 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 select-none group flex-shrink-0">
-          <div className="relative h-10 w-10 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+          <div className="relative h-10 w-10 flex-shrink-0">
             <Image
               src="/images/mdfFavicon.png"
               alt="MDF"
               fill
-              className="object-contain drop-shadow-sm"
+              className="object-contain"
               sizes="40px"
               priority
             />
@@ -109,7 +109,7 @@ export function Navbar() {
             >
               MDF
             </span>
-            <span className="text-[#8B6B23] text-[8.5px] font-bold tracking-[0.28em] uppercase mt-[2px]">
+            <span className="text-[#8B6B23] text-[11px] font-bold tracking-[0.16em] uppercase mt-[2px]">
               ENTERPRISES
             </span>
           </div>
@@ -142,7 +142,7 @@ export function Navbar() {
                   <motion.div
                     layoutId="navbar-underline"
                     className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#141414] rounded-full"
-                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                   />
                 )}
               </Link>
@@ -154,18 +154,15 @@ export function Navbar() {
         <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
           <Link
             href="/#contact"
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] text-[13px] font-semibold tracking-wide rounded-full transition-all duration-200 shadow-xs hover:shadow hover:scale-[1.02]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#CCA552] hover:bg-[#BF9744] text-[#1E170A] text-[14px] font-semibold rounded-full transition-colors"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1E170A]">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
             <span>{copy.quote_button}</span>
           </Link>
           <a
             href={whatsapp()}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-[#FAF8F5] text-[#141414] border border-[#E2DBD0] text-[13px] font-semibold tracking-wide rounded-full transition-all duration-200 shadow-xs hover:shadow hover:scale-[1.02]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-[#F4F4F4] text-[#141414] border border-[#E0E0E0] text-[14px] font-semibold rounded-full transition-colors"
           >
             <WhatsappLogo size={18} weight="fill" className="text-[#25D366]" />
             <span>{copy.whatsapp_button}</span>
@@ -174,9 +171,10 @@ export function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="lg:hidden text-[#141414] p-2 rounded-full hover:bg-black/[0.04] transition-colors"
+          className="lg:hidden text-[#141414] p-2.5 -mr-2.5 rounded-full hover:bg-black/[0.04] transition-colors"
           onClick={() => setMenuOpen(v => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <X size={24} weight="bold" /> : <List size={24} weight="bold" />}
         </button>
@@ -186,11 +184,11 @@ export function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.98 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden mt-2 bg-[#FAF8F5]/95 backdrop-blur-2xl border border-[#E8E2D6] rounded-[22px] shadow-[0_24px_60px_-20px_rgba(40,28,10,0.35)] overflow-hidden mx-3 origin-top"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
+            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+            className="lg:hidden mt-2 bg-[#F7F7F7]/95 backdrop-blur-2xl border border-[#E5E5E5] rounded-[22px] shadow-[0_24px_60px_-20px_rgba(40,28,10,0.35)] overflow-hidden mx-3 origin-top"
           >
             <div className="px-5 py-4 flex flex-col">
               {navLinks.map((link, i) => (
@@ -198,12 +196,12 @@ export function Navbar() {
                   key={link.href}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.04 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.25, delay: i * 0.03, ease: [0.23, 1, 0.32, 1] }}
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center justify-between min-h-[50px] text-[22px] font-semibold text-[#141414] border-b border-[#EDE6D8] font-serif-heading"
+                    className="flex items-center justify-between min-h-[50px] text-[22px] font-semibold text-[#141414] border-b border-[#EDEDED] font-serif-heading"
                   >
                     {link.label}
                     <span className="text-[#C59B27] text-[15px]" aria-hidden>→</span>
@@ -216,7 +214,7 @@ export function Navbar() {
                   className="btn-gold w-full justify-center py-3 text-center"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Get a Quote
+                  {copy.quote_button}
                 </Link>
                 <a
                   href={whatsapp()}

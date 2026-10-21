@@ -81,7 +81,7 @@ export default function AdminHome() {
       <Card className="p-5 sm:p-7 mb-6">
         {missing.length > 0 ? (
           <>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-rust">— Finish setting up</p>
+            <p className="text-[13px] font-semibold text-rust">Finish setting up</p>
             <h2 className="mt-1 font-serif-heading text-[28px] font-bold leading-tight">A few things to switch on in Vercel</h2>
             <ul className="mt-4 space-y-3">
               {checks.map(c => (
@@ -97,7 +97,7 @@ export default function AdminHome() {
           </>
         ) : data.drafts.length > 0 ? (
           <>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep">— Waiting for you</p>
+            <p className="text-[13px] font-semibold text-gold-deep">Waiting for you</p>
             <h2 className="mt-1 font-serif-heading text-[28px] font-bold leading-tight">
               {data.drafts.length === 1 ? 'One article is ready for your approval' : `${data.drafts.length} articles are ready for your approval`}
             </h2>
@@ -131,13 +131,13 @@ export default function AdminHome() {
         )}
       </Card>
 
-      {/* The shop in numbers — echoes the stats strip on the home page */}
+      {/* The shop in numbers, echoes the stats strip on the home page */}
       <Card className="mb-6 overflow-hidden">
         <div className="grid grid-cols-2 lg:grid-cols-4 lg:divide-x divide-hairline">
           {stats.map(s => (
             <Link key={s.label} href={s.href} className="group p-5 sm:p-6 hover:bg-gold-wash/60 transition-colors">
               <p className="font-light text-[40px] sm:text-[46px] leading-none tracking-[-0.035em] tabular-nums text-ink">{s.value}</p>
-              <p className="mt-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ink-soft">{s.label}</p>
+              <p className="mt-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-soft">{s.label}</p>
               <p className="mt-1 text-[12px] text-ink-faint group-hover:text-gold-deep">{s.note}</p>
             </Link>
           ))}
@@ -148,7 +148,7 @@ export default function AdminHome() {
         <Card className="p-5 sm:p-7">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep">— Article Writer</p>
+              <p className="text-[13px] font-semibold text-gold-deep">Article Writer</p>
               <h2 className="mt-1 font-serif-heading text-[26px] font-bold leading-tight">
                 {data.settings.blog_auto_enabled ? `Writing ${every(data.settings.blog_every_days)}` : 'Automatic writing is off'}
               </h2>
@@ -173,7 +173,7 @@ export default function AdminHome() {
         </Card>
 
         <Card className="p-5 sm:p-7">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep">— Quick jobs</p>
+          <p className="text-[13px] font-semibold text-gold-deep">Quick jobs</p>
           <ul className="mt-3 space-y-1">
             {[
               { href: '/admin/products?new=1', icon: Package, title: 'Add a product', text: 'Photo, name and a few words' },

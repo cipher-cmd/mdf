@@ -19,11 +19,10 @@ function Item({ q, a }: { q: string; a: string }) {
 export function Faq() {
   const rest = FAQ.slice(SHOWN)
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="faq relative bg-[#FAF8F5] py-12 sm:py-20">
+    <section id="faq" aria-labelledby="faq-heading" className="faq relative bg-[#F7F7F7] py-12 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-[1180px] mx-auto px-5 sm:px-6 md:px-10 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-6 lg:gap-16">
         <div className="lg:sticky lg:top-28 self-start">
-          <p className="mb-1.5 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Questions</p>
           <h2 id="faq-heading" className="text-[26px] sm:text-[36px] lg:text-[42px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
             Asked at the counter, answered here.
           </h2>

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function PrivacyPage() {
   const { contact } = await getSiteCopy()
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pt-28 sm:pt-32 pb-20 text-[#141414]">
+    <div className="bg-[#F7F7F7] min-h-dvh pt-28 sm:pt-32 pb-20 text-[#141414]">
       <article className="article-body max-w-[680px] mx-auto px-4 sm:px-6">
         <h1 className="text-[38px] sm:text-[52px] font-bold leading-[1] font-serif-heading mb-3">Privacy Policy</h1>
         <p>Last updated: 21 October 2026</p>

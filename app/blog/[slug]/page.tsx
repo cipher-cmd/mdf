@@ -96,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
+    <div className="bg-[#F7F7F7] min-h-dvh pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <div className="mt-7 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[12.5px] text-[#6B6359]">
             <span className="inline-flex items-center gap-2 font-semibold text-[#141414]">
-              <span className="relative w-7 h-7 rounded-full bg-white border border-[#E5DDD0] overflow-hidden">
+              <span className="relative w-7 h-7 rounded-full bg-white border border-[#E5E5E5] overflow-hidden">
                 <Image src="/images/mdfFavicon.png" alt="" fill className="object-contain p-1" sizes="28px" />
               </span>
               {copy.blog_page.author}
@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-10 mt-10 sm:mt-14">
-          <div className="relative aspect-[16/10] sm:aspect-[2/1] rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#EFE8DB] shadow-[0_40px_80px_-40px_rgba(40,28,10,0.55)]">
+          <div className="relative aspect-[16/10] sm:aspect-[2/1] rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#EDEDED] shadow-[0_40px_80px_-40px_rgba(40,28,10,0.55)]">
             <Image src={post.coverImage} alt="" fill priority className="object-cover" sizes="(max-width: 1180px) 100vw, 1100px" />
           </div>
           {post.coverCredit && (
@@ -146,7 +146,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {post.sources && post.sources.length > 0 && (
           <aside className="max-w-[680px] mx-auto px-4 sm:px-6 mt-10">
-            <p className="text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase mb-3">Sources</p>
+            <h2 className="text-[16px] font-semibold text-[#141414] mb-3">Sources</h2>
             <ul className="space-y-1.5">
               {post.sources.map(s => (
                 <li key={s.url} className="text-[13px] text-[#6B6359] leading-snug">
@@ -170,12 +170,12 @@ export default async function BlogPostPage({ params }: Props) {
           </p>
         )}
 
-        <footer className="max-w-[680px] mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-[#E8E2D6] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <footer className="max-w-[680px] mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-[#E5E5E5] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <a
             href={`https://wa.me/?text=${encodeURIComponent(`${post.title} — ${url}`)}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-[#DDD3C0] bg-white/70 hover:bg-white hover:border-[#CCA552] text-[13px] font-semibold text-[#141414] transition-colors self-start"
+            className="inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-[#D9D9D9] bg-white/70 hover:bg-white hover:border-[#CCA552] text-[13px] font-semibold text-[#141414] transition-colors self-start"
           >
             <WhatsappLogo size={16} weight="fill" className="text-[#25D366]" />
             Share on WhatsApp
@@ -196,7 +196,6 @@ export default async function BlogPostPage({ params }: Props) {
         <section aria-labelledby="related-heading" className="max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10 mt-20 sm:mt-28 mb-8">
           <div className="flex items-end justify-between gap-4 mb-8 sm:mb-10">
             <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Keep Reading</p>
               <h2 id="related-heading" className="text-[28px] sm:text-[36px] font-bold text-[#141414] leading-[1.05] font-serif-heading">More from the Journal.</h2>
             </div>
             <Link href="/blog" className="hidden sm:inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#8B6B23] hover:text-[#A47E28] transition-colors group">

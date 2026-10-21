@@ -117,7 +117,7 @@ export default function ArticlesPage() {
                       {r.cover_image && <Image src={r.cover_image} alt="" fill className="object-cover" sizes="100px" unoptimized={r.cover_image.startsWith('/media/')} />}
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-gold-deep">{categoryLabel(r.category)}</span>
+                      <span className="block text-[12px] font-semibold uppercase tracking-[0.16em] text-gold-deep">{categoryLabel(r.category)}</span>
                       <span className="block font-serif-heading text-[20px] font-bold leading-tight text-ink group-hover:text-[#6E5418] line-clamp-2">{r.title}</span>
                       <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-ink-muted">
                         {scheduled ? <Badge tone="gold">Goes live {new Date(r.published_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</Badge>

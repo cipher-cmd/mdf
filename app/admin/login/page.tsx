@@ -49,7 +49,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#FAF8F5] flex flex-col justify-between p-4 sm:p-6 md:p-8 font-sans antialiased text-[#141414]">
+    <div className="min-h-dvh w-full bg-[#F7F7F7] flex flex-col justify-between p-4 sm:p-6 md:p-8 font-sans antialiased text-[#141414]">
       {/* Top Header Bar */}
       <div className="max-w-[1200px] w-full mx-auto flex items-center justify-between">
         <Link
@@ -59,7 +59,7 @@ function LoginForm() {
           <ArrowLeft size={14} weight="bold" />
           <span>Back to MDF Website</span>
         </Link>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF0DC] text-[#8B6B23] border border-[#E5DDD0] text-[11px] font-bold tracking-wider uppercase">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF0DC] text-[#8B6B23] border border-[#E5E5E5] text-[11px] font-semibold">
           <ShieldCheck size={14} weight="fill" />
           <span>Store Manager Portal</span>
         </span>
@@ -132,7 +132,7 @@ function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   autoFocus
-                  className="w-full pl-4 pr-11 py-3 bg-[#FAF8F5] border border-[#E5DDD0] focus:border-[#CCA552] focus:bg-white rounded-xl text-[14px] text-[#141414] placeholder:text-[#9A9287] outline-none transition-all"
+                  className="w-full pl-4 pr-11 py-3 bg-[#F7F7F7] border border-[#E5E5E5] focus:border-[#CCA552] focus:bg-white rounded-xl text-[14px] text-[#141414] placeholder:text-[#9A9287] outline-none transition-all"
                 />
                 <button
                   type="button"
@@ -175,7 +175,7 @@ export default function AdminLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen w-full bg-[#FAF8F5] flex items-center justify-center">
+        <div className="min-h-dvh w-full bg-[#F7F7F7] flex items-center justify-center">
           <div className="text-xs text-[#8B6B23] font-medium animate-pulse">Loading Store Portal...</div>
         </div>
       }

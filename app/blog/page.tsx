@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: `${BASE_URL}/blog` },
     openGraph: {
       url: `${BASE_URL}/blog`,
-      title: `${copy.title} — MDF Enterprises Srinagar J&K`,
+      title: `${copy.title} | MDF Enterprises Srinagar J&K`,
       description: copy.seo_description,
       images: [{ url: '/opengraph-image.jpg', width: 1200, height: 630 }],
     },
@@ -50,7 +50,7 @@ export default async function BlogPage() {
   }
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
+    <div className="bg-[#F7F7F7] min-h-dvh text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 

@@ -1,66 +1,37 @@
 'use client'
 
 import Image from 'next/image'
-import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
-import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { useCopy } from '@/providers/SiteProvider'
 import { lines } from '@/lib/content/copy'
 
 function BrandTile({ brand }: { brand: { name: string; logo: string } }) {
   return (
-    <div className="group mx-2 sm:mx-2.5 w-[148px] sm:w-[192px] h-[78px] sm:h-[96px] flex-shrink-0 bg-white/90 rounded-[16px] sm:rounded-[20px] border border-[#EAE3D6] px-5 flex items-center justify-center shadow-[0_2px_10px_rgba(60,45,20,0.04)] hover:shadow-[0_10px_26px_-8px_rgba(60,45,20,0.16)] hover:border-[#D9C9A6] transition-all duration-300">
+    <li className="h-[78px] sm:h-[96px] bg-white rounded-[16px] sm:rounded-[20px] border border-[#E5E5E5] px-5 flex items-center justify-center">
       <div className="relative w-full h-10 sm:h-12">
-        <Image
-          src={brand.logo}
-          alt={`${brand.name} authorised dealer`}
-          fill
-          className="object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
-          sizes="192px"
-          loading="eager"
-        />
+        <Image src={brand.logo} alt={`${brand.name} authorised dealer`} fill className="object-contain" sizes="192px" />
       </div>
-    </div>
+    </li>
   )
 }
 
 export function BrandPartners() {
   const copy = useCopy('home_brands')
-  const brandList = copy.brands
-  const half = Math.ceil(brandList.length / 2)
   return (
-    <section id="brands" className="relative bg-[#FAF8F5] py-12 sm:py-14 md:py-16 overflow-hidden">
-      {/* Soft gold glow — a quiet interlude between the two image-heavy sections */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 70% at 50% 55%, rgba(204,165,82,0.10), transparent 70%)' }}
-        aria-hidden
-      />
-
-      <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
-        <AnimatedSection className="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-8 mb-8 sm:mb-10">
-          <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">
-              — {copy.eyebrow}
-            </p>
-            <h2 className="text-[28px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] font-serif-heading">
-              {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
-            </h2>
-          </div>
-          <p className="text-[#6B6359] text-[15px] md:text-[13.5px] md:text-right max-w-[420px] leading-relaxed">
+    <section id="brands" className="relative bg-[#F7F7F7] py-12 sm:py-14 md:py-16">
+      <div className="max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-8 mb-8 sm:mb-10">
+          <h2 className="text-[28px] sm:text-[34px] lg:text-[38px] font-bold text-[#141414] leading-[1.08] font-serif-heading">
+            {lines(copy.heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
+          </h2>
+          <p className="text-[#5E5850] text-[15px] md:text-right max-w-[420px] leading-relaxed">
             {copy.text}
           </p>
-        </AnimatedSection>
-      </div>
+        </div>
 
-      {/* Two continuously moving strips, all 12 brands in each, offset so the same logo never lines up */}
-      <AnimatedSection delay={0.1} className="relative flex flex-col gap-3 sm:gap-4">
-        <InfiniteMarquee pauseOnHover={false} speed={45}>
-          {brandList.map((b, i) => <BrandTile key={i} brand={b} />)}
-        </InfiniteMarquee>
-        <InfiniteMarquee pauseOnHover={false} speed={52} direction="right">
-          {[...brandList.slice(half), ...brandList.slice(0, half)].map((b, i) => <BrandTile key={i} brand={b} />)}
-        </InfiniteMarquee>
-      </AnimatedSection>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          {copy.brands.map(b => <BrandTile key={b.name} brand={b} />)}
+        </ul>
+      </div>
     </section>
   )
 }

@@ -1,25 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-canvas:     #FAF8F5;
-  --color-surface-white: #FFFFFF;
-  --color-surface-soft:  #F5F1EA;
-  --color-border-hairline: #E8E2D6;
-  --color-border-gold:   rgba(197,155,39,0.30);
+  /* One token set. Neutral greys carry the page; gold is the brand accent, used for action and state. */
+  --color-ink-muted:   #68645E;
 
-  --color-accent-gold:   #C59B27;
-  --color-accent-hover:  #B38A1F;
-  --color-ink-primary:   #141414;
-  --color-ink-muted:     #68645E;
-
-  /* Store-manager panel: the showroom's ledger — parchment, ink and gold leaf */
-  --color-parchment:   #FAF8F5;
+  /* Store-manager panel */
+  --color-parchment:   #F7F7F7;
   --color-ledger:      #FFFFFF;
-  --color-vellum:      #F5F0E6;
+  --color-vellum:      #F2F2F2;
   --color-ink:         #141414;
   --color-ink-soft:    #554E46;
-  --color-ink-faint:   #99938B;
-  --color-hairline:    #E8E2D6;
+  --color-ink-faint:   #8A857E;
+  --color-hairline:    #E5E5E5;
   --color-gold:        #CCA552;
   --color-gold-deep:   #8B6B23;
   --color-gold-wash:   #FAF5EB;
@@ -28,45 +20,19 @@
   --color-rust:        #B4412E;
   --color-rust-wash:   #FBEDEA;
 
-  --font-inter-variable: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-cormorant:      var(--font-cormorant), 'Cormorant Garamond', ui-serif, Georgia, serif;
+  /* Hanken Grotesk, because its narrower, warmer forms suit a 1997 showroom better than a UI-default grotesk.
+     Cormorant Garamond is the brand's heading face. Family names come from next/font. */
+  --font-sans:    var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-serif:   var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
 @layer base {
-  :root {
-    --bg: #FAF8F5;
-    --surface: #FFFFFF;
-    --surface-2: #F5F1EA;
-    --card: #FFFFFF;
-    --fg: #141414;
-    --muted: #68645E;
-    --faint: #99938B;
-    --border: #E8E2D6;
-    --border-gold: rgba(197,155,39,0.35);
-    --gold: #C59B27;
-    --gold-hover: #B38A1F;
-  }
-
-  [data-theme="light"], :root {
-    --bg: #FAF8F5;
-    --surface: #FFFFFF;
-    --surface-2: #F5F1EA;
-    --card: #FFFFFF;
-    --fg: #141414;
-    --muted: #68645E;
-    --faint: #99938B;
-    --border: #E8E2D6;
-    --border-gold: rgba(197,155,39,0.35);
-    --gold: #C59B27;
-    --gold-hover: #B38A1F;
-  }
-
   * { box-sizing: border-box; }
 
   body {
-    background-color: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-inter-variable);
+    background-color: #F7F7F7;
+    color: #141414;
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -76,11 +42,19 @@
     color: #ffffff;
   }
 
-  /* Smooth transitions for interactive elements */
-  a, button { 
-    transition-property: color, background-color, border-color, opacity, transform, box-shadow; 
-    transition-duration: 200ms; 
+  a, button {
+    transition-property: color, background-color, border-color, opacity, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
   }
+
+  /* One visible focus ring for every control; 3:1 against white and grey */
+  :focus-visible {
+    outline: 2px solid #8B6B23;
+    outline-offset: 2px;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 68px; }
 }
 
 @layer utilities {
@@ -96,14 +70,12 @@
     font-weight: 600;
     letter-spacing: 0.02em;
     border-radius: 9999px;
-    transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    transition: background-color 0.15s;
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(197, 155, 39, 0.25);
   }
   .btn-gold:hover { 
     background-color: #B38A1F;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
   }
 
   .btn-pill-whatsapp {
@@ -113,29 +85,27 @@
     gap: 8px;
     background-color: #ffffff;
     color: #141414;
-    border: 1px solid #E2DBD0;
+    border: 1px solid #E0E0E0;
     padding: 10px 22px;
     font-size: 13px;
     font-weight: 600;
     border-radius: 9999px;
-    transition: all 0.2s;
+    transition: background-color 0.15s, border-color 0.15s;
     white-space: nowrap;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   }
   .btn-pill-whatsapp:hover {
-    background-color: #FAF8F5;
+    background-color: #F4F4F4;
     border-color: #25D366;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.15);
   }
 
   .font-serif-heading {
-    font-family: var(--font-cormorant), 'Playfair Display', Georgia, serif;
+    font-family: var(--font-serif);
   }
 
 }
 
-/* ── Section blending: bg art melts into the cream canvas, no hard seams ── */
+/* ── Section blending: bg art melts into the page, no hard seams ── */
 @layer utilities {
   .bg-feather {
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
@@ -143,15 +113,6 @@
   }
 }
 
-/* ── Marquee (InfiniteMarquee) ── */
-@keyframes mdf-marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
-@keyframes mdf-marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-.mdf-marquee-hover:hover { animation-play-state: paused !important; }
-
-
-/* Custom cursor (fine pointers only — CustomCursor adds the class) */
-html.has-custom-cursor, html.has-custom-cursor * { cursor: none !important; }
-html.has-custom-cursor :is(input, textarea, select, [contenteditable="true"]) { cursor: auto !important; }
 
 /* ── Touch polish (phones/tablets) ── */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -169,7 +130,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .article-body > * + * { margin-top: 1.25em; }
 .article-body > p:first-child { font-size: 1.12em; color: #141414; }
 .article-body h2 {
-  margin-top: 2.2em; font-family: var(--font-cormorant), Georgia, serif; font-weight: 700;
+  margin-top: 2.2em; font-family: var(--font-serif); font-weight: 700;
   font-size: 1.85em; line-height: 1.1; color: #141414;
 }
 .article-body h3 { margin-top: 1.8em; font-weight: 600; font-size: 1.1em; color: #141414; }
@@ -187,8 +148,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .article-body strong { color: #141414; font-weight: 600; }
 .article-body a { color: #8B6B23; text-decoration: underline; text-underline-offset: 3px; }
 .article-body blockquote {
-  margin: 2em 0; padding: 0.2em 0 0.2em 1.2em; border-left: 2px solid #CCA552;
-  font-family: var(--font-cormorant), Georgia, serif; font-style: italic;
+  margin: 2em 0; padding: 0 0 0 1.2em;
+  font-family: var(--font-serif); font-style: italic;
   font-size: 1.45em; line-height: 1.35; color: #141414;
 }
 @media (max-width: 640px) { .article-body { font-size: 16px; } }
@@ -202,6 +163,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .adm-dialog[open] { animation: adm-pop 200ms cubic-bezier(0.23, 1, 0.32, 1); }
 .adm-editor:empty::before { content: attr(data-placeholder); color: var(--color-ink-faint); }
 .adm-editor:focus { outline: none; }
+.adm-editor:focus-visible { outline: 2px solid #8B6B23; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
   .adm-rise, .adm-drawer[open], .adm-dialog[open] { animation: none; }
 }
@@ -217,4 +179,16 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .faq details[open]::details-content { block-size: auto; }
 @media (prefers-reduced-motion: reduce) {
   .faq details::details-content { transition: none; }
+}
+
+/* Reduced motion: drop movement, keep short fades that show state */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+  a, button { transition-property: color, background-color, border-color, opacity !important; transition-duration: 150ms !important; }
+  a:active, button:active, [role="button"]:active { transform: none !important; }
 }

@@ -7,7 +7,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'What brands does MDF Enterprises stock?',
-    a: 'MDF Enterprises is an authorised dealer for SG, YONEX, NIVIA, COSCO, STAG, SPARTAN, SS, JONEX, and NETCO — among 25+ premium sports and fitness brands. All stock is genuine and sourced directly.',
+    a: 'MDF Enterprises is an authorised dealer for SG, YONEX, NIVIA, COSCO, STAG, SPARTAN, SS, JONEX and NETCO, among 25+ premium sports and fitness brands. All stock is genuine and sourced directly.',
   },
   {
     q: 'Does MDF Enterprises supply to government institutions in J&K?',
@@ -15,7 +15,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Where is MDF Enterprises located?',
-    a: 'MDF Enterprises is located at SDA Shopping Complex, Opposite Iqbal Park, Srinagar, Jammu & Kashmir — 190008. Established in 1997, we serve all districts of J&K.',
+    a: 'MDF Enterprises is located at SDA Shopping Complex, Opposite Iqbal Park, Srinagar, Jammu & Kashmir 190008. Established in 1997, we serve all districts of J&K.',
   },
   {
     q: 'Does MDF Enterprises do installation of gymnasium and fitness equipment?',

@@ -5,7 +5,6 @@ import { motion, useInView, useMotionValueEvent, useScroll, useTransform, type M
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
-import { getLenis } from '@/lib/scroll'
 import { useCopy } from '@/providers/SiteProvider'
 import type { Category } from '@/lib/data/categories'
 
@@ -57,7 +56,7 @@ function DeptCard({ dep, index, N, t, videoRef, cta }: { dep: Category; index: n
 
       <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="max-w-[560px]">
-          <p className="text-[11px] font-semibold tracking-[0.22em] text-white/70 mb-2 tabular-nums">0{index + 1} / 0{N}</p>
+          <p className="text-[12px] font-medium text-white/75 mb-2 tabular-nums">{index + 1} / {N}</p>
           <p className="text-[#E9CF94] text-[15px] sm:text-[17px] mb-0.5" style={{ fontFamily: 'var(--font-cormorant), serif', fontStyle: 'italic' }}>
             {dep.tagline}
           </p>
@@ -131,9 +130,7 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
     if (!track) return
     const top = track.getBoundingClientRect().top + window.scrollY
     const y = top + (track.offsetHeight - window.innerHeight) * ((i / Math.max(1, N - 1)) * DWELL)
-    const lenis = getLenis()
-    if (lenis) lenis.scrollTo(y, { duration: 1.1 })
-    else window.scrollTo({ top: y, behavior: 'smooth' })
+    window.scrollTo({ top: y, behavior: 'smooth' })
   }
 
   return (
@@ -143,7 +140,6 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
         {/* Heading + deck progress */}
         <div className="max-w-[1400px] w-full mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 px-2 sm:px-0 mb-4 sm:mb-6">
           <div>
-            <p className="mb-1 text-[10.5px] sm:text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.eyebrow}</p>
             <h2 className="text-[26px] sm:text-[34px] lg:text-[40px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
               {copy.heading}
             </h2>

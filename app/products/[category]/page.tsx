@@ -36,13 +36,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical: `${BASE_URL}/products/${category}` },
     openGraph: {
       url: `${BASE_URL}/products/${category}`,
-      title: `${cat.label} — MDF Enterprises Srinagar`,
+      title: `${cat.label} | MDF Enterprises Srinagar`,
       description: `Genuine ${cat.label} from MDF Enterprises, Srinagar J&K. Authorized dealer for SG, SS, YONEX, NIVIA and 25+ brands. GeM-registered supplier.`,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: `${cat.label} — MDF Enterprises, Srinagar` }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${cat.label}, MDF Enterprises, Srinagar` }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${cat.label} — MDF Enterprises Srinagar`,
+      title: `${cat.label} | MDF Enterprises Srinagar`,
       images: [ogImage],
     },
   }
@@ -100,7 +100,7 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
+    <div className="bg-[#F7F7F7] min-h-dvh pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
@@ -163,14 +163,14 @@ export default async function CategoryPage({ params }: Props) {
             <div>
               <h2 id="guide-heading" className="text-[30px] sm:text-[40px] font-bold leading-[1.05] font-serif-heading">{guide.heading}</h2>
               {guide.body.map(p => <p key={p.slice(0, 24)} className="mt-4 text-[15px] leading-relaxed text-[#554E46]">{p}</p>)}
-              <h3 className="mt-8 mb-3 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">What we stock</h3>
+              <h3 className="mt-8 mb-3 text-[16px] font-semibold text-[#141414]">What we stock</h3>
               <ul className="space-y-2 text-[14.5px] text-[#141414]">
-                {guide.stock.map(s => <li key={s} className="pl-4 border-l-2 border-[#CCA552]">{s}</li>)}
+                {guide.stock.map(s => <li key={s} className="relative pl-4 before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#CCA552]">{s}</li>)}
               </ul>
             </div>
             <div>
               <h2 className="text-[22px] sm:text-[26px] font-bold font-serif-heading">Common questions</h2>
-              <div className="mt-4 divide-y divide-[#E8E2D6] border-y border-[#E8E2D6]">
+              <div className="mt-4 divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
                 {guide.faq.map(({ q, a }) => (
                   <details key={q} className="group py-4">
                     <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden flex justify-between gap-4 text-[15px] font-semibold">
@@ -187,14 +187,14 @@ export default async function CategoryPage({ params }: Props) {
 
         {/* Other departments */}
         {allCategories.length > 1 && (
-          <nav aria-label="Other departments" className="mt-16 sm:mt-20 pt-8 border-t border-[#E8E2D6]">
-            <p className="mb-4 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— Explore other departments</p>
+          <nav aria-label="Other departments" className="mt-16 sm:mt-20 pt-8 border-t border-[#E5E5E5]">
+            <h2 className="mb-4 text-[22px] sm:text-[26px] font-bold font-serif-heading">Explore other departments</h2>
             <div className="flex flex-wrap gap-2.5">
               {allCategories.filter(c => c.id !== cat.id).map(c => (
                 <Link
                   key={c.id}
                   href={c.href}
-                  className="group inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-[#E0D6C3] bg-white/70 hover:bg-white hover:border-[#CCA552] text-[13.5px] font-semibold text-[#141414] transition-colors"
+                  className="group inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-[#E0E0E0] bg-white/70 hover:bg-white hover:border-[#CCA552] text-[13.5px] font-semibold text-[#141414] transition-colors"
                 >
                   {c.label}
                   <ArrowUpRight size={13} weight="bold" className="text-[#B8923F] transition-transform duration-300 group-hover:rotate-45" />

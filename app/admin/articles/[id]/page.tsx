@@ -110,7 +110,7 @@ export default function ArticleEditor() {
           <ArrowLeft size={14} weight="bold" /> All articles
         </Link>
         <div className="flex items-center gap-2">
-          {live ? <Badge tone="live">On the website</Badge> : <Badge tone="draft">Draft — only you can see it</Badge>}
+          {live ? <Badge tone="live">On the website</Badge> : <Badge tone="draft">Draft, only you can see it</Badge>}
           {live && a.slug && (
             <a href={`/blog/${a.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-gold-deep hover:underline">
               View <ArrowSquareOut size={14} />
@@ -151,7 +151,7 @@ export default function ArticleEditor() {
           <RichEditor value={a.content} onChange={html => set('content', html)} />
           {a.source_urls && a.source_urls.length > 0 && (
             <Card className="p-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep mb-2">— News this article is based on</p>
+              <p className="text-[13px] font-semibold text-gold-deep mb-2">News this article is based on</p>
               <ul className="space-y-1.5">
                 {a.source_urls.map(s => (
                   <li key={s.url} className="text-[13px] leading-snug">

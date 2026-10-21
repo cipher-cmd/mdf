@@ -37,10 +37,10 @@ export function WhatsAppButton() {
       <AnimatePresence>
         {showTooltip && (
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="bg-[#0f0f0f] border border-white/[0.08] text-white text-[12px] font-medium px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap"
           >
             {tip}
@@ -54,15 +54,8 @@ export function WhatsAppButton() {
         rel="noreferrer"
         aria-label="Chat on WhatsApp"
         className="relative w-14 h-14 bg-[#25d366] hover:bg-[#20ba5a] rounded-full flex items-center justify-center shadow-lg shadow-[#25d366]/20 transition-colors duration-200"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.97 }}
       >
-        {/* Pulse ring */}
-        <span
-          className="absolute inset-0 rounded-full bg-[#25d366] animate-ping opacity-30"
-          style={{ animationDuration: '2s' }}
-          aria-hidden
-        />
         {WA_SVG}
       </motion.a>
     </div>

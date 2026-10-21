@@ -5,7 +5,6 @@ import { motion, useInView, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
-import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
 import { CategoryDeck } from './CategoryDeck'
 import { useCopy } from '@/providers/SiteProvider'
 import type { Category } from '@/lib/data/categories'
@@ -44,13 +43,12 @@ export function Categories({ departments }: { departments: Category[] }) {
   const autoplay = visible && !held && !reduce && N > 1
 
   return (
-    <section id="categories" className="relative w-full bg-[#FAF8F5]">
+    <section id="categories" className="relative w-full bg-[#F7F7F7]">
       <CategoryDeck departments={departments} />
 
       <div ref={boardRef} className="hidden lg:block max-w-[1400px] mx-auto px-12 pt-28 pb-12">
         <div className="flex items-end justify-between gap-8 mb-10">
           <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.eyebrow}</p>
             <h2 className="text-[44px] xl:text-[52px] font-bold text-[#141414] leading-[1.02] tracking-[-0.015em] font-serif-heading max-w-[680px]">
               {copy.heading}
             </h2>
@@ -116,8 +114,6 @@ export function Categories({ departments }: { departments: Category[] }) {
                   <div className={`absolute inset-0 bg-black/45 transition-opacity duration-700 ${on ? 'opacity-0' : 'opacity-100'}`} />
                   <div className={`absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-700 ${on ? 'opacity-100' : 'opacity-0'}`} />
 
-                  <span className="absolute top-6 left-6 text-[11px] font-semibold tracking-[0.2em] tabular-nums text-white/80">{pad(i + 1)}</span>
-
                   {/* Spine: the name runs up the narrow panel */}
                   <span
                     aria-hidden
@@ -163,24 +159,6 @@ export function Categories({ departments }: { departments: Category[] }) {
             )
           })}
         </ol>
-      </div>
-
-      {/* Kinetic band of disciplines, a light breath before About */}
-      <div className="relative py-10 sm:py-12 lg:py-14" aria-label="Disciplines we equip">
-        <InfiniteMarquee speed={60} pauseOnHover={false}>
-          {copy.marquee.map((word, i) => (
-            <span key={`${word}-${i}`} className="flex items-center">
-              <span
-                className={`px-5 sm:px-7 text-[34px] sm:text-[44px] lg:text-[52px] leading-none whitespace-nowrap font-serif-heading ${
-                  i % 2 ? 'italic text-[#C8A45A]' : 'font-bold text-[#1E1A14]'
-                }`}
-              >
-                {word}
-              </span>
-              <span className="text-[#CCA552] text-[14px]" aria-hidden>✦</span>
-            </span>
-          ))}
-        </InfiniteMarquee>
       </div>
     </section>
   )

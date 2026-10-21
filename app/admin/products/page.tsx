@@ -178,7 +178,7 @@ function ProductsScreen() {
                     {p.image && <Image src={p.image} alt="" fill className="object-cover object-top" sizes="60px" unoptimized={p.image.startsWith('/media/')} />}
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-gold-deep">
+                    <span className="block text-[12px] font-semibold uppercase tracking-[0.16em] text-gold-deep">
                       {p.brand || 'No brand'} · {deptName(p.category)}
                     </span>
                     <span className="block font-serif-heading text-[21px] font-bold leading-tight text-ink group-hover:text-[#6E5418] truncate">{p.name}</span>
@@ -194,7 +194,7 @@ function ProductsScreen() {
                   <div className="w-[170px]"><Toggle on={p.is_visible} onChange={v => quick(p, 'is_visible', v)} label="On the website" /></div>
                   <div className="w-[150px]"><Toggle on={p.in_stock} onChange={v => quick(p, 'in_stock', v)} label={p.in_stock ? 'Available' : 'On order'} /></div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => quick(p, 'is_featured', !p.is_featured)} title={p.is_featured ? 'Shown first — tap to undo' : 'Show this product first'} aria-label="Show first" className={`h-10 w-10 rounded-full flex items-center justify-center ${p.is_featured ? 'text-gold' : 'text-ink-faint hover:text-gold-deep'} hover:bg-gold-wash`}>
+                    <button onClick={() => quick(p, 'is_featured', !p.is_featured)} title={p.is_featured ? 'Shown first. Tap to undo' : 'Show this product first'} aria-label="Show first" className={`h-10 w-10 rounded-full flex items-center justify-center ${p.is_featured ? 'text-gold' : 'text-ink-faint hover:text-gold-deep'} hover:bg-gold-wash`}>
                       <Star size={18} weight={p.is_featured ? 'fill' : 'regular'} />
                     </button>
                     <button onClick={() => move(p, -1)} disabled={idx === 0} aria-label="Move up" title="Move up" className="h-10 w-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-vellum disabled:opacity-30"><ArrowUp size={16} /></button>

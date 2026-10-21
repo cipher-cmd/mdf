@@ -9,7 +9,6 @@ export function ProductsHero() {
   return (
     <PageHero
       crumb="Products"
-      eyebrow={copy.eyebrow}
       title={copy.title}
       intro={copy.intro}
       video="/BG/productsBg.mp4"
@@ -18,8 +17,8 @@ export function ProductsHero() {
       badge={copy.badge}
       stripLabel="Departments"
     >
-      {departments.slice(0, 4).map((c, i) => (
-        <StripItem key={c.id} index={i} short={c.short} label={c.label} sub={c.tagline} href={c.href} />
+      {departments.slice(0, 4).map(c => (
+        <StripItem key={c.id} short={c.short} label={c.label} sub={c.tagline} href={c.href} />
       ))}
     </PageHero>
   )

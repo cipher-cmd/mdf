@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, X } from '@phosphor-icons/react'
-import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FilterBar } from '@/components/ui/FilterBar'
 import { EASE } from '@/lib/animation'
 import { scrollToId } from '@/lib/scroll'
@@ -66,7 +65,7 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
 
   const showFeatured = active === 'all' && !query.trim()
 
-  // ponytail: no pagination — add it once the admin panel pushes past ~12 posts
+  // ponytail: no pagination, add it once the admin panel pushes past ~12 posts
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     return newestFirst
@@ -76,16 +75,15 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
   }, [newestFirst, featured, active, query, showFeatured])
 
   return (
-    <section id="articles" className="relative w-full bg-[#FAF8F5] pt-6 sm:pt-10 pb-16 sm:pb-24">
+    <section id="articles" className="relative w-full bg-[#F7F7F7] pt-6 sm:pt-10 pb-16 sm:pb-24">
       {/* Misty range watermark behind the heading */}
       <div className="absolute inset-x-0 top-0 h-[460px] pointer-events-none select-none bg-feather opacity-80" aria-hidden>
         <Image src="/BG/blogBg.png" alt="" fill className="object-cover object-left-top" sizes="100vw" />
       </div>
 
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
-        <AnimatedSection className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
           <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.section_eyebrow}</p>
             <h2 className="text-[30px] sm:text-[38px] lg:text-[44px] font-bold text-[#141414] leading-[1.04] font-serif-heading">
               {lines(copy.section_heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
             </h2>
@@ -93,7 +91,7 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
           <p className="text-[#6B6359] text-[14.5px] lg:text-[14px] lg:text-right max-w-[460px] leading-relaxed">
             {copy.section_text}
           </p>
-        </AnimatedSection>
+        </div>
       </div>
 
       <FilterBar filters={filters} active={active} onSelect={select} query={query} onQuery={setQuery} placeholder="Search articles" />
@@ -104,29 +102,28 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
           {active !== 'all' && <> in <span className="text-[#141414] font-semibold">{categoryLabel(active)}</span></>}
         </p>
 
-        {/* Featured story — only on the unfiltered view */}
+        {/* Featured story, only on the unfiltered view */}
         <AnimatePresence initial={false}>
           {showFeatured && featured && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.5, ease: EASE }}
-              className="overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.25, ease: EASE }}
             >
               <Link
                 href={`/blog/${featured.slug}`}
-                className="group grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-5 lg:gap-12 items-center pb-12 sm:pb-16 mb-10 sm:mb-14 border-b border-[#E8E2D6]"
+                className="group grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-5 lg:gap-12 items-center pb-12 sm:pb-16 mb-10 sm:mb-14 border-b border-[#E5E5E5]"
               >
-                <div className="relative aspect-[16/10] rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#EFE8DB] shadow-[0_30px_60px_-30px_rgba(40,28,10,0.55)]">
+                <div className="relative aspect-[16/10] rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#EDEDED]">
                   <Image
                     src={featured.coverImage}
                     alt=""
                     fill
-                    className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 760px"
                   />
-                  <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#141414]/80 backdrop-blur text-[10.5px] font-semibold tracking-[0.18em] uppercase text-[#E9CF94]">
+                  <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#141414] text-[12px] font-semibold text-[#E9CF94]">
                     Featured
                   </span>
                 </div>
@@ -155,10 +152,10 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
                 <motion.div
                   key={post.slug}
                   layout
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
-                  transition={{ duration: 0.6, delay: Math.min(i * 0.05, 0.3), ease: EASE }}
+                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.15), ease: EASE }}
                 >
                   <PostCard post={post} />
                 </motion.div>
@@ -172,7 +169,7 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
               <p className="mt-2 text-[14px] text-[#6B6359] leading-relaxed">Try another topic or a different search.</p>
               <button
                 onClick={() => { select('all'); setQuery('') }}
-                className="mt-6 inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full border border-[#DDD3C0] text-[13px] font-semibold text-[#141414] hover:border-[#CCA552] transition-colors"
+                className="mt-6 inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full border border-[#D9D9D9] text-[13px] font-semibold text-[#141414] hover:border-[#CCA552] transition-colors"
               >
                 <X size={13} weight="bold" /> Clear filters
               </button>

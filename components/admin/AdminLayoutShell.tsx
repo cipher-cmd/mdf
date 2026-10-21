@@ -24,12 +24,12 @@ const NAV = [
 function Logo() {
   return (
     <Link href="/admin" className="flex items-center gap-3 select-none group">
-      <span className="relative h-10 w-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <span className="relative h-10 w-10 flex-shrink-0 transition-transform duration-300">
         <Image src="/images/mdfFavicon.png" alt="" fill className="object-contain" sizes="40px" priority />
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-serif-heading text-[22px] font-bold tracking-[0.02em] text-ink">MDF</span>
-        <span className="mt-[3px] text-[8.5px] font-bold uppercase tracking-[0.28em] text-gold-deep">Store Manager</span>
+        <span className="mt-[3px] text-[11px] font-bold uppercase tracking-[0.28em] text-gold-deep">Store Manager</span>
       </span>
     </Link>
   )
@@ -41,7 +41,7 @@ export default function AdminLayoutShell({ children }: { children: ReactNode }) 
   const [leaving, setLeaving] = useState(false)
 
   if (pathname === '/admin/login') {
-    return <div className="min-h-screen bg-parchment text-ink">{children}</div>
+    return <div className="min-h-dvh bg-parchment text-ink">{children}</div>
   }
 
   const active = (href: string) => (href === '/admin' ? pathname === '/admin' : pathname === href || pathname.startsWith(`${href}/`))
@@ -55,9 +55,9 @@ export default function AdminLayoutShell({ children }: { children: ReactNode }) 
 
   return (
     <FeedbackProvider>
-      <div className="min-h-screen bg-parchment text-ink antialiased lg:grid lg:grid-cols-[256px_minmax(0,1fr)]">
+      <div className="min-h-dvh bg-parchment text-ink antialiased lg:grid lg:grid-cols-[256px_minmax(0,1fr)]">
         {/* Desktop sidebar: same paper as the page, divided by a hairline */}
-        <aside className="hidden lg:flex sticky top-0 h-screen flex-col border-r border-hairline px-5 py-6">
+        <aside className="hidden lg:flex sticky top-0 h-dvh flex-col border-r border-hairline px-5 py-6">
           <Logo />
           <nav className="mt-9 flex flex-col gap-0.5" aria-label="Store manager">
             {NAV.map(({ href, label, icon: Icon }) => {

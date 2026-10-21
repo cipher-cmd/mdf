@@ -45,7 +45,7 @@ function Choice({ on, onClick, title, text }: { on: boolean; onClick: () => void
       )}
     >
       <span className="flex items-center gap-2 text-[14px] font-semibold text-ink">
-        <span className={cn('h-4 w-4 rounded-full border-2 flex-shrink-0', on ? 'border-gold bg-gold shadow-[inset_0_0_0_2px_white]' : 'border-[#CFC4B2]')} />
+        <span className={cn('h-4 w-4 rounded-full border-2 flex-shrink-0', on ? 'border-gold bg-gold shadow-[inset_0_0_0_2px_white]' : 'border-[#CCCCCC]')} />
         {title}
       </span>
       <span className="mt-1 block pl-6 text-[12.5px] leading-snug text-ink-muted">{text}</span>
@@ -187,7 +187,7 @@ export default function WriterPage() {
               options={[
                 { value: 'next', label: 'Next topic in line (automatic choice)' },
                 ...activeTopics.map(t => ({ value: t.id, label: t.keyword })),
-                { value: 'custom', label: 'Something else — I will type it' },
+                { value: 'custom', label: 'Something else (I will type it)' },
               ]}
             />
           </Field>

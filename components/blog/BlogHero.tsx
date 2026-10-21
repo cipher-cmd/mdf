@@ -11,7 +11,6 @@ export function BlogHero({ posts }: { posts: BlogPost[] }) {
   return (
     <PageHero
       crumb="Blog"
-      eyebrow={copy.eyebrow}
       title={copy.title}
       intro={copy.intro}
       video="/BG/blogHero.mp4"
@@ -20,10 +19,9 @@ export function BlogHero({ posts }: { posts: BlogPost[] }) {
       badge={copy.badge}
       stripLabel="Blog topics"
     >
-      {blogCategories.map((c, i) => (
+      {blogCategories.map(c => (
         <StripItem
           key={c.id}
-          index={i}
           short={c.short}
           label={c.label}
           sub={`${count(c.id)} ${count(c.id) === 1 ? 'article' : 'articles'}`}

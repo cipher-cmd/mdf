@@ -111,7 +111,7 @@ export function PageHeader({ eyebrow, title, intro, actions }: { eyebrow: string
   return (
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-7 sm:mb-9">
       <div className="min-w-0">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep">— {eyebrow}</p>
+        <p className="text-[13px] font-semibold text-gold-deep">{eyebrow}</p>
         <h1 className="mt-1.5 font-serif-heading text-[36px] sm:text-[44px] font-bold leading-[1] tracking-[-0.01em] text-ink text-balance">
           {title}<span className="text-gold">.</span>
         </h1>
@@ -431,7 +431,7 @@ export function Drawer({ open, onClose, title, children, footer }: { open: boole
               <X size={16} weight="bold" />
             </button>
           </div>
-          <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-7 py-6">{children}</div>
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-7 py-6">{children}</div>
           {footer && <div className="border-t border-hairline bg-ledger/80 px-5 sm:px-7 py-4 flex flex-wrap justify-end gap-2.5">{footer}</div>}
         </div>
       )}

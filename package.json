@@ -9,7 +9,8 @@
     "lint": "eslint",
     "indexnow": "node scripts/indexnow.mjs",
     "db:setup": "node scripts/db-setup.mts",
-    "check": "node lib/content/copy.check.mts && node lib/ai/writer.check.mts"
+    "check": "node lib/content/copy.check.mts && node lib/ai/writer.check.mts",
+    "check:ui": "node scripts/ui-check.mjs app components providers"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
@@ -18,7 +19,6 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "groq-sdk": "^1.6.0",
-    "lenis": "^1.3.23",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",

@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { EASE } from '@/lib/animation'
 
-const ROW = 1.15 // em — height of one digit cell
+const ROW = 1.15 // em, height of one digit cell
 const STRIP = Array.from({ length: 20 }, (_, i) => i % 10) // 0-9 twice, so every digit rolls a full turn
 
 function Digit({ digit, go, delay }: { digit: number; go: boolean; delay: number }) {

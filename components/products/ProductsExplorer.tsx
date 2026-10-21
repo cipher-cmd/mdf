@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, X } from '@phosphor-icons/react'
-import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FilterBar } from '@/components/ui/FilterBar'
 import { categories as defaultCategories, type Category } from '@/lib/data/categories'
 import { products as defaultProducts, type Product } from '@/lib/data/products'
@@ -49,16 +48,15 @@ export function ProductsExplorer({
   const reset = () => { setActive('all'); setQuery('') }
 
   return (
-    <section id="collection" className="relative w-full bg-[#FAF8F5] pt-6 sm:pt-10 pb-16 sm:pb-24">
+    <section id="collection" className="relative w-full bg-[#F7F7F7] pt-6 sm:pt-10 pb-16 sm:pb-24">
       {/* Engraved Kashmir range, a quiet watermark behind the heading */}
       <div className="absolute inset-x-0 top-0 h-[420px] pointer-events-none select-none bg-feather opacity-70" aria-hidden>
         <Image src="/BG/productsSectionBg.png" alt="" fill className="object-cover object-left" sizes="100vw" />
       </div>
 
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
-        <AnimatedSection className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-10 mb-6 sm:mb-8">
           <div>
-            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.section_eyebrow}</p>
             <h2 className="text-[30px] sm:text-[38px] lg:text-[44px] font-bold text-[#141414] leading-[1.04] font-serif-heading">
               {lines(copy.section_heading).map((l, i) => <span key={i}>{i > 0 && <><br className="hidden sm:block" />{' '}</>}{l}</span>)}
             </h2>
@@ -66,7 +64,7 @@ export function ProductsExplorer({
           <p className="text-[#6B6359] text-[14.5px] lg:text-[14px] lg:text-right max-w-[460px] leading-relaxed">
             {copy.section_text}
           </p>
-        </AnimatedSection>
+        </div>
       </div>
 
       <FilterBar
@@ -101,11 +99,11 @@ export function ProductsExplorer({
               {copy.empty_text}
             </p>
             <div className="mt-6 flex items-center justify-center gap-3">
-              <button onClick={reset} className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full border border-[#DDD3C0] text-[13px] font-semibold text-[#141414] hover:border-[#CCA552] transition-colors">
+              <button onClick={reset} className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full border border-[#D9D9D9] text-[13px] font-semibold text-[#141414] hover:border-[#CCA552] transition-colors">
                 <X size={13} weight="bold" /> Clear filters
               </button>
               <a
-                href={waLink(`Hi MDF Enterprises, I am looking for ${query || 'a product'} — is it available?`)}
+                href={waLink(`Hi MDF Enterprises, I am looking for ${query || 'a product'}. Is it available?`)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center min-h-[44px] px-5 rounded-full bg-[#141414] text-white text-[13px] font-semibold hover:bg-[#2A241B] transition-colors"

@@ -16,7 +16,7 @@ export default async function HomePage() {
   const departments = await getCategories()
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#141414] overflow-x-clip selection:bg-[#C59B27] selection:text-white">
+    <div className="min-h-dvh bg-[#F7F7F7] text-[#141414] overflow-x-clip selection:bg-[#C59B27] selection:text-white">
       {/* 1. Hero with Dal lake canvas & overlapping floating stats */}
       <Hero />
 

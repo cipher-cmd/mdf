@@ -27,7 +27,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative bg-[#FAF8F5] border-t border-[#EAE3D5] text-[#222] overflow-hidden">
+    <footer className="relative bg-[#F7F7F7] border-t border-[#E5E5E5] text-[#222] overflow-hidden">
       
       {/* Background Image: footerBg.png with carved wood on left & sketch on right */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -38,7 +38,7 @@ export function Footer() {
           className="object-cover object-bottom opacity-70 select-none"
         />
         {/* Soft cream wash for 100% crisp typography */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/90 via-[#FAF8F5]/80 to-[#FAF8F5]/75" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F7F7F7]/90 via-[#F7F7F7]/80 to-[#F7F7F7]/75" />
       </div>
 
       <div className="relative z-10 max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10 pt-8 sm:pt-9 md:pt-10 pb-6">
@@ -47,10 +47,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[240px_1fr_1fr_1.1fr_1.4fr] gap-6 lg:gap-8 mb-7 items-start">
 
           {/* ── Brand Column ── */}
-          <div className="lg:border-r lg:border-[#EAE3D5] lg:pr-6">
+          <div className="lg:border-r lg:border-[#E5E5E5] lg:pr-6">
             <Link href="/" className="flex items-center gap-3.5 group mb-4 w-fit">
-              <div className="relative h-16 w-16 flex-shrink-0 transition-transform duration-500 group-hover:scale-105">
-                <Image src="/images/mdfFavicon.png" alt="MDF Enterprises" fill className="object-contain drop-shadow-sm" sizes="64px" />
+              <div className="relative h-16 w-16 flex-shrink-0">
+                <Image src="/images/mdfFavicon.png" alt="MDF Enterprises" fill className="object-contain" sizes="64px" />
               </div>
               <div className="flex flex-col leading-none">
                 <span
@@ -59,26 +59,26 @@ export function Footer() {
                 >
                   MDF
                 </span>
-                <span className="text-[#8B6B23] text-[10px] font-bold tracking-[0.3em] uppercase mt-1">
+                <span className="text-[#8B6B23] text-[11px] font-bold tracking-[0.2em] uppercase mt-1">
                   ENTERPRISES
                 </span>
               </div>
             </Link>
 
-            <p className="text-[#6B6359] text-[12px] leading-relaxed">
+            <p className="text-[#5E5850] text-[13px] leading-relaxed">
               {lines(copy.tagline).map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}
             </p>
           </div>
 
           {/* ── Products Column ── */}
           <div>
-            <h4 className="text-[11.5px] font-bold text-[#141414] uppercase tracking-[0.14em] mb-2.5 font-sans">
+            <h2 className="text-[14px] font-semibold text-[#141414] mb-2.5">
               Products
-            </h4>
+            </h2>
             <ul className="space-y-1.5">
               {products.map(p => (
                 <li key={p.href}>
-                  <Link href={p.href} className="text-[12.5px] text-[#554E46] hover:text-[#B8860B] transition-colors leading-snug">
+                  <Link href={p.href} className="text-[14px] text-[#554E46] hover:text-[#8B6B23] transition-colors leading-snug">
                     {p.label}
                   </Link>
                 </li>
@@ -88,13 +88,13 @@ export function Footer() {
 
           {/* ── Company Column ── */}
           <div>
-            <h4 className="text-[11.5px] font-bold text-[#141414] uppercase tracking-[0.14em] mb-2.5 font-sans">
+            <h2 className="text-[14px] font-semibold text-[#141414] mb-2.5">
               Company
-            </h4>
+            </h2>
             <ul className="space-y-1.5">
               {company.map(c => (
                 <li key={c.href}>
-                  <Link href={c.href} className="text-[12.5px] text-[#554E46] hover:text-[#B8860B] transition-colors leading-snug">
+                  <Link href={c.href} className="text-[14px] text-[#554E46] hover:text-[#8B6B23] transition-colors leading-snug">
                     {c.label}
                   </Link>
                 </li>
@@ -104,12 +104,12 @@ export function Footer() {
 
           {/* ── We Serve Column ── */}
           <div>
-            <h4 className="text-[11.5px] font-bold text-[#141414] uppercase tracking-[0.14em] mb-2.5 font-sans">
+            <h2 className="text-[14px] font-semibold text-[#141414] mb-2.5">
               We Serve
-            </h4>
+            </h2>
             <ul className="space-y-1.5">
               {weServe.map(s => (
-                <li key={s} className="text-[12.5px] text-[#554E46] leading-snug">
+                <li key={s} className="text-[14px] text-[#554E46] leading-snug">
                   {s}
                 </li>
               ))}
@@ -118,21 +118,21 @@ export function Footer() {
 
           {/* ── Contact Column ── */}
           <div>
-            <h4 className="text-[11.5px] font-bold text-[#141414] uppercase tracking-[0.14em] mb-2.5 font-sans">
+            <h2 className="text-[14px] font-semibold text-[#141414] mb-2.5">
               Contact
-            </h4>
+            </h2>
             <ul className="space-y-2">
-              <li className="flex items-start gap-2 text-[12px] text-[#554E46]">
-                <MapPin size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0 mt-0.5" />
+              <li className="flex items-start gap-2 text-[13px] text-[#554E46]">
+                <MapPin size={15} className="text-[#8B6B23] flex-shrink-0 mt-0.5" />
                 <span>{contact.address_line1}, {contact.address_line2}</span>
               </li>
-              <li className="flex items-center gap-2 text-[12px] text-[#554E46]">
-                <Phone size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0" />
-                <a href={telHref(contact.phone_display)} className="hover:text-[#B8860B] transition-colors">{contact.phone_display}</a>
+              <li className="flex items-center gap-2 text-[13px] text-[#554E46]">
+                <Phone size={15} className="text-[#8B6B23] flex-shrink-0" />
+                <a href={telHref(contact.phone_display)} className="hover:text-[#8B6B23] transition-colors">{contact.phone_display}</a>
               </li>
-              <li className="flex items-center gap-2 text-[12px] text-[#554E46]">
-                <EnvelopeSimple size={15} weight="duotone" className="text-[#8B6B23] flex-shrink-0" />
-                <a href={`mailto:${contact.email}`} className="hover:text-[#B8860B] transition-colors truncate">
+              <li className="flex items-center gap-2 text-[13px] text-[#554E46]">
+                <EnvelopeSimple size={15} className="text-[#8B6B23] flex-shrink-0" />
+                <a href={`mailto:${contact.email}`} className="hover:text-[#8B6B23] transition-colors truncate">
                   {contact.email}
                 </a>
               </li>
@@ -142,12 +142,12 @@ export function Footer() {
         </div>
 
         {/* ── Bottom Bar ── */}
-        <div className="pt-4 border-t border-[#EAE3D5] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#7A7369]">
+        <div className="pt-4 border-t border-[#E5E5E5] flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#6B6359]">
           <p>© {new Date().getFullYear()} {copy.copyright}</p>
-          <div className="flex items-center gap-2 text-[11px] text-[#7A7369]">
+          <div className="flex items-center gap-2">
             <span>{copy.bottom_line}</span>
             <div className="relative w-4 h-3.5 ml-0.5 flex-shrink-0">
-              <Image src="/images/mdfFavicon.png" alt="MDF" fill className="object-contain opacity-75" />
+              <Image src="/images/mdfFavicon.png" alt="" fill sizes="16px" className="object-contain opacity-75" />
             </div>
           </div>
         </div>

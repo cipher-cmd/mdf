@@ -1,28 +1,27 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Cormorant_Garamond } from 'next/font/google'
+import { Hanken_Grotesk, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 import { Navbar }       from '@/components/layout/Navbar'
 import { Footer }       from '@/components/layout/Footer'
 import { ClientShell }  from '@/components/layout/ClientShell'
-import { LenisProvider } from '@/providers/LenisProvider'
+import { MotionProvider } from '@/providers/MotionProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SiteProvider } from '@/providers/SiteProvider'
 import { getSiteCopy, getCategories } from '@/lib/db/content'
 import type { SiteCopy } from '@/lib/content/copy'
 
-const inter = Inter({
-  variable: '--font-inter',
+// Variable fonts: one file per style instead of one per weight
+const hanken = Hanken_Grotesk({
+  variable: '--font-hanken',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
 })
 
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
   style: ['normal', 'italic'],
 })
 
@@ -34,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   metadataBase: new URL(BASE_URL),
   title: {
     default: seo.site_title,
-    template: '%s | MDF Enterprises — Srinagar',
+    template: '%s | MDF Enterprises, Srinagar',
   },
   description: seo.site_description,
   keywords: [
@@ -113,7 +112,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#FAF8F5',
+  themeColor: '#F7F7F7',
 }
 
 // ── Structured data ─────────────────────────────────────────────────────────
@@ -231,7 +230,7 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
     'Music Lab Setup',
     'Annual Maintenance Contract (AMC)',
   ],
-  // Add your verified profiles below — each URL boosts AI entity recognition
+  // Add your verified profiles below; each URL boosts AI entity recognition
   sameAs: [
     // 'https://maps.app.goo.gl/YOUR_GOOGLE_MAPS_LINK',
     // 'https://www.linkedin.com/company/mdf-enterprises-srinagar',
@@ -258,7 +257,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const [copy, departments] = await Promise.all([getSiteCopy(), getCategories()])
 
   return (
-    <html lang="en-IN" className={`${inter.variable} ${cormorant.variable}`} suppressHydrationWarning>
+    <html lang="en-IN" className={`${hanken.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
         {/* Performance: preconnect for external origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -276,16 +275,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Schema: WebSite entity */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
-      <body className="bg-[#FAF8F5] text-[#141414] antialiased min-h-screen flex flex-col selection:bg-[#C59B27] selection:text-white" suppressHydrationWarning>
+      <body className="bg-[#F7F7F7] text-[#141414] antialiased min-h-dvh flex flex-col selection:bg-[#C59B27] selection:text-white" suppressHydrationWarning>
         <ThemeProvider>
           <SiteProvider value={{ copy, departments }}>
           <div className="noise-overlay" aria-hidden />
           <ClientShell />
-          <LenisProvider>
+          <MotionProvider>
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
-          </LenisProvider>
+          </MotionProvider>
           <SpeedInsights />
           </SiteProvider>
         </ThemeProvider>
