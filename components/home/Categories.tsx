@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
 import { InfiniteMarquee } from '@/components/ui/InfiniteMarquee'
+import { CategoryDeck } from './CategoryDeck'
 import { useCopy } from '@/providers/SiteProvider'
 import type { Category } from '@/lib/data/categories'
 
@@ -13,8 +14,8 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 /**
  * The shop's directory board: one entry per department, a picture over big serif type.
- * Phones stack the entries; wide screens line them up as a gallery where the one you
- * point at opens wider and runs its film.
+ * Wide screens line them up as a gallery where the one you
+ * point at opens wider and runs its film. Smaller screens get the scroll deck instead.
  */
 export function Categories({ departments }: { departments: Category[] }) {
   const copy = useCopy('home_categories')
@@ -36,7 +37,9 @@ export function Categories({ departments }: { departments: Category[] }) {
 
   return (
     <section id="categories" className="relative w-full bg-[#FAF8F5]">
-      <div className="relative bg-[#15110C] text-[#F3EBDD]">
+      <CategoryDeck departments={departments} />
+
+      <div className="hidden lg:block relative bg-[#15110C] text-[#F3EBDD]">
         <div ref={boardRef} className="max-w-[1400px] mx-auto px-5 sm:px-6 md:px-12 pt-24 sm:pt-28 pb-16 sm:pb-24">
 
           {/* Board header */}
