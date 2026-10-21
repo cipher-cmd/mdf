@@ -9,7 +9,7 @@ import { getLenis } from '@/lib/scroll'
 import { useCopy } from '@/providers/SiteProvider'
 import type { Category } from '@/lib/data/categories'
 
-const STEP_VH = 80   // scroll distance per card
+const STEP_VH = 62   // scroll distance per card
 const DWELL = 0.9    // last 10% of the track holds the final card before release
 const PEEK = 12      // px of each buried card left showing at the top of the deck
 
@@ -19,14 +19,17 @@ const easeOut = (e: number) => 1 - Math.pow(1 - e, 3)
 
 /** One card in the deck. `t` runs 0 → N-1: card i slides in while t goes i-1 → i, then sinks as later cards land on it. */
 function DeptCard({ dep, index, N, t, videoRef, cta }: { dep: Category; index: number; N: number; t: MotionValue<number>; videoRef: (el: HTMLVideoElement | null) => void; cta: string }) {
-  const y = useTransform(t, v => `${index === 0 ? 0 : (1 - easeOut(clamp01(v - (index - 1)))) * 115}%`)
+  // Rises from below the fold (vh, since the deck no longer reaches the screen edge) with a slight deal-in tilt
+  const enter = useTransform(t, v => (index === 0 ? 0 : 1 - easeOut(clamp01(v - (index - 1)))))
+  const y = useTransform(enter, e => `${e * 100}vh`)
+  const rotate = useTransform(enter, e => e * 4)
   const depth = useTransform(t, v => Math.min(N - 1 - index, Math.max(0, v - index)))
   const scale = useTransform(depth, d => 1 - d * 0.05)
   const dim = useTransform(depth, d => Math.min(0.6, d * 0.4))
 
   return (
     <motion.div
-      style={{ y, scale, top: index * PEEK, zIndex: index, height: `calc(100% - ${(N - 1) * PEEK}px)` }}
+      style={{ y, rotate, scale, top: index * PEEK, zIndex: index, height: `calc(100% - ${(N - 1) * PEEK}px)` }}
       className="absolute inset-x-0 origin-top rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#0E0B07] shadow-[0_-18px_40px_-20px_rgba(20,14,6,0.55)] will-change-transform"
     >
       {/* Phones: blurred scene fills the tall card, the clip sits in a wide band so most of the frame stays visible */}
@@ -44,7 +47,7 @@ function DeptCard({ dep, index, N, t, videoRef, cta }: { dep: Category; index: n
         playsInline
         preload="none"
         aria-hidden
-        className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 w-[165%] max-w-none aspect-video object-cover
+        className="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 w-[150%] max-w-none aspect-video object-cover
           [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]
           sm:[mask-image:none] sm:inset-0 sm:left-0 sm:top-0 sm:translate-x-0 sm:translate-y-0 sm:w-full sm:h-full sm:aspect-auto"
       />}
@@ -135,7 +138,7 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
 
   return (
     <div ref={trackRef} data-hide-fab className="relative lg:hidden" style={{ height: `calc(100svh + ${((N - 1) * STEP_VH) / DWELL}svh)` }}>
-      <div className="sticky top-0 h-[100svh] overflow-hidden flex flex-col pt-[72px] sm:pt-[84px] pb-3 sm:pb-6 px-3 sm:px-6 md:px-12">
+      <div className="sticky top-0 h-[100svh] overflow-hidden flex flex-col justify-center pt-[72px] sm:pt-[84px] pb-4 sm:pb-6 px-3 sm:px-6 md:px-12">
 
         {/* Heading + deck progress */}
         <div className="max-w-[1400px] w-full mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4 px-2 sm:px-0 mb-4 sm:mb-6">
@@ -159,7 +162,8 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
         </div>
 
         {/* The deck */}
-        <div ref={deckRef} className="relative flex-1 min-h-0 max-w-[1400px] w-full mx-auto">
+        {/* Capped height: cards read as cards, not full-screen slabs */}
+        <div ref={deckRef} className="relative h-[clamp(360px,56svh,500px)] sm:h-[clamp(420px,62svh,600px)] min-h-0 max-w-[1400px] w-full mx-auto">
           {departments.map((dep, i) => (
             <DeptCard key={dep.id} dep={dep} index={i} N={N} t={t} cta={copy.card_button} videoRef={el => { videos.current[i] = el }} />
           ))}
