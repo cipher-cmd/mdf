@@ -6,10 +6,10 @@
  * plain-word feedback for every action.
  */
 import {
-  createContext, useCallback, useContext, useEffect, useRef, useState,
-  type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes,
+  createContext, useCallback, useContext, useEffect, useId, useRef, useState,
+  type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode, type TextareaHTMLAttributes,
 } from 'react'
-import { CheckCircle, WarningCircle, X, CircleNotch } from '@phosphor-icons/react'
+import { CheckCircle, WarningCircle, X, CircleNotch, CaretDown, Check } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 
 // ── Talking to the server ───────────────────────────────────────────────────
@@ -171,14 +171,28 @@ export function Button({
   )
 }
 
+/**
+ * A labelled form row. The label points at the control by id (via context) instead of
+ * wrapping it: a wrapping <label> makes the browser "click" the first button inside
+ * whenever empty space is clicked, which misfires on picture boxes and pop-ups.
+ */
+const FieldContext = createContext<{ id: string; helpId?: string } | null>(null)
+
 export function Field({ label, help, children, className = '' }: { label: string; help?: ReactNode; children: ReactNode; className?: string }) {
+  const id = useId()
+  const helpId = help ? `${id}-help` : undefined
   return (
-    <label className={cn('block', className)}>
-      <span className="block text-[13px] font-semibold text-ink mb-1.5">{label}</span>
-      {children}
-      {help && <span className="block mt-1.5 text-[12px] leading-snug text-ink-muted">{help}</span>}
-    </label>
+    <div className={cn('block', className)}>
+      <label htmlFor={id} className="block text-[13px] font-semibold text-ink mb-1.5">{label}</label>
+      <FieldContext.Provider value={{ id, helpId }}>{children}</FieldContext.Provider>
+      {help && <p id={helpId} className="mt-1.5 text-[12px] leading-snug text-ink-muted">{help}</p>}
+    </div>
   )
+}
+
+const useFieldIds = (id?: string) => {
+  const field = useContext(FieldContext)
+  return { id: id ?? field?.id, 'aria-describedby': field?.helpId }
 }
 
 const INPUT =
@@ -187,18 +201,149 @@ const INPUT =
   'focus:bg-ledger focus:shadow-[inset_0_0_0_1.5px_var(--color-gold),0_0_0_4px_rgba(204,165,82,0.15)] transition-[background-color,box-shadow] duration-150'
 
 export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={cn(INPUT, 'min-h-[44px]', props.className)} />
+  const ids = useFieldIds(props.id)
+  return <input {...ids} {...props} id={ids.id} className={cn(INPUT, 'min-h-[44px]', props.className)} />
 }
 
 export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea rows={3} {...props} className={cn(INPUT, 'resize-y leading-relaxed', props.className)} />
+  const ids = useFieldIds(props.id)
+  return <textarea rows={3} {...ids} {...props} id={ids.id} className={cn(INPUT, 'resize-y leading-relaxed', props.className)} />
 }
 
-export function Select({ value, onChange, options, className = '' }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[]; className?: string }) {
+/** Styled dropdown with full keyboard support (arrows, Enter/Space, Escape, Tab). */
+export function Select({
+  value,
+  onChange,
+  options = [],
+  placeholder = 'Choose…',
+  disabled = false,
+  className = '',
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+  placeholder?: string
+  disabled?: boolean
+  className?: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [highlighted, setHighlighted] = useState(-1)
+  const [upward, setUpward] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const id = useId()
+  const ids = useFieldIds()
+  const selected = options.find(o => o.value === value)
+
+  useEffect(() => {
+    if (!open) return
+    const onOutside = (e: MouseEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onOutside)
+    return () => document.removeEventListener('mousedown', onOutside)
+  }, [open])
+
+  useEffect(() => {
+    if (open && highlighted >= 0) listRef.current?.children[highlighted]?.scrollIntoView({ block: 'nearest' })
+  }, [highlighted, open])
+
+  const openList = () => {
+    if (disabled || !containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const below = window.innerHeight - rect.bottom
+    setUpward(below < 260 && rect.top > below)
+    setHighlighted(Math.max(0, options.findIndex(o => o.value === value)))
+    setOpen(true)
+  }
+
+  const choose = (v: string) => {
+    onChange(v)
+    setOpen(false)
+  }
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled) return
+    if (!open) {
+      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+        e.preventDefault()
+        openList()
+      }
+      return
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setOpen(false)
+    } else if (e.key === 'Tab') {
+      setOpen(false)
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault()
+      const step = e.key === 'ArrowDown' ? 1 : -1
+      setHighlighted(i => (i + step + options.length) % Math.max(1, options.length))
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      if (options[highlighted]) choose(options[highlighted].value)
+    }
+  }
+
   return (
-    <select value={value} onChange={e => onChange(e.target.value)} className={cn(INPUT, 'min-h-[44px] pr-9 appearance-none bg-[url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%238B6B23%27 stroke-width=%273%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E")] bg-no-repeat bg-[right_14px_center]', className)}>
-      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-    </select>
+    <div ref={containerRef} className={cn('relative w-full', className)} onKeyDown={onKeyDown}>
+      <button
+        type="button"
+        {...ids}
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={`${id}-list`}
+        aria-activedescendant={open && highlighted >= 0 ? `${id}-${highlighted}` : undefined}
+        disabled={disabled}
+        onClick={() => (open ? setOpen(false) : openList())}
+        className={cn(
+          INPUT,
+          'min-h-[44px] flex items-center justify-between gap-2.5 text-left select-none disabled:opacity-50 disabled:cursor-not-allowed',
+          open && 'bg-ledger shadow-[inset_0_0_0_1.5px_var(--color-gold),0_0_0_4px_rgba(204,165,82,0.15)]'
+        )}
+      >
+        <span className={cn('truncate', selected ? 'text-ink' : 'text-ink-faint')}>{selected?.label ?? placeholder}</span>
+        <CaretDown size={14} weight="bold" className={cn('flex-shrink-0 text-gold-deep transition-transform duration-200', open && 'rotate-180')} />
+      </button>
+
+      {open && (
+        <ul
+          ref={listRef}
+          id={`${id}-list`}
+          role="listbox"
+          className={cn(
+            'adm-rise absolute inset-x-0 z-[120] max-h-[260px] overflow-y-auto overscroll-contain rounded-[16px] bg-ledger p-1.5',
+            'shadow-[0_0_0_1px_rgba(60,45,20,0.1),0_18px_40px_-8px_rgba(40,28,10,0.22)]',
+            upward ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
+          )}
+        >
+          {options.length === 0 && <li className="px-3.5 py-2.5 text-center text-[13px] text-ink-muted">Nothing to choose yet</li>}
+          {options.map((option, i) => {
+            const isSelected = option.value === value
+            return (
+              <li
+                key={option.value}
+                id={`${id}-${i}`}
+                role="option"
+                aria-selected={isSelected}
+                onMouseEnter={() => setHighlighted(i)}
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => choose(option.value)}
+                className={cn(
+                  'flex items-center justify-between gap-3 rounded-[10px] px-3.5 min-h-[40px] text-[13.5px] cursor-pointer select-none transition-colors duration-100',
+                  isSelected ? 'bg-gold-wash font-semibold text-gold-deep' : i === highlighted ? 'bg-vellum text-ink' : 'text-ink'
+                )}
+              >
+                <span className="truncate">{option.label}</span>
+                {isSelected && <Check size={15} weight="bold" className="flex-shrink-0" />}
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }
 

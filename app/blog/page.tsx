@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { BlogHero } from '@/components/blog/BlogHero'
 import { BlogExplorer } from '@/components/blog/BlogExplorer'
 import { CtaBand } from '@/components/home/CtaBand'
-import { getPublishedPosts, getSiteCopy } from '@/lib/db/content'
+import { expireAtNextScheduledPost, getPublishedPosts, getSiteCopy } from '@/lib/db/content'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-  const posts = await getPublishedPosts()
+  const [posts] = await Promise.all([getPublishedPosts(), expireAtNextScheduledPost()])
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -50,13 +50,13 @@ export default async function BlogPage() {
   }
 
   return (
-    <main className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
+    <div className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
       <BlogHero posts={posts} />
       <BlogExplorer initialPosts={posts} />
       <CtaBand />
-    </main>
+    </div>
   )
 }

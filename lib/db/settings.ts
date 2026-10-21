@@ -6,6 +6,8 @@ export const SETTINGS_DEFAULTS = {
   blog_auto_enabled: true,
   /** true = go live straight away, false = wait in Drafts for approval */
   blog_auto_publish: true,
+  /** Time of day (Srinagar) the automatic article goes live, "HH:MM" */
+  blog_publish_time: '10:00',
   /** Write one article every N days (1, 2, 3 or 7) */
   blog_every_days: 1,
   /** Region the articles focus on, added to every news search */

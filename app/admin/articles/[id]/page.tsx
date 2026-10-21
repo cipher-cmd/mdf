@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, ArrowSquareOut, Sparkle, Trash } from '@phosphor-icons/react'
+import { ArrowLeft, ArrowSquareOut, PenNib, Trash } from '@phosphor-icons/react'
 import { api, Badge, Button, Card, Field, Loading, Select, TextArea, TextInput, Toggle, useFeedback } from '@/components/admin/ui'
 import { ImageField } from '@/components/admin/ImageField'
+import { CoverFinder, type CoverCredit } from '@/components/admin/CoverFinder'
 import { RichEditor } from '@/components/admin/RichEditor'
 import { blogCategories } from '@/lib/data/blog'
 
@@ -16,6 +17,7 @@ interface Article {
   excerpt: string
   content: string
   cover_image: string
+  cover_credit: CoverCredit | null
   category: string
   status: 'published' | 'draft'
   published_at: string | null
@@ -23,11 +25,12 @@ interface Article {
   meta_description: string
   ai_generated?: boolean
   review_notes?: string | null
+  reviewed_at?: string | null
   source_urls?: { title: string; source: string; url: string }[]
 }
 
 const empty: Article = {
-  id: '', slug: '', title: '', excerpt: '', content: '', cover_image: '/images/sports.webp', category: 'guides',
+  id: '', slug: '', title: '', excerpt: '', content: '', cover_image: '/images/sports.webp', cover_credit: null, category: 'guides',
   status: 'draft', published_at: null, is_featured: false, meta_description: '',
 }
 
@@ -78,7 +81,7 @@ export default function ArticleEditor() {
       const future = status === 'published' && a.published_at && new Date(a.published_at) > new Date()
       notify(status === 'published' ? (future ? 'Saved. It will appear on the website on the date you chose.' : 'Published. The article is on the website.') : 'Saved as a draft. Only you can see it.')
       if (isNew) router.replace(`/admin/articles/${r.data.id}`)
-      else setA(x => (x ? { ...x, status, slug: r.data.slug } : x))
+      else setA(x => (x ? { ...x, status, slug: r.data.slug, reviewed_at: status === 'published' ? x.reviewed_at ?? new Date().toISOString() : x.reviewed_at } : x))
     } catch (e) {
       notify((e as Error).message, 'error')
     } finally {
@@ -116,9 +119,19 @@ export default function ArticleEditor() {
         </div>
       </div>
 
+      {a.ai_generated && !a.reviewed_at && (
+        <p className="mb-3 flex items-start gap-2.5 rounded-2xl bg-gold-wash px-4 py-3 text-[13px] leading-snug text-gold-deep">
+          <PenNib size={17} weight="bold" className="text-gold flex-shrink-0" />
+          <span>
+            Google does not see this article yet. Visitors can read it, but search engines are told to skip it until you read it and press {live ? 'Save changes' : 'Publish to website'} here.
+            Adding something only MDF knows (a real price, a school you supplied, a photo from the shop) makes it far more likely to rank.
+          </span>
+        </p>
+      )}
+
       {a.ai_generated && a.review_notes && (
         <p className="mb-5 flex items-start gap-2.5 rounded-2xl bg-gold-wash px-4 py-3 text-[13px] leading-snug text-gold-deep">
-          <Sparkle size={17} weight="fill" className="text-gold flex-shrink-0" />
+          <PenNib size={17} weight="bold" className="text-gold flex-shrink-0" />
           <span>{a.review_notes} Please read it once before publishing, and change anything you like.</span>
         </p>
       )}
@@ -164,8 +177,12 @@ export default function ArticleEditor() {
           </Card>
 
           <Card className="p-5 space-y-5">
-            <Field label="Cover picture" help="A wide photo works best.">
-              <ImageField value={a.cover_image} onChange={v => set('cover_image', v)} maxSide={1800} />
+            <Field label="Cover picture" help="A wide photo works best. Your own photos look most genuine; free photos are credited automatically.">
+              <ImageField value={a.cover_image} onChange={v => { set('cover_image', v); set('cover_credit', null) }} maxSide={1800} />
+              <div className="mt-1">
+                <CoverFinder suggestion={a.title} onPick={(url, credit) => { set('cover_image', url); set('cover_credit', credit) }} />
+              </div>
+              {a.cover_credit && <p className="mt-2 text-[11.5px] text-ink-muted">Shown under the photo: {a.cover_credit.text}</p>}
             </Field>
             <Field label="Blog section">
               <Select value={a.category} onChange={v => set('category', v)} options={blogCategories.map(c => ({ value: c.id, label: c.label }))} />

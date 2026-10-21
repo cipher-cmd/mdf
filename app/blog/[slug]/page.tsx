@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, CaretRight, WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import { categoryLabel, formatDate, readTime } from '@/lib/data/blog'
-import { getPublishedPost, getPublishedPosts, getSiteCopy } from '@/lib/db/content'
+import { DEPARTMENT_GUIDES, departmentFor } from '@/lib/content/departments'
+import { expireAtNextScheduledPost, getPublishedPost, getPublishedPosts, getSiteCopy } from '@/lib/db/content'
 import { waHref } from '@/lib/content/copy'
 import { PostCard } from '@/components/blog/PostCard'
 import { CtaBand } from '@/components/home/CtaBand'
@@ -33,6 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.title,
     description: post.metaDescription || post.excerpt,
     alternates: { canonical: `${BASE_URL}/blog/${slug}` },
+    // Unreviewed AI articles: readable on the site, links followed, kept out of search results
+    ...(post.indexable === false ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: 'article',
       url: `${BASE_URL}/blog/${slug}`,
@@ -46,11 +49,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const [post, allPosts, copy] = await Promise.all([getPublishedPost(slug), getPublishedPosts(), getSiteCopy()])
+  const [post, allPosts, copy] = await Promise.all([getPublishedPost(slug), getPublishedPosts(), getSiteCopy(), expireAtNextScheduledPost()])
   if (!post) notFound()
 
   const label = categoryLabel(post.category)
   const url = `${BASE_URL}/blog/${post.slug}`
+  // Points readers (and link equity) from the article to the department it is about
+  const dept = departmentFor(`${post.title} ${post.excerpt}`)
   
   // Same topic first, then the newest of the rest
   const related = allPosts
@@ -91,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <main className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
+    <div className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
@@ -130,6 +135,11 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="relative aspect-[16/10] sm:aspect-[2/1] rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#EFE8DB] shadow-[0_40px_80px_-40px_rgba(40,28,10,0.55)]">
             <Image src={post.coverImage} alt="" fill priority className="object-cover" sizes="(max-width: 1180px) 100vw, 1100px" />
           </div>
+          {post.coverCredit && (
+            <p className="mt-2.5 text-right text-[11.5px] text-[#99938B]">
+              <a href={post.coverCredit.url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#8B6B23] transition-colors">{post.coverCredit.text}</a>
+            </p>
+          )}
         </div>
 
         <div className="article-body max-w-[680px] mx-auto px-4 sm:px-6 mt-12 sm:mt-16" dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -148,6 +158,16 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </ul>
           </aside>
+        )}
+
+        {dept && (
+          <p className="max-w-[680px] mx-auto px-4 sm:px-6 mt-12 text-[15px] text-[#554E46]">
+            Looking to buy? See our{' '}
+            <Link href={`/products/${dept}`} className="font-semibold text-[#8B6B23] underline underline-offset-4 hover:text-[#A47E28]">
+              {DEPARTMENT_GUIDES[dept].heading.toLowerCase()}
+            </Link>
+            .
+          </p>
         )}
 
         <footer className="max-w-[680px] mx-auto px-4 sm:px-6 mt-12 pt-8 border-t border-[#E8E2D6] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -191,6 +211,6 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       <CtaBand />
-    </main>
+    </div>
   )
 }

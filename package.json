@@ -9,7 +9,7 @@
     "lint": "eslint",
     "indexnow": "node scripts/indexnow.mjs",
     "db:setup": "node scripts/db-setup.mts",
-    "check:writer": "node lib/ai/writer.check.mts"
+    "check": "node lib/content/copy.check.mts && node lib/ai/writer.check.mts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

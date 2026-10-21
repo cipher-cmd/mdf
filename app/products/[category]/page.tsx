@@ -6,6 +6,7 @@ import { ArrowUpRight, CaretRight, WhatsappLogo } from '@phosphor-icons/react/di
 import { categories as defaultCategories } from '@/lib/data/categories'
 import { getProducts, getCategories, getSiteCopy } from '@/lib/db/content'
 import { waHref } from '@/lib/content/copy'
+import { DEPARTMENT_GUIDES } from '@/lib/content/departments'
 import { CtaBand } from '@/components/home/CtaBand'
 import { ProductGrid } from '@/components/products/ProductGrid'
 
@@ -26,10 +27,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params
   const cat = (await getCategories()).find(c => c.id === category)
   if (!cat) return {}
+  const guide = DEPARTMENT_GUIDES[category]
   const ogImage = BUILT_IN_OG.has(category) ? `/og/${category}.jpg` : cat.image
   return {
-    title: `${cat.label} in Srinagar, J&K`,
-    description: `Buy genuine ${cat.label} in Srinagar, J&K from MDF Enterprises — GeM-registered, MSME-certified. Authorized dealer for 25+ premium brands. Institutional pricing and district-wide delivery.`,
+    // Absolute: the site template would add a second "Srinagar"
+    title: { absolute: `${guide ? guide.heading : `${cat.label} in Srinagar`}, J&K | MDF Enterprises` },
+    description: `Buy genuine ${cat.label.toLowerCase()} in Srinagar from MDF Enterprises: ${cat.items.replace(/ · /g, ', ')}. GeM-registered, MSME-certified, delivering across J&K since 1997.`,
     alternates: { canonical: `${BASE_URL}/products/${category}` },
     openGraph: {
       url: `${BASE_URL}/products/${category}`,
@@ -55,6 +58,7 @@ export default async function CategoryPage({ params }: Props) {
   const page = copy.products_page
   const fill = (text: string) => text.replace(/\[department\]/gi, cat.label.toLowerCase())
   const categoryProducts = allProducts.filter(p => p.category === category)
+  const guide = DEPARTMENT_GUIDES[category]
 
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -68,21 +72,21 @@ export default async function CategoryPage({ params }: Props) {
     itemListElement: categoryProducts.map((p, index) => ({
       '@type': 'ListItem',
       position: index + 1,
+      // Plain list entries: a Product without a price trips Search Console's "missing offers" error
       item: {
-        '@type': 'Product',
+        '@type': 'Thing',
         name: p.name,
         description: p.description,
-        brand: { '@type': 'Brand', name: p.brand },
         image: abs(p.image),
         url: `${BASE_URL}/products/${category}`,
-        offers: {
-          '@type': 'Offer',
-          availability: (p as { inStock?: boolean }).inStock === false ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
-          areaServed: { '@type': 'State', name: 'Jammu & Kashmir' },
-          seller: { '@type': 'Organization', '@id': `${BASE_URL}/#organization` },
-        },
       },
     })),
+  }
+
+  const faqSchema = guide && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   }
 
   const breadcrumbSchema = {
@@ -96,9 +100,10 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   return (
-    <main className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
+    <div className="bg-[#FAF8F5] min-h-screen pt-24 sm:pt-28 text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
         <nav aria-label="Breadcrumb" className="mb-4 sm:mb-5">
@@ -153,6 +158,33 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         )}
 
+        {guide && (
+          <section aria-labelledby="guide-heading" className="mt-16 sm:mt-24 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+            <div>
+              <h2 id="guide-heading" className="text-[30px] sm:text-[40px] font-bold leading-[1.05] font-serif-heading">{guide.heading}</h2>
+              {guide.body.map(p => <p key={p.slice(0, 24)} className="mt-4 text-[15px] leading-relaxed text-[#554E46]">{p}</p>)}
+              <h3 className="mt-8 mb-3 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">What we stock</h3>
+              <ul className="space-y-2 text-[14.5px] text-[#141414]">
+                {guide.stock.map(s => <li key={s} className="pl-4 border-l-2 border-[#CCA552]">{s}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-[22px] sm:text-[26px] font-bold font-serif-heading">Common questions</h2>
+              <div className="mt-4 divide-y divide-[#E8E2D6] border-y border-[#E8E2D6]">
+                {guide.faq.map(({ q, a }) => (
+                  <details key={q} className="group py-4">
+                    <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden flex justify-between gap-4 text-[15px] font-semibold">
+                      {q}
+                      <CaretRight size={14} weight="bold" className="mt-1 flex-shrink-0 text-[#B8923F] transition-transform group-open:rotate-90" />
+                    </summary>
+                    <p className="mt-2 text-[14.5px] leading-relaxed text-[#554E46]">{a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Other departments */}
         {allCategories.length > 1 && (
           <nav aria-label="Other departments" className="mt-16 sm:mt-20 pt-8 border-t border-[#E8E2D6]">
@@ -174,6 +206,6 @@ export default async function CategoryPage({ params }: Props) {
       </div>
 
       <CtaBand />
-    </main>
+    </div>
   )
 }

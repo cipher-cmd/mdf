@@ -89,7 +89,11 @@ async function schema() {
   )`
   await sql`ALTER TABLE mdf_blog_posts ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT FALSE`
   await sql`ALTER TABLE mdf_blog_posts ADD COLUMN IF NOT EXISTS topic VARCHAR(200)`
+  await sql`ALTER TABLE mdf_blog_posts ADD COLUMN IF NOT EXISTS cover_credit JSONB`
   await sql`ALTER TABLE mdf_blog_posts ALTER COLUMN status SET DEFAULT 'draft'`
+  // AI articles stay out of Google until a person has saved them once in the editor
+  await sql`ALTER TABLE mdf_blog_posts ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ`
+  await sql`UPDATE mdf_blog_posts SET reviewed_at = COALESCE(updated_at, created_at) WHERE ai_generated = false AND reviewed_at IS NULL`
   await sql`CREATE INDEX IF NOT EXISTS idx_mdf_blog_posts_live ON mdf_blog_posts(status, published_at DESC)`
 
   // News stories already turned into articles, so the writer never repeats one

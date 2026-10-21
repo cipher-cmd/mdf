@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Circle, Package, PenNib, TextAa, SealCheck, Sparkle } from '@phosphor-icons/react'
+import { ArrowRight, CheckCircle, Circle, Package, PenNib, TextAa, SealCheck, Lightning } from '@phosphor-icons/react'
 import { api, Badge, Button, Card, Loading, PageHeader, timeAgo, useFeedback } from '@/components/admin/ui'
 import { formatBytes } from '@/components/admin/ImageField'
 
@@ -18,13 +18,19 @@ interface Overview {
   picture_bytes: number
   lastRun: { status: string; message: string; created_at: string; trigger: string } | null
   drafts: { id: string; title: string; created_at: string; ai_generated: boolean }[]
-  settings: { blog_auto_enabled: boolean; blog_auto_publish: boolean; blog_every_days: number }
+  settings: { blog_auto_enabled: boolean; blog_auto_publish: boolean; blog_every_days: number; blog_publish_time: string }
 }
 interface Check { label: string; done: boolean; fix: string }
 
 const greeting = () => {
   const h = Number(new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'Asia/Kolkata' }))
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
+}
+
+/** "10:30" → "10:30 am" */
+const clock = (hhmm: string) => {
+  const [h, m] = hhmm.split(':').map(Number)
+  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`
 }
 
 const every = (n: number) => (n === 1 ? 'every day' : n === 7 ? 'once a week' : `every ${n} days`)
@@ -152,7 +158,7 @@ export default function AdminHome() {
           <p className="mt-2 text-[14px] text-ink-soft leading-relaxed">
             {data.settings.blog_auto_enabled
               ? data.settings.blog_auto_publish
-                ? `New articles go live by themselves, about ${data.topics} topics in rotation.`
+                ? `New articles go live by themselves at ${clock(data.settings.blog_publish_time)}, taking ${data.topics} topics in turn.`
                 : 'New articles wait in Drafts until you press Publish.'
               : 'Turn it on to get a fresh article on your topics without lifting a finger.'}
           </p>
@@ -171,7 +177,7 @@ export default function AdminHome() {
           <ul className="mt-3 space-y-1">
             {[
               { href: '/admin/products?new=1', icon: Package, title: 'Add a product', text: 'Photo, name and a few words' },
-              { href: '/admin/writer', icon: Sparkle, title: 'Get an article written', text: 'Pick a topic, the writer does the rest' },
+              { href: '/admin/writer', icon: Lightning, title: 'Get an article written', text: 'Pick a topic, the writer does the rest' },
               { href: '/admin/articles/new', icon: PenNib, title: 'Write an article yourself', text: 'Like writing an email' },
               { href: '/admin/text', icon: TextAa, title: 'Change words on the website', text: 'Phone number, headings, anything' },
             ].map(({ href, icon: Icon, title, text }) => (

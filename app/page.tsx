@@ -7,6 +7,7 @@ import { WhoWeServe }    from '@/components/home/WhoWeServe'
 import { Process }       from '@/components/home/Process'
 import { Clients }       from '@/components/home/Clients'
 import { Showroom }      from '@/components/home/Showroom'
+import { Faq }           from '@/components/home/Faq'
 import { getCategories } from '@/lib/db/content'
 
 const CtaBand = dynamic(() => import('@/components/home/CtaBand').then(m => m.CtaBand))
@@ -15,7 +16,7 @@ export default async function HomePage() {
   const departments = await getCategories()
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#141414] overflow-x-clip selection:bg-[#C59B27] selection:text-white">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#141414] overflow-x-clip selection:bg-[#C59B27] selection:text-white">
       {/* 1. Hero with Dal lake canvas & overlapping floating stats */}
       <Hero />
 
@@ -40,8 +41,11 @@ export default async function HomePage() {
       {/* 8. Visit Our Srinagar Showroom */}
       <Showroom />
 
-      {/* 9. Panoramic finale: contact + quick quote (id="contact") */}
+      {/* 9. Questions buyers ask (visible FAQ + FAQPage schema) */}
+      <Faq />
+
+      {/* 10. Panoramic finale: contact + quick quote (id="contact") */}
       <CtaBand />
-    </main>
+    </div>
   )
 }

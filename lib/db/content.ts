@@ -1,9 +1,9 @@
 import { cache } from 'react'
-import { query, hasDb } from '@/lib/db'
-import { mergeCopy, type SiteCopy } from '@/lib/content/copy'
+import { query, hasDb, getDb } from '@/lib/db'
+import { applyTokens, mergeCopy, type SiteCopy } from '@/lib/content/copy'
 import { categories as defaultCategories, type Category } from '@/lib/data/categories'
 import { products as defaultProducts, type Product, type ProductCategory } from '@/lib/data/products'
-import { blogPosts as defaultBlogPosts, type BlogPost, type BlogCategory } from '@/lib/data/blog'
+import { blogPosts as defaultBlogPosts, isIndexable, type BlogPost, type BlogCategory } from '@/lib/data/blog'
 
 /**
  * Public-site readers. Pages are statically cached and refreshed the moment the
@@ -19,6 +19,9 @@ export interface ExtendedBlogPost extends BlogPost {
   metaTitle?: string
   metaDescription?: string
   updatedAt?: string
+  coverCredit?: { text: string; url: string } | null
+  /** false = written by the AI and not yet read by a person: live on the site, hidden from search engines */
+  indexable?: boolean
 }
 
 async function safe<T>(label: string, run: () => Promise<T>, fallback: T): Promise<T> {
@@ -33,12 +36,16 @@ async function safe<T>(label: string, run: () => Promise<T>, fallback: T): Promi
 
 const isoDay = (d: unknown) => (d ? new Date(d as string).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10))
 
-export const getSiteCopy = cache((): Promise<SiteCopy> =>
+/** The admin's text exactly as typed (with {years} placeholders). */
+export const getRawSiteCopy = cache((): Promise<SiteCopy> =>
   safe('site copy', async () => {
     const rows = await query<{ key: string; content: Record<string, unknown> }>('SELECT key, content FROM mdf_site_copy')
     return mergeCopy(Object.fromEntries(rows.map(r => [r.key, r.content])))
   }, mergeCopy({}))
 )
+
+/** What visitors see: placeholders filled in for the current year. */
+export const getSiteCopy = cache(async (): Promise<SiteCopy> => applyTokens(await getRawSiteCopy()))
 
 export function rowToCategory(r: any): Category {
   return {
@@ -111,11 +118,13 @@ export function rowToPost(r: any): ExtendedBlogPost {
       .filter((s: any) => s && typeof s.url === 'string' && /^https?:\/\//.test(s.url)),
     metaTitle: r.meta_title || undefined,
     metaDescription: r.meta_description || undefined,
+    coverCredit: r.cover_credit && typeof r.cover_credit.text === 'string' ? r.cover_credit : null,
+    indexable: isIndexable(r),
   }
 }
 
 const POST_COLUMNS =
-  'id, slug, title, excerpt, content, cover_image, category, status, published_at, created_at, updated_at, is_featured, ai_generated, source_urls, meta_title, meta_description'
+  'id, slug, title, excerpt, content, cover_image, cover_credit, category, status, published_at, created_at, updated_at, is_featured, ai_generated, source_urls, meta_title, meta_description, reviewed_at'
 
 /** Published articles, newest first. Posts scheduled for a future date stay hidden. */
 export const getPublishedPosts = cache((): Promise<ExtendedBlogPost[]> =>
@@ -142,3 +151,25 @@ export const getPublishedPost = cache((slug: string): Promise<ExtendedBlogPost |
     return p ? { ...p, status: 'published' as const } : null
   })())
 )
+
+/**
+ * Articles can be scheduled ("goes live at 10:00"). Pages are cached for up to an hour,
+ * so when the next scheduled article is due sooner, tell Next.js to expire this page's
+ * cache exactly then. A fetch with a lower `revalidate` shortens the whole page's cache
+ * (documented ISR behaviour); the Neon driver's own fetch carries it. Costs one tiny
+ * query per page rebuild, never per visit.
+ */
+export async function expireAtNextScheduledPost() {
+  const db = getDb()
+  if (!db) return
+  try {
+    const [row] = await query<{ at: string | null }>(
+      `SELECT min(published_at) AS at FROM mdf_blog_posts WHERE status = 'published' AND published_at > now()`
+    )
+    const seconds = row?.at ? Math.ceil((new Date(row.at).getTime() - Date.now()) / 1000) : 0
+    if (seconds <= 0 || seconds >= 3600) return
+    await db.query('SELECT 1', [], { fetchOptions: { next: { revalidate: Math.max(30, seconds) } } } as Parameters<typeof db.query>[2])
+  } catch (err) {
+    console.error('[content] could not schedule page refresh:', err)
+  }
+}

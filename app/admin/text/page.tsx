@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowUp, ArrowDown, Plus, X, ArrowCounterClockwise, CaretRight } from '@phosphor-icons/react'
-import { api, Badge, Button, Card, Field, Loading, PageHeader, Select, TextArea, TextInput, timeAgo, useFeedback } from '@/components/admin/ui'
+import { api, Badge, Button, Card, Field, Loading, PageHeader, Select, TextArea, TextInput, Toggle, timeAgo, useFeedback } from '@/components/admin/ui'
 import { ImageField } from '@/components/admin/ImageField'
 import { COPY_DEFAULTS, COPY_PAGES, COPY_SECTIONS, type CopyField, type CopyKey, type SiteCopy } from '@/lib/content/copy'
 import { cn } from '@/lib/utils'
@@ -46,9 +46,10 @@ function FieldInput({ field, value, onChange }: { field: CopyField; value: Value
     case 'image': return <ImageField value={value ?? ''} onChange={onChange} shape={/logo/i.test(field.key) ? 'logo' : 'landscape'} />
     case 'tags': return <TagsInput value={Array.isArray(value) ? value : []} onChange={onChange} />
     case 'select': return <Select value={value ?? ''} onChange={onChange} options={field.options} />
+    case 'toggle': return <Toggle on={Boolean(value)} onChange={onChange} label={value ? 'Yes' : 'No'} />
     case 'list': {
       const items: Record<string, Value>[] = Array.isArray(value) ? value : []
-      const blank = Object.fromEntries(field.fields.map(f => [f.key, f.type === 'number' ? 0 : f.type === 'tags' ? [] : f.type === 'select' ? f.options[0].value : '']))
+      const blank = Object.fromEntries(field.fields.map(f => [f.key, f.type === 'number' ? 0 : f.type === 'toggle' ? false : f.type === 'tags' ? [] : f.type === 'select' ? f.options[0].value : '']))
       const update = (i: number, key: string, v: Value) => onChange(items.map((it, j) => (j === i ? { ...it, [key]: v } : it)))
       const move = (i: number, d: -1 | 1) => { const l = [...items]; [l[i], l[i + d]] = [l[i + d], l[i]]; onChange(l) }
       return (
@@ -135,7 +136,11 @@ export default function WebsiteTextPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Every word on your website" title="Website Text" intro="Pick a part of the website on the left, change the words, then press Save. You can always put the original wording back." />
+      <PageHeader
+        eyebrow="Every word on your website"
+        title="Website Text"
+        intro={<>Pick a part of the website on the left, change the words, then press Save. You can always put the original wording back. Tip: type <strong className="font-semibold text-ink">{'{years}'}</strong> anywhere and the website shows your years of experience, which go up by themselves every January.</>}
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)] items-start">
         <nav className="lg:sticky lg:top-6 space-y-5" aria-label="Website sections">

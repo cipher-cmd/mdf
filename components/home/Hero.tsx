@@ -1,13 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Odometer } from '@/components/ui/Odometer'
 import { EASE } from '@/lib/animation'
 import {
   ArrowRight,
-  Play,
-  X,
   WhatsappLogo,
 } from '@phosphor-icons/react'
 import Image from 'next/image'
@@ -93,7 +91,6 @@ export function Hero() {
   const copy = useCopy('home_hero')
   const stats = useCopy('home_stats').items.map((s, i) => ({ ...s, icon: statIcons[i % statIcons.length] }))
   const whatsapp = useWhatsApp()
-  const [videoModalOpen, setVideoModalOpen] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   // Gentle scroll parallax: scene drifts and deepens, copy lifts away
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
@@ -104,13 +101,6 @@ export function Hero() {
   // The last " · part" of the eyebrow is hidden on phones, where the line would wrap
   const eyebrowCut = copy.eyebrow.lastIndexOf(' · ')
   const headlineLines = lines(copy.heading)
-
-  useEffect(() => {
-    if (!videoModalOpen) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setVideoModalOpen(false)
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [videoModalOpen])
 
   return (
     <div className="relative w-full bg-[#FAF8F5]">
@@ -295,29 +285,6 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Floating "WATCH THE STORY" Video Button over Kashmir Lake gap */}
-        <button
-          type="button"
-          onClick={() => setVideoModalOpen(true)}
-          className="absolute left-[53%] lg:left-[55%] top-[41%] -translate-y-1/2 z-20 pointer-events-auto hidden md:flex items-center gap-3 group cursor-pointer text-left focus:outline-none"
-          aria-label="Watch the story video"
-        >
-          <div className="relative">
-            <span className="absolute -inset-1 rounded-full bg-white/40 animate-ping" />
-            <div className="relative w-11 h-11 rounded-full bg-white/95 backdrop-blur-md shadow-[0_8px_25px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#161616] group-hover:scale-105 transition-transform">
-              <Play size={16} weight="fill" className="ml-0.5 text-[#221C11]" />
-            </div>
-          </div>
-          <div className="text-left select-none">
-            <p className="text-[11px] font-bold text-white tracking-[0.16em] uppercase leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
-              {copy.video_label}
-            </p>
-            <p className="text-[9px] font-medium text-white/90 tracking-[0.12em] uppercase mt-0.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
-              {copy.video_length}
-            </p>
-          </div>
-        </button>
-
         {/* Cursive Signature in bottom right */}
         <div className="absolute right-8 md:right-14 bottom-8 sm:bottom-12 z-10 pointer-events-none hidden sm:block text-right">
           <p
@@ -372,32 +339,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Video Modal */}
-      {videoModalOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={() => setVideoModalOpen(false)}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
-        >
-          <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl">
-            <button
-              onClick={() => setVideoModalOpen(false)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition-colors"
-              aria-label="Close story video modal"
-            >
-              <X size={20} weight="bold" />
-            </button>
-            <div className="aspect-video w-full bg-black flex items-center justify-center">
-              <video autoPlay controls playsInline className="w-full h-full object-contain">
-                <source src="/BG/heroBg.mp4" type="video/mp4" />
-                <source src="/hero.webm" type="video/webm" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-        </motion.div>
-      )}
     </div>
   )
 }

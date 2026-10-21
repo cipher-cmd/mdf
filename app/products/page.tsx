@@ -46,12 +46,11 @@ export default async function ProductsPage() {
       name: p.name,
       description: p.description,
       image: abs(p.image),
-      brand: { '@type': 'Brand', name: p.brand },
     })),
   }
 
   return (
-    <main className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
+    <div className="bg-[#FAF8F5] min-h-screen text-[#141414] overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
@@ -59,6 +58,6 @@ export default async function ProductsPage() {
       <ProductsExplorer initialProducts={allProducts} initialCategories={allCategories} />
       <BrandPartners />
       <CtaBand />
-    </main>
+    </div>
   )
 }

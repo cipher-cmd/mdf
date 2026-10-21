@@ -1,12 +1,12 @@
 import { query } from '@/lib/db'
-import { getSiteCopy } from '@/lib/db/content'
+import { getRawSiteCopy } from '@/lib/db/content'
 import { refreshWebsite } from '@/lib/db/revalidate'
 import { route, ok, fail } from '@/lib/admin/api'
 import { COPY_DEFAULTS, COPY_SECTIONS, type CopyKey } from '@/lib/content/copy'
 
 export const GET = route(async () => {
   const saved = await query<{ key: string; updated_at: string }>('SELECT key, updated_at FROM mdf_site_copy')
-  return ok(await getSiteCopy(), { edited: Object.fromEntries(saved.map(s => [s.key, s.updated_at])) })
+  return ok(await getRawSiteCopy(), { edited: Object.fromEntries(saved.map(s => [s.key, s.updated_at])) })
 })
 
 /** Keep only fields that exist in the defaults and have the same kind of value. */

@@ -19,6 +19,8 @@ export const PUT = route(async req => {
   if (typeof body.blog_every_days === 'number') body.blog_every_days = Math.min(30, Math.max(1, Math.round(body.blog_every_days)))
   if (typeof body.blog_extra_instructions === 'string') body.blog_extra_instructions = body.blog_extra_instructions.slice(0, 1000)
   if (typeof body.blog_region === 'string') body.blog_region = body.blog_region.slice(0, 100)
+  // Writing happens around 5am, so the earliest sensible go-live time is 7am
+  if (typeof body.blog_publish_time === 'string' && !/^(0[7-9]|1\d|2[0-2]):[0-5]\d$/.test(body.blog_publish_time)) delete body.blog_publish_time
   await saveSettings(body)
   return ok(await getSettings())
 })

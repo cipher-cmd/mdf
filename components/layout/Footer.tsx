@@ -12,6 +12,7 @@ const company = [
   { label: 'Clients',  href: '/#clients' },
   { label: 'Blog',     href: '/blog' },
   { label: 'Contact',  href: '/#contact' },
+  { label: 'Privacy',  href: '/privacy' },
 ]
 
 export function Footer() {

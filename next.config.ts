@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  // A package-lock.json further up the disk confuses root detection; this folder is the project
+  turbopack: { root: __dirname },
   compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],

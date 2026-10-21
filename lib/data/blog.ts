@@ -207,3 +207,9 @@ export const blogPosts: BlogPost[] = [
     `,
   },
 ]
+
+/**
+ * Google's spam policy targets AI text published at scale without human oversight. The writer
+ * can keep its daily pace, but only articles a person has written or read and saved get indexed.
+ */
+export const isIndexable = (r: { ai_generated?: boolean | null; reviewed_at?: unknown }) => !r.ai_generated || Boolean(r.reviewed_at)

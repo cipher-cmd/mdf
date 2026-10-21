@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Plus, MagnifyingGlass, ArrowSquareOut, Sparkle } from '@phosphor-icons/react'
+import { Plus, MagnifyingGlass, ArrowSquareOut, PenNib } from '@phosphor-icons/react'
 import { api, Badge, Button, Card, Empty, Loading, PageHeader, TextInput, timeAgo, useFeedback } from '@/components/admin/ui'
 import { categoryLabel } from '@/lib/data/blog'
 import { cn } from '@/lib/utils'
@@ -20,6 +20,7 @@ interface Row {
   created_at: string
   is_featured: boolean
   ai_generated: boolean
+  reviewed_at: string | null
 }
 
 const TABS = [
@@ -73,7 +74,7 @@ export default function ArticlesPage() {
         actions={
           <>
             <Link href="/admin/writer" className="inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full text-[13.5px] font-semibold bg-ledger text-ink shadow-[0_0_0_1px_rgba(60,45,20,0.14)] hover:bg-gold-wash">
-              <Sparkle size={16} weight="fill" className="text-gold" /> Get one written
+              <PenNib size={16} weight="bold" className="text-gold" /> Get one written
             </Link>
             <Link href="/admin/articles/new" className="inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full text-[13.5px] font-semibold bg-gold hover:bg-[#BF9744] text-[#1E170A] shadow-[0_8px_20px_-10px_rgba(204,165,82,0.9)]">
               <Plus size={16} weight="bold" /> Write an article
@@ -121,7 +122,8 @@ export default function ArticlesPage() {
                       <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-ink-muted">
                         {scheduled ? <Badge tone="gold">Goes live {new Date(r.published_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</Badge>
                           : r.status === 'published' ? <Badge tone="live">Live</Badge> : <Badge tone="draft">Draft</Badge>}
-                        {r.ai_generated && <Badge tone="neutral"><Sparkle size={11} weight="fill" className="text-gold" /> Article Writer</Badge>}
+                        {r.ai_generated && <Badge tone="neutral"><PenNib size={11} weight="bold" className="text-gold" /> Auto-written</Badge>}
+                        {r.ai_generated && !r.reviewed_at && r.status === 'published' && <Badge tone="warn">Not on Google until you read it</Badge>}
                         {r.is_featured && <Badge tone="gold">Featured</Badge>}
                         <span>{timeAgo(r.published_at ?? r.created_at)}</span>
                       </span>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { Plus, Sparkle, Trash, PencilSimple, CheckCircle, WarningCircle, MinusCircle, ArrowRight } from '@phosphor-icons/react'
+import { Plus, PenNib, Trash, PencilSimple, CheckCircle, WarningCircle, MinusCircle, ArrowRight } from '@phosphor-icons/react'
 import { api, Badge, Button, Card, Drawer, Empty, Field, Loading, PageHeader, SectionTitle, Select, TextArea, TextInput, Toggle, timeAgo, useFeedback } from '@/components/admin/ui'
 import { ImageField } from '@/components/admin/ImageField'
 import { cn } from '@/lib/utils'
@@ -12,6 +12,7 @@ interface Run { id: string; trigger: string; status: string; message: string; to
 interface Settings {
   blog_auto_enabled: boolean
   blog_auto_publish: boolean
+  blog_publish_time: string
   blog_every_days: number
   blog_region: string
   blog_length: string
@@ -20,6 +21,15 @@ interface Settings {
   blog_extra_instructions: string
 }
 interface Result { status: string; message: string; postId?: string }
+
+/** 7:00 am – 10:00 pm in half-hour steps; writing happens around 5 am, before any of these. */
+const TIMES = Array.from({ length: 31 }, (_, i) => {
+  const h = 7 + Math.floor(i / 2)
+  const m = i % 2 ? '30' : '00'
+  const value = `${String(h).padStart(2, '0')}:${m}`
+  return { value, label: `${h % 12 || 12}:${m} ${h < 12 ? 'am' : 'pm'}` }
+})
+const timeLabel = (v: string) => TIMES.find(t => t.value === v)?.label ?? v
 
 const STEPS = ['Looking for the latest news on your topic…', 'Writing the article…', 'Reading it back and removing anything that sounds robotic…', 'Adding a cover picture and saving…']
 
@@ -193,7 +203,7 @@ export default function WriterPage() {
         </div>
         <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-4">
           <Button variant="gold" busy={writing} onClick={write} className="sm:min-w-[200px]">
-            <Sparkle size={16} weight="fill" /> {writing ? 'Writing…' : 'Write it'}
+            <PenNib size={16} weight="bold" /> {writing ? 'Writing…' : 'Write it'}
           </Button>
           {writing && <p className="text-[13.5px] text-ink-soft adm-rise" key={step}>{STEPS[step]}</p>}
         </div>
@@ -248,7 +258,7 @@ export default function WriterPage() {
               on={settings.blog_auto_enabled}
               onChange={v => setS('blog_auto_enabled', v)}
               label="Write articles automatically"
-              hint="Runs once each morning (around 11:30 am India time)."
+              hint="Written early each morning, then published at the time you choose below."
             />
             <div className={cn('space-y-5 transition-opacity', !settings.blog_auto_enabled && 'opacity-50 pointer-events-none')}>
               <Field label="How often">
@@ -262,8 +272,13 @@ export default function WriterPage() {
                 on={settings.blog_auto_publish}
                 onChange={v => setS('blog_auto_publish', v)}
                 label="Publish without asking me"
-                hint={settings.blog_auto_publish ? 'New articles go live by themselves.' : 'New articles wait in Drafts for you to approve.'}
+                hint={settings.blog_auto_publish ? `New articles go live by themselves at ${timeLabel(settings.blog_publish_time)}.` : 'New articles wait in Drafts for you to approve.'}
               />
+              {settings.blog_auto_publish && (
+                <Field label="Go-live time (India time)" help="The article appears on the website at this time. It is written a few hours earlier, so it is always ready.">
+                  <Select value={settings.blog_publish_time} onChange={v => setS('blog_publish_time', v)} options={TIMES} />
+                </Field>
+              )}
             </div>
             <div className="h-px bg-hairline" />
             <Field label="Area to focus on" help="Added to every news search.">

@@ -38,6 +38,8 @@ export interface Draft {
   department: Department
   content: string
   metaDescription: string
+  /** Two or three words describing a good cover photo, e.g. "football training" */
+  imageIdea: string
   model: string
   edited: boolean
 }
@@ -135,6 +137,33 @@ async function ask(model: string, system: string, user: string, maxTokens: numbe
 }
 
 /** Problems a reader would notice as "AI-written". Empty = clean. */
+const STOP = new Set('a an and are at by for from how in is it j k jammu kashmir of on or srinagar the this to what why with your you'.split(' '))
+const titleWords = (t: string) =>
+  new Set(t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w.length > 1 && !STOP.has(w)).map(w => w.replace(/s$/, '')))
+
+/** The existing title that shares the most meaningful words with this one, if it is close enough to read as a repeat. */
+export function closestTitle(title: string, existing: string[], threshold = 0.5): string | null {
+  const a = titleWords(title)
+  let best: string | null = null
+  let bestScore = 0
+  for (const t of existing) {
+    const b = titleWords(t)
+    const shared = [...a].filter(w => b.has(w)).length
+    const score = shared / Math.max(1, Math.min(a.size, b.size))
+    if (score > bestScore) [best, bestScore] = [t, score]
+  }
+  return bestScore >= threshold ? best : null
+}
+
+/** Reasons a finished article is too thin or too machine-like to go live without a person reading it first. */
+export function qualityProblems(html: string): string[] {
+  const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
+  const problems = findAiTells(html)
+  if (words < 400) problems.push(`only ${words} words`)
+  if ((html.match(/<h2[\s>]/gi) || []).length < 2) problems.push('fewer than two sections')
+  return problems
+}
+
 export function findAiTells(html: string): string[] {
   const text = plainText(html)
   const lower = text.toLowerCase()
@@ -203,7 +232,7 @@ Region: ${settings.blog_region}
 Voice: ${TONES[settings.blog_tone] ?? TONES.friendly}
 Length: ${WORDS[settings.blog_length] ?? WORDS.medium} words.
 ${store}${settings.blog_extra_instructions ? `\nOwner's extra instructions: ${settings.blog_extra_instructions}` : ''}
-${recentTitles.length ? `\nRecent articles on the site (do not repeat their angle):\n${recentTitles.map(t => `- ${t}`).join('\n')}` : ''}
+${recentTitles.length ? `\nArticles already on the site. Do not repeat any of their angles or reuse their headlines; find a different question to answer:\n${recentTitles.map(t => `- ${t}`).join('\n')}` : ''}
 
 ${reports}
 
@@ -214,6 +243,7 @@ Return JSON with exactly these keys:
   "category": one of ${Object.entries(BLOG_CATEGORIES).map(([k, v]) => `"${k}" (${v})`).join(', ')},
   "department": one of "sports", "fitness", "music", "awards", "general",
   "meta_description": "under 155 characters, for Google",
+  "image_idea": "two or three plain words for a cover photo search, like 'football training' or 'cricket bat'. No place names.",
   "content": "the article as HTML using only <p>, <h2>, <h3>, <ul>, <li>, <blockquote>, <strong>, <em>. No <h1> and do not repeat the title. Two to four <h2> subheadings."
 }`
 
@@ -268,6 +298,7 @@ Return JSON with exactly these keys:
     department,
     content,
     metaDescription: polish(clip(raw.meta_description || raw.excerpt, 160)),
+    imageIdea: clip(raw.image_idea, 60).replace(/[^\w\s&-]/g, ''),
     model,
     edited,
   }

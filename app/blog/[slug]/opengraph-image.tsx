@@ -14,7 +14,8 @@ export function generateStaticParams() {
   return blogPosts.map(p => ({ slug: p.slug }))
 }
 
-const file = (p: string) => readFile(join(process.cwd(), p))
+// Scoped to assets/ so the build bundles only these files (not the whole project)
+const file = (p: string) => readFile(join(process.cwd(), 'assets', p))
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -23,9 +24,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const meta = post ? `${readTime(post)} min read` : 'Srinagar, J&K'
 
   const [serif, sans, shield] = await Promise.all([
-    file('assets/fonts/CormorantGaramond-Bold.woff'),
-    file('assets/fonts/Inter-SemiBold.woff'),
-    file('assets/og-shield.png'),
+    file('fonts/CormorantGaramond-Bold.woff'),
+    file('fonts/Inter-SemiBold.woff'),
+    file('og-shield.png'),
   ])
   const shieldSrc = `data:image/png;base64,${shield.toString('base64')}`
 

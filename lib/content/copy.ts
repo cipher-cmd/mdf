@@ -20,6 +20,9 @@ export const COPY_DEFAULTS = {
     close_time: '19:00',
     closed_days: ['Sunday'],
     whatsapp_greeting: 'Hi MDF Enterprises, I would like to enquire about your products.',
+    // "28 years in 2026" → 29 in 2027, 30 in 2028… Anywhere on the site, {years} shows this number.
+    experience_years: 28,
+    experience_counted_in: 2026,
   },
   header: {
     quote_button: 'Get Quote',
@@ -34,17 +37,15 @@ export const COPY_DEFAULTS = {
     button_primary: 'Explore Products',
     button_secondary: 'Get a Quote',
     button_whatsapp: 'WhatsApp Us',
-    video_label: 'WATCH THE STORY',
-    video_length: 'VIDEO · 00:42',
     place_line1: 'Srinagar',
     place_line2: 'Jammu & Kashmir',
   },
   home_stats: {
     items: [
-      { value: 28, label: 'Years of Excellence' },
-      { value: 1000, label: 'Institutions Served' },
-      { value: 500, label: 'Installations Done' },
-      { value: 25, label: 'Trusted Brands' },
+      { value: 28, label: 'Years of Excellence', auto_years: true },
+      { value: 1000, label: 'Institutions Served', auto_years: false },
+      { value: 500, label: 'Installations Done', auto_years: false },
+      { value: 25, label: 'Trusted Brands', auto_years: false },
     ],
   },
   home_categories: {
@@ -61,7 +62,7 @@ export const COPY_DEFAULTS = {
     eyebrow: 'About MDF Enterprises',
     heading: 'One Supplier.\nEvery Need.',
     text:
-      "Founded in 1997 in Srinagar, MDF Enterprises has been J&K's trusted equipment partner for 28+ years — supplying sports goods, fitness equipment, musical instruments, awards and custom solutions across institutions, clubs and communities.",
+      "Founded in 1997 in Srinagar, MDF Enterprises has been J&K's trusted equipment partner for {years}+ years — supplying sports goods, fitness equipment, musical instruments, awards and custom solutions across institutions, clubs and communities.",
     button: 'Our Journey',
     pillars: [
       { title: 'Retail & Bulk Orders', desc: 'Individual and institutional supply' },
@@ -80,7 +81,7 @@ export const COPY_DEFAULTS = {
   },
   journey: {
     eyebrow: 'Our Journey',
-    heading: '28 Years.\nOne Valley.',
+    heading: '{years} Years.\nOne Valley.',
     place: 'Srinagar, Jammu & Kashmir',
     image: '/images/dal_lake_about.jpg',
     milestones: [
@@ -230,7 +231,7 @@ export type CopyKey = keyof SiteCopy
 // ── Admin form description ──────────────────────────────────────────────────
 
 export type CopyField =
-  | { key: string; label: string; type: 'text' | 'textarea' | 'image' | 'number' | 'time' | 'tags'; help?: string }
+  | { key: string; label: string; type: 'text' | 'textarea' | 'image' | 'number' | 'time' | 'tags' | 'toggle'; help?: string }
   | { key: string; label: string; type: 'select'; options: { value: string; label: string }[]; help?: string }
   | { key: string; label: string; type: 'list'; itemLabel: string; fields: CopyField[]; min?: number; max?: number; help?: string }
 
@@ -270,6 +271,8 @@ export const COPY_SECTIONS: CopySection[] = [
       { key: 'close_time', label: 'Shop closes at', type: 'time' },
       { key: 'closed_days', label: 'Days the shop is closed', type: 'tags', help: 'Full day names, e.g. Sunday.' },
       { key: 'whatsapp_greeting', label: 'Message pre-filled when someone taps WhatsApp', type: 'textarea' },
+      { key: 'experience_years', label: 'Years of experience', type: 'number', help: 'Goes up by one every January by itself. Type {years} in any text on the website to show it.' },
+      { key: 'experience_counted_in', label: '…counted in the year', type: 'number', help: 'The year the number above is correct for.' },
     ],
   },
   {
@@ -311,8 +314,6 @@ export const COPY_SECTIONS: CopySection[] = [
       { key: 'button_primary', label: 'Gold button', type: 'text' },
       { key: 'button_secondary', label: 'Quote button', type: 'text' },
       { key: 'button_whatsapp', label: 'WhatsApp button', type: 'text' },
-      { key: 'video_label', label: 'Video button — title', type: 'text' },
-      { key: 'video_length', label: 'Video button — small line', type: 'text' },
       { key: 'place_line1', label: 'Place name (bottom right) — first line', type: 'text' },
       { key: 'place_line2', label: 'Place name (bottom right) — second line', type: 'text' },
     ],
@@ -326,6 +327,7 @@ export const COPY_SECTIONS: CopySection[] = [
         fields: [
           { key: 'value', label: 'Number', type: 'number', help: 'A "+" is added automatically.' },
           { key: 'label', label: 'What it counts', type: 'text' },
+          { key: 'auto_years', label: 'Use the years of experience (goes up by itself every January)', type: 'toggle', help: 'Set the number under "Phone, WhatsApp & address".' },
         ],
       },
     ],
@@ -545,6 +547,28 @@ export function mergeCopy(saved: Record<string, unknown>): SiteCopy {
     out[key] = section
   }
   return out as SiteCopy
+}
+
+/** Years of experience for the current year: 28 in 2026 becomes 29 in 2027. */
+export function yearsOfExperience(contact: SiteCopy['contact'], now = new Date()) {
+  const year = Number(now.toLocaleString('en-US', { year: 'numeric', timeZone: 'Asia/Kolkata' }))
+  return Math.max(0, contact.experience_years + Math.max(0, year - contact.experience_counted_in))
+}
+
+/** Fill in {years} everywhere and the auto-counting stats. Applied to what visitors see. */
+export function applyTokens(copy: SiteCopy, now = new Date()): SiteCopy {
+  const years = String(yearsOfExperience(copy.contact, now))
+  const walk = (v: unknown): unknown =>
+    typeof v === 'string' ? v.replace(/\{years\}/gi, years)
+      : Array.isArray(v) ? v.map(walk)
+        : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, walk(x)]))
+          : v
+  const out = walk(copy) as SiteCopy
+  out.home_stats = {
+    ...out.home_stats,
+    items: out.home_stats.items.map(s => ((s as { auto_years?: boolean }).auto_years ? { ...s, value: Number(years) } : s)),
+  }
+  return out
 }
 
 // ── Helpers shared by the website components ────────────────────────────────

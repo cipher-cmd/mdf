@@ -178,6 +178,7 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
     { '@type': 'City',  name: 'Anantnag' },
     { '@type': 'City',  name: 'Kupwara' },
     { '@type': 'City',  name: 'Sopore' },
+    { '@type': 'State', name: 'Ladakh' },
     { '@type': 'City',  name: 'Leh' },
   ],
   openingHoursSpecification: [
@@ -191,11 +192,12 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Sports, Fitness, Music & Awards Equipment',
+    // Sub-catalogues, not Products: a Product without a price trips Search Console's "missing offers" error
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Sports Goods & Cricket Equipment' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Fitness & Gymnasium Equipment' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Musical Instruments' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Custom Awards & Trophies' } },
+      { '@type': 'OfferCatalog', name: 'Sports Goods & Cricket Equipment', url: `${BASE_URL}/products/sports` },
+      { '@type': 'OfferCatalog', name: 'Fitness & Gymnasium Equipment', url: `${BASE_URL}/products/fitness` },
+      { '@type': 'OfferCatalog', name: 'Musical Instruments', url: `${BASE_URL}/products/music` },
+      { '@type': 'OfferCatalog', name: 'Custom Awards & Trophies', url: `${BASE_URL}/products/awards` },
     ],
   },
   hasCredential: [
@@ -250,93 +252,6 @@ const websiteSchema = {
   inLanguage: 'en-IN',
 }
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Is MDF Enterprises a GeM-registered supplier?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises is a registered supplier on the Government e-Marketplace (GeM). Government departments, schools, and institutions across J&K can procure sports goods, fitness equipment, musical instruments and awards through the GeM portal.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What brands does MDF Enterprises stock?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'MDF Enterprises is an authorised dealer for SG, YONEX, NIVIA, COSCO, STAG, SPARTAN, SS, JONEX, and NETCO — among 25+ premium sports and fitness brands. All stock is genuine and sourced directly.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does MDF Enterprises supply to government institutions in J&K?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises supplies sports goods, fitness equipment, and musical instruments to government departments (DYSO, Police, Army), universities, schools, and medical colleges across J&K through direct orders, L1 tenders, and the GeM portal.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Where is MDF Enterprises located?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'MDF Enterprises is located at SDA Shopping Complex, Opposite Iqbal Park, Srinagar, Jammu & Kashmir — 190008. Established in 1997, we serve all districts of J&K.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does MDF Enterprises do installation of gymnasium and fitness equipment?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises has an in-house installation team specialised in gymnasium fit-outs, sports court installation, music lab setup, and multi-activity zone commissioning across J&K.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How can I place a bulk order with MDF Enterprises?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'For bulk orders, contact MDF Enterprises on WhatsApp at +91 70062 52334 or email mdfenterprisesjk@gmail.com. We handle bulk procurement for government departments, schools, clubs, and private organisations across J&K.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What sports equipment does MDF Enterprises supply?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'MDF Enterprises supplies cricket equipment (bats, balls, pads, helmets), football, badminton, volleyball, hockey, athletics gear, table tennis, and multi-sport equipment for schools, clubs, and government institutions across J&K.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does MDF Enterprises offer AMC (Annual Maintenance Contract) for fitness equipment?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises offers Annual Maintenance Contracts (AMC) for gymnasium and fitness equipment installed across J&K. AMC covers preventive maintenance, breakdown service, and spare parts supply.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can MDF Enterprises participate in J&K government tenders for sports equipment?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises participates in J&K government tenders including JKTENDERS, L1 procurement, and GeM portal orders. As an MSME-certified and GeM-registered supplier, MDF qualifies for government sports equipment tenders across all districts of J&K.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does MDF Enterprises supply to districts outside Srinagar in J&K?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. MDF Enterprises delivers sports goods and fitness equipment to all districts of Jammu & Kashmir including Baramulla, Anantnag, Kupwara, Sopore, Jammu, and Leh. We serve 1000+ institutions across the entire union territory.',
-      },
-    },
-  ],
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -360,8 +275,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(copy.contact)) }} />
         {/* Schema: WebSite entity */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
-        {/* Schema: FAQ — AEO + AI citation */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </head>
       <body className="bg-[#FAF8F5] text-[#141414] antialiased min-h-screen flex flex-col selection:bg-[#C59B27] selection:text-white" suppressHydrationWarning>
         <ThemeProvider>

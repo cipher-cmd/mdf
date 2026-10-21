@@ -13,7 +13,7 @@ export const GET = route(async req => {
   // List view: no article bodies
   const rows = await query(
     `SELECT id, slug, title, excerpt, cover_image, category, status, published_at, created_at, updated_at,
-            is_featured, ai_generated, topic
+            is_featured, ai_generated, topic, reviewed_at
      FROM mdf_blog_posts ORDER BY COALESCE(published_at, created_at) DESC`
   )
   return ok(rows)
@@ -32,6 +32,9 @@ function fields(body: any) {
     published_at: when && !isNaN(Date.parse(when)) ? new Date(when).toISOString() : null,
     is_featured: bool(body.is_featured),
     meta_description: str(body.meta_description, 300),
+    cover_credit: body.cover_credit && typeof body.cover_credit.text === 'string'
+      ? JSON.stringify({ text: str(body.cover_credit.text, 200), url: /^https:\/\//.test(body.cover_credit.url) ? str(body.cover_credit.url, 500) : '' })
+      : null,
   }
 }
 
@@ -52,11 +55,11 @@ export const POST = route(async req => {
   const slug = await freeSlug(str(body.slug) || f.title)
   const id = `post-${slug.slice(0, 70)}-${Date.now().toString(36)}`
   await query(
-    `INSERT INTO mdf_blog_posts (id, slug, title, excerpt, content, cover_image, category, status, published_at,
-       is_featured, ai_generated, meta_title, meta_description)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, false, $3, $11)`,
+    `INSERT INTO mdf_blog_posts (id, slug, title, excerpt, content, cover_image, cover_credit, category, status, published_at,
+       is_featured, ai_generated, meta_title, meta_description, reviewed_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $12, $7, $8, $9, $10, false, $3, $11, now())`,
     [id, slug, f.title, f.excerpt, f.content, f.cover_image, f.category, f.status,
-     f.status === 'published' ? f.published_at ?? new Date().toISOString() : f.published_at, f.is_featured, f.meta_description]
+     f.status === 'published' ? f.published_at ?? new Date().toISOString() : f.published_at, f.is_featured, f.meta_description, f.cover_credit]
   )
   if (f.is_featured) await query('UPDATE mdf_blog_posts SET is_featured = false WHERE id <> $1', [id])
   refreshWebsite()
@@ -79,9 +82,11 @@ export const PUT = route(async req => {
   await query(
     `UPDATE mdf_blog_posts SET slug = $2, title = $3, excerpt = $4, content = $5, cover_image = $6, category = $7,
        status = $8::text, published_at = CASE WHEN $8::text = 'published' THEN COALESCE($9::timestamptz, published_at, now()) ELSE $9::timestamptz END,
-       is_featured = $10, meta_title = $3, meta_description = $11, updated_at = now()
+       is_featured = $10, meta_title = $3, meta_description = $11, cover_credit = $12, updated_at = now(),
+       -- Publishing from the editor means a person has read it, so search engines may now index it
+       reviewed_at = CASE WHEN $8::text = 'published' THEN COALESCE(reviewed_at, now()) ELSE reviewed_at END
      WHERE id = $1`,
-    [id, slug, f.title, f.excerpt, f.content, f.cover_image, f.category, f.status, f.published_at, f.is_featured, f.meta_description]
+    [id, slug, f.title, f.excerpt, f.content, f.cover_image, f.category, f.status, f.published_at, f.is_featured, f.meta_description, f.cover_credit]
   )
   if (f.is_featured) await query('UPDATE mdf_blog_posts SET is_featured = false WHERE id <> $1', [id])
   refreshWebsite()
