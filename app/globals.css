@@ -207,3 +207,14 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── FAQ: answers glide open where the browser can animate to auto height ── */
+.faq { interpolate-size: allow-keywords; }
+.faq details::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size 380ms cubic-bezier(0.22, 1, 0.36, 1), content-visibility 380ms allow-discrete;
+}
+.faq details[open]::details-content { block-size: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .faq details::details-content { transition: none; }
+}

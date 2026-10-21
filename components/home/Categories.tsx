@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
@@ -11,133 +11,158 @@ import { useCopy } from '@/providers/SiteProvider'
 import type { Category } from '@/lib/data/categories'
 
 const pad = (n: number) => String(n).padStart(2, '0')
+const EASE = [0.22, 1, 0.36, 1] as const
+const DWELL_S = 6 // seconds each department stays open before the gallery moves on
 
 /**
- * The shop's directory board: one entry per department, a picture over big serif type.
- * Wide screens line them up as a gallery where the one you
- * point at opens wider and runs its film. Smaller screens get the scroll deck instead.
+ * Wide screens: the departments stand side by side as film panels. One is open and running
+ * its clip; the rest rest as narrow spines with their names set vertically. Left alone, the
+ * gallery walks through them on its own; pointing at one takes over. Smaller screens get the deck.
  */
 export function Categories({ departments }: { departments: Category[] }) {
   const copy = useCopy('home_categories')
+  const reduce = useReducedMotion()
   const boardRef = useRef<HTMLDivElement>(null)
   const videos = useRef<(HTMLVideoElement | null)[]>([])
   const [active, setActive] = useState(0)
+  const [held, setHeld] = useState(false)
   const visible = useInView(boardRef, { margin: '-15% 0px' })
+  const N = departments.length
 
-  // Only the department on show plays (videos are desktop-only, hidden on phones)
+  // The open panel plays from the top; the next one warms up so the hand-off is instant
   useEffect(() => {
     videos.current.forEach((v, i) => {
-      if (!v) return
-      if (i === active && visible && v.offsetParent) {
-        v.preload = 'auto'
+      if (!v || !v.offsetParent) return
+      if (i === active || i === (active + 1) % N) v.preload = 'auto'
+      if (i === active && visible) {
+        v.currentTime = 0
         v.play().catch(() => {})
       } else v.pause()
     })
-  }, [active, visible])
+  }, [active, visible, N])
+
+  const autoplay = visible && !held && !reduce && N > 1
 
   return (
     <section id="categories" className="relative w-full bg-[#FAF8F5]">
       <CategoryDeck departments={departments} />
 
-      <div className="hidden lg:block relative bg-[#15110C] text-[#F3EBDD]">
-        <div ref={boardRef} className="max-w-[1400px] mx-auto px-5 sm:px-6 md:px-12 pt-24 sm:pt-28 pb-16 sm:pb-24">
-
-          {/* Board header */}
-          <div className="flex items-end justify-between gap-6 pb-6 sm:pb-8 lg:pb-10 border-b border-[#F3EBDD]/25 lg:border-0">
-            <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#CCA552] uppercase">{copy.eyebrow}</p>
-              <h2 className="text-[30px] sm:text-[40px] lg:text-[52px] font-bold leading-[1.02] tracking-[-0.01em] font-serif-heading max-w-[640px]">
-                {copy.heading}
-              </h2>
-            </div>
-            <Link href="/products" className="hidden sm:inline-flex items-center gap-1.5 pb-2 text-[13px] font-semibold text-[#CCA552] hover:text-[#E9CF94] transition-colors group flex-shrink-0">
+      <div ref={boardRef} className="hidden lg:block max-w-[1400px] mx-auto px-12 pt-28 pb-12">
+        <div className="flex items-end justify-between gap-8 mb-10">
+          <div>
+            <p className="mb-2 text-[11px] tracking-[0.2em] font-semibold text-[#8B6B23] uppercase">— {copy.eyebrow}</p>
+            <h2 className="text-[44px] xl:text-[52px] font-bold text-[#141414] leading-[1.02] tracking-[-0.015em] font-serif-heading max-w-[680px]">
+              {copy.heading}
+            </h2>
+          </div>
+          <div className="flex items-center gap-8 pb-2 flex-shrink-0">
+            <p className="text-[12px] font-semibold tracking-[0.2em] tabular-nums text-[#141414]">
+              {pad(active + 1)} <span className="text-[#99938B]">/ {pad(N)}</span>
+            </p>
+            <Link href="/products" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#8B6B23] hover:text-[#A47E28] transition-colors group">
               {copy.all_link}
               <ArrowRight size={13} weight="bold" className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-
-          <ol className="lg:flex lg:gap-4 xl:gap-5">
-            {departments.map((dep, i) => {
-              const on = i === active
-              return (
-                <li
-                  key={dep.id}
-                  className={`border-b border-[#F3EBDD]/15 lg:border-0 lg:min-w-0 lg:transition-[flex-grow] lg:duration-700 lg:ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    on ? 'lg:flex-[2.1]' : 'lg:flex-1'
-                  }`}
-                >
-                  <Link
-                    href={dep.href}
-                    onMouseEnter={() => setActive(i)}
-                    onFocus={() => setActive(i)}
-                    className="group block py-6 sm:py-8 lg:py-0 focus:outline-none"
-                  >
-                    <div className="relative aspect-[16/9] lg:aspect-auto lg:h-[min(58vh,520px)] mb-4 lg:mb-6 overflow-hidden bg-[#221B12] lg:rounded-[4px]">
-                      <Image
-                        src={dep.poster || dep.image}
-                        alt={dep.label}
-                        fill
-                        className={`object-cover transition-transform duration-[1.2s] ease-out ${on ? 'lg:scale-100' : 'lg:scale-110 lg:grayscale-[40%]'}`}
-                        sizes="(max-width: 1024px) 100vw, 45vw"
-                      />
-                      {dep.video && (
-                        <video
-                          ref={el => { videos.current[i] = el }}
-                          src={dep.video}
-                          poster={dep.poster || dep.image}
-                          muted
-                          loop
-                          playsInline
-                          preload="none"
-                          aria-hidden
-                          className={`hidden lg:block absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${on ? 'opacity-100' : 'opacity-0'}`}
-                        />
-                      )}
-                      {/* Desktop: dim the resting panels, shade the open one's foot */}
-                      <div className={`hidden lg:block absolute inset-0 bg-[#15110C] transition-opacity duration-700 pointer-events-none ${on ? 'opacity-0' : 'opacity-45'}`} />
-                      <div className="hidden lg:block absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/55 to-transparent pointer-events-none" />
-                      <span className="hidden lg:block absolute top-4 left-4 text-[12px] font-semibold tracking-[0.16em] text-[#F3EBDD]/85 tabular-nums">No.{pad(i + 1)}</span>
-                      <span
-                        className={`hidden lg:flex absolute bottom-4 right-4 w-11 h-11 rounded-full items-center justify-center transition-all duration-500 ${
-                          on ? 'bg-[#CCA552] text-[#1E170A] rotate-45' : 'bg-white/10 text-[#F3EBDD] backdrop-blur-md border border-white/25'
-                        }`}
-                      >
-                        <ArrowUpRight size={18} weight="bold" />
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] lg:block items-baseline gap-x-4 sm:gap-x-6">
-                      <span className="lg:hidden text-[12px] font-semibold tracking-[0.16em] text-[#CCA552] tabular-nums">No.{pad(i + 1)}</span>
-                      <span
-                        className={`block text-[34px] sm:text-[52px] lg:text-[30px] xl:text-[38px] font-bold leading-[0.95] tracking-[-0.02em] font-serif-heading transition-colors duration-500 lg:truncate ${
-                          on ? 'text-[#F3EBDD]' : 'text-[#F3EBDD] lg:text-[#F3EBDD]/45'
-                        }`}
-                      >
-                        {dep.label}
-                      </span>
-                      <ArrowUpRight size={22} weight="light" className="lg:hidden self-center text-[#CCA552]" />
-                      <span className="lg:hidden" />
-                      <span
-                        className={`col-span-2 mt-2 lg:mt-3 block text-[13px] sm:text-[14px] leading-relaxed transition-opacity duration-500 ${
-                          on ? 'text-[#F3EBDD]/80' : 'text-[#F3EBDD]/70 lg:opacity-0'
-                        }`}
-                      >
-                        <span className="italic font-serif-heading text-[16px] sm:text-[18px] text-[#E9CF94]">{dep.tagline}</span>
-                        <span className="hidden sm:inline lg:hidden"> — </span>
-                        <span className="block sm:inline lg:block lg:truncate">{dep.items.split('·').map(s => s.trim()).filter(Boolean).join(', ')}</span>
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              )
-            })}
-          </ol>
-
-          <Link href="/products" className="sm:hidden mt-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#CCA552]">
-            {copy.all_link}
-            <ArrowRight size={13} weight="bold" />
-          </Link>
         </div>
+
+        <ol
+          className="flex gap-3 h-[clamp(460px,66vh,660px)]"
+          onMouseEnter={() => setHeld(true)}
+          onMouseLeave={() => setHeld(false)}
+        >
+          {departments.map((dep, i) => {
+            const on = i === active
+            return (
+              <motion.li
+                key={dep.id}
+                initial={reduce ? false : { clipPath: 'inset(100% 0% 0% 0% round 24px)' }}
+                whileInView={{ clipPath: 'inset(0% 0% 0% 0% round 24px)' }}
+                viewport={{ once: true, margin: '-10% 0px' }}
+                transition={{ duration: 1, ease: EASE, delay: i * 0.09 }}
+                className={`relative min-w-0 rounded-[24px] overflow-hidden bg-[#1A1712] transition-[flex-grow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  on ? 'flex-[3.2]' : 'flex-1'
+                }`}
+              >
+                <Link
+                  href={dep.href}
+                  onMouseEnter={() => setActive(i)}
+                  onFocus={() => setActive(i)}
+                  aria-label={`${dep.label}: ${dep.items}`}
+                  className="group absolute inset-0 block focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-white"
+                >
+                  <Image
+                    src={dep.poster || dep.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1400px) 60vw, 840px"
+                    className={`object-cover transition-transform duration-[1.4s] ease-out ${on ? 'scale-100' : 'scale-[1.12]'}`}
+                  />
+                  {dep.video && (
+                    <video
+                      ref={el => { videos.current[i] = el }}
+                      src={dep.video}
+                      poster={dep.poster || dep.image}
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      aria-hidden
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${on ? 'opacity-100' : 'opacity-0'}`}
+                    />
+                  )}
+
+                  {/* Resting panels sit back; the open one only shades where its words are */}
+                  <div className={`absolute inset-0 bg-black/45 transition-opacity duration-700 ${on ? 'opacity-0' : 'opacity-100'}`} />
+                  <div className={`absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-700 ${on ? 'opacity-100' : 'opacity-0'}`} />
+
+                  <span className="absolute top-6 left-6 text-[11px] font-semibold tracking-[0.2em] tabular-nums text-white/80">{pad(i + 1)}</span>
+
+                  {/* Spine: the name runs up the narrow panel */}
+                  <span
+                    aria-hidden
+                    className={`absolute bottom-7 left-1/2 -translate-x-1/2 [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-[22px] xl:text-[24px] font-bold text-white font-serif-heading transition-opacity ${
+                      on ? 'opacity-0 duration-200' : 'opacity-100 duration-500 delay-300'
+                    }`}
+                  >
+                    {dep.label}
+                  </span>
+
+                  {/* Open panel: fixed-width copy so it never reflows while the panel widens */}
+                  <div
+                    className={`absolute bottom-0 left-0 w-[400px] xl:w-[500px] p-8 xl:p-10 transition-all ${
+                      on ? 'opacity-100 translate-y-0 duration-700 delay-300' : 'opacity-0 translate-y-4 duration-200'
+                    }`}
+                  >
+                    <p className="text-[#E9CF94] text-[20px] xl:text-[22px] mb-1" style={{ fontFamily: 'var(--font-cormorant), serif', fontStyle: 'italic' }}>
+                      {dep.tagline}
+                    </p>
+                    <h3 className="text-[40px] xl:text-[54px] font-bold text-white leading-[0.95] tracking-[-0.02em] font-serif-heading">{dep.label}</h3>
+                    <p className="mt-3 text-[14px] text-white/75">{dep.items}</p>
+                    <span className="mt-6 inline-flex items-center gap-3 pl-5 pr-1.5 min-h-[48px] rounded-full bg-white/15 group-hover:bg-white/25 backdrop-blur-md border border-white/30 text-white text-[14px] font-semibold transition-colors">
+                      {copy.card_button} {dep.short}
+                      <span className="w-9 h-9 rounded-full bg-[#CCA552] text-[#1E170A] flex items-center justify-center">
+                        <ArrowUpRight size={16} weight="bold" className="transition-transform duration-300 group-hover:rotate-45" />
+                      </span>
+                    </span>
+                  </div>
+
+                  {/* Timer: when the line fills, the next department opens */}
+                  {on && autoplay && (
+                    <motion.span
+                      key={active}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: DWELL_S, ease: 'linear' }}
+                      onAnimationComplete={() => setActive(a => (a + 1) % N)}
+                      className="absolute left-0 right-0 bottom-0 h-[3px] bg-[#CCA552] origin-left"
+                    />
+                  )}
+                </Link>
+              </motion.li>
+            )
+          })}
+        </ol>
       </div>
 
       {/* Kinetic band of disciplines, a light breath before About */}
