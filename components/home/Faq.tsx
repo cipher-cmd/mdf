@@ -1,4 +1,4 @@
-import { FAQ, faqSchema } from '@/lib/content/faq'
+import { getSiteCopy } from '@/lib/db/content'
 
 const SHOWN = 6
 
@@ -16,22 +16,29 @@ function Item({ q, a }: { q: string; a: string }) {
 }
 
 /** Plain-HTML questions and answers: readable without JavaScript, so crawlers and AI answers can quote them (the folded ones too). */
-export function Faq() {
-  const rest = FAQ.slice(SHOWN)
+export async function Faq() {
+  const { home_faq: copy } = await getSiteCopy()
+  const faq = copy.items.filter(f => f.q.trim() && f.a.trim())
+  const rest = faq.slice(SHOWN)
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }
   return (
     <section id="faq" aria-labelledby="faq-heading" className="faq relative bg-[#F7F7F7] py-12 sm:py-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
       <div className="max-w-[1180px] mx-auto px-5 sm:px-6 md:px-10 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-6 lg:gap-16">
         <div className="lg:sticky lg:top-28 self-start">
           <h2 id="faq-heading" className="text-[26px] sm:text-[36px] lg:text-[42px] font-bold text-[#141414] leading-[1.04] tracking-[-0.01em] font-serif-heading">
-            Asked at the counter, answered here.
+            {copy.heading}
           </h2>
           <p className="mt-3 text-[#4E4841] text-[14px] sm:text-[14.5px] leading-[1.6] max-w-[380px]">
-            Procurement, brands, delivery and installation. If yours is not here, ask us on WhatsApp.
+            {copy.text}
           </p>
         </div>
         <div className="border-t border-[#E2D8C6]">
-          {FAQ.slice(0, SHOWN).map(f => <Item key={f.q} {...f} />)}
+          {faq.slice(0, SHOWN).map(f => <Item key={f.q} {...f} />)}
           {rest.length > 0 && (
             <details className="group/more">
               <summary className="mt-5 inline-flex items-center gap-2.5 pl-5 pr-1.5 min-h-[44px] rounded-full border border-[#E2D8C6] hover:border-[#CCA552] text-[13px] font-semibold text-[#141414] cursor-pointer list-none [&::-webkit-details-marker]:hidden transition-colors">

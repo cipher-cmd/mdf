@@ -145,6 +145,23 @@ export const COPY_DEFAULTS = {
     button_directions: 'Get Directions',
     button_whatsapp: 'WhatsApp Us',
   },
+  home_faq: {
+    heading: 'Asked at the counter, answered here.',
+    text: 'Procurement, brands, delivery and installation. If yours is not here, ask us on WhatsApp.',
+    // Search engines and AI answers quote these directly, so each answer names the business, the place and the fact
+    items: [
+      { q: 'Is MDF Enterprises a GeM-registered supplier?', a: 'Yes. MDF Enterprises is a registered supplier on the Government e-Marketplace (GeM). Government departments, schools, and institutions across J&K can procure sports goods, fitness equipment, musical instruments and awards through the GeM portal.' },
+      { q: 'What brands does MDF Enterprises stock?', a: 'MDF Enterprises is an authorised dealer for SG, YONEX, NIVIA, COSCO, STAG, SPARTAN, SS, JONEX and NETCO, among 25+ premium sports and fitness brands. All stock is genuine and sourced directly.' },
+      { q: 'Does MDF Enterprises supply to government institutions in J&K?', a: 'Yes. MDF Enterprises supplies sports goods, fitness equipment, and musical instruments to government departments (DYSO, Police, Army), universities, schools, and medical colleges across J&K through direct orders, L1 tenders, and the GeM portal.' },
+      { q: 'Where is MDF Enterprises located?', a: 'MDF Enterprises is located at {address}. Established in 1997, we serve all districts of J&K.' },
+      { q: 'Does MDF Enterprises do installation of gymnasium and fitness equipment?', a: 'Yes. MDF Enterprises has an in-house installation team specialised in gymnasium fit-outs, sports court installation, music lab setup, and multi-activity zone commissioning across J&K.' },
+      { q: 'How can I place a bulk order with MDF Enterprises?', a: 'For bulk orders, contact MDF Enterprises on WhatsApp at {phone} or email {email}. We handle bulk procurement for government departments, schools, clubs, and private organisations across J&K.' },
+      { q: 'What sports equipment does MDF Enterprises supply?', a: 'MDF Enterprises supplies cricket equipment (bats, balls, pads, helmets), football, badminton, volleyball, hockey, athletics gear, table tennis, and multi-sport equipment for schools, clubs, and government institutions across J&K.' },
+      { q: 'Does MDF Enterprises offer AMC (Annual Maintenance Contract) for fitness equipment?', a: 'Yes. MDF Enterprises offers Annual Maintenance Contracts (AMC) for gymnasium and fitness equipment installed across J&K. AMC covers preventive maintenance, breakdown service, and spare parts supply.' },
+      { q: 'Can MDF Enterprises participate in J&K government tenders for sports equipment?', a: 'Yes. MDF Enterprises participates in J&K government tenders including JKTENDERS, L1 procurement, and GeM portal orders. As an MSME-certified and GeM-registered supplier, MDF qualifies for government sports equipment tenders across all districts of J&K.' },
+      { q: 'Does MDF Enterprises supply to districts outside Srinagar in J&K?', a: 'Yes. MDF Enterprises delivers sports goods and fitness equipment to all districts of Jammu & Kashmir including Baramulla, Anantnag, Kupwara, Sopore and Jammu, and to Leh and Kargil in Ladakh. We serve 1000+ institutions across the region.' },
+    ],
+  },
   contact_section: {
     heading: 'Ready to Equip\nYour Space?',
     text: 'A school sports room, a full gym fit-out or a GeM order: tell us what you need and get expert advice with end-to-end support.',
@@ -202,6 +219,7 @@ export const COPY_DEFAULTS = {
     site_description: "J&K's premier sports equipment supplier since 1997. Cricket gear, fitness equipment, musical instruments & custom awards. GeM-registered, MSME-certified. Serving all districts of Jammu & Kashmir.",
     share_title: 'MDF Enterprises: One Supplier. Every Need.',
     share_description: "J&K's one-stop supplier of sports goods, fitness equipment, musical instruments and custom awards since 1997. GeM-registered, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",
+    profiles: [] as string[],
   },
 }
 
@@ -282,6 +300,7 @@ export const COPY_SECTIONS: CopySection[] = [
       { key: 'site_description', label: 'Description in Google results', type: 'textarea', help: 'Keep it under 160 characters.' },
       { key: 'share_title', label: 'Title when the link is shared', type: 'text' },
       { key: 'share_description', label: 'Description when the link is shared', type: 'textarea' },
+      { key: 'profiles', label: 'Business profiles', type: 'tags', help: 'Paste the full link of each listing you own: Google Maps, GeM seller page, IndiaMART, JustDial, Facebook. Google uses these to recognise your business.' },
     ],
   },
   {
@@ -435,6 +454,22 @@ export const COPY_SECTIONS: CopySection[] = [
     ],
   },
   {
+    key: 'home_faq', page: 'Home page', title: 'Questions & answers',
+    description: 'The questions near the bottom of the home page. Google and AI assistants read these word for word, so answer each one fully.',
+    fields: [
+      { key: 'heading', label: 'Heading', type: 'text' },
+      { key: 'text', label: 'Text under the heading', type: 'textarea' },
+      {
+        key: 'items', label: 'Questions', type: 'list', itemLabel: 'Question', min: 1,
+        help: 'The first six show open; the rest fold under "more questions". Type {phone}, {email} or {address} to use your current contact details.',
+        fields: [
+          { key: 'q', label: 'Question', type: 'text' },
+          { key: 'a', label: 'Answer', type: 'textarea' },
+        ],
+      },
+    ],
+  },
+  {
     key: 'contact_section', page: 'Whole website', title: 'Contact & quick quote',
     description: 'The enquiry section at the bottom of the home, products and blog pages.',
     fields: [
@@ -518,11 +553,18 @@ export function yearsOfExperience(contact: SiteCopy['contact'], now = new Date()
   return Math.max(0, contact.experience_years + Math.max(0, year - contact.experience_counted_in))
 }
 
-/** Fill in {years} everywhere and the auto-counting stats. Applied to what visitors see. */
+/** {phone}, {email} and {address} become the admin's current contact details. */
+export const fillContact = (text: string, { phone_display, email, address_line1, address_line2 }: SiteCopy['contact']) => text
+  .replace(/\{phone\}/gi, phone_display)
+  .replace(/\{email\}/gi, email)
+  .replace(/\{address\}/gi, `${address_line1}, ${address_line2}`)
+
+/** Fill in {years}, {phone}, {email} and {address} everywhere and the auto-counting stats. Applied to what visitors see. */
 export function applyTokens(copy: SiteCopy, now = new Date()): SiteCopy {
   const years = String(yearsOfExperience(copy.contact, now))
+  const fill = (t: string) => fillContact(t.replace(/\{years\}/gi, years), copy.contact)
   const walk = (v: unknown): unknown =>
-    typeof v === 'string' ? v.replace(/\{years\}/gi, years)
+    typeof v === 'string' ? fill(v)
       : Array.isArray(v) ? v.map(walk)
         : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, walk(x)]))
           : v

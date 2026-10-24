@@ -1,6 +1,6 @@
 // Long-form copy for each department page. These pages are what people land on when they search
 // "cricket bats Srinagar" or "gym equipment Kashmir", so each one answers that search on its own.
-// Only facts the business has confirmed (see faq.ts and public/llms.txt). Departments added in the
+// Only facts the business has confirmed (see the home FAQ in lib/content/copy.ts). Departments added in the
 // admin without an entry here simply skip this section.
 
 export interface DepartmentGuide {
@@ -40,7 +40,7 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       },
       {
         q: 'Can schools order sports equipment in bulk from MDF Enterprises?',
-        a: 'Yes. Schools, colleges and clubs across J&K order in bulk by WhatsApp on +91 70062 52334 or by email at mdfenterprisesjk@gmail.com. Government buyers can also order through the GeM portal.',
+        a: 'Yes. Schools, colleges and clubs across J&K order in bulk by WhatsApp on {phone} or by email at {email}. Government buyers can also order through the GeM portal.',
       },
       {
         q: 'Does MDF Enterprises deliver sports goods outside Srinagar?',
@@ -132,7 +132,7 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       },
       {
         q: 'Does MDF Enterprises take bulk orders for medals?',
-        a: 'Yes. Send the event, quantity and date on WhatsApp to +91 70062 52334 or email mdfenterprisesjk@gmail.com for a quote on bulk trophies and medals.',
+        a: 'Yes. Send the event, quantity and date on WhatsApp to {phone} or email {email} for a quote on bulk trophies and medals.',
       },
       {
         q: 'Can government departments buy awards from MDF Enterprises?',

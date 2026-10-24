@@ -13,6 +13,7 @@ const company = [
   { label: 'Blog',     href: '/blog' },
   { label: 'Contact',  href: '/#contact' },
   { label: 'Privacy',  href: '/privacy' },
+  { label: 'Terms',    href: '/terms' },
 ]
 
 export function Footer() {

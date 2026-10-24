@@ -117,12 +117,15 @@ export const viewport: Viewport = {
 
 // ── Structured data ─────────────────────────────────────────────────────────
 
-const localBusinessSchema = (contact: SiteCopy['contact']) => ({
+const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+// Built from the admin's contact details, so hours, address and profiles never disagree with the page
+const localBusinessSchema = ({ contact, seo, home_about }: SiteCopy) => ({
   '@context': 'https://schema.org',
   '@type': ['Store', 'LocalBusiness', 'SportingGoodsStore'],
   '@id': `${BASE_URL}/#organization`,
-  name: 'MDF Enterprises',
-  legalName: 'MDF Enterprises',
+  name: contact.business_name,
+  legalName: contact.business_name,
   alternateName: 'MDF Enterprises Srinagar',
   description: "J&K's premier sports equipment, fitness gear, musical instruments and custom awards supplier since 1997. GeM-registered government supplier, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",
   url: BASE_URL,
@@ -136,15 +139,16 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
   telephone: `+${contact.phone_display.replace(/\D/g, '')}`,
   email: contact.email,
   foundingDate: '1997',
+  founder: { '@type': 'Person', name: home_about.founder_name.replace(/^(Mr|Mrs|Ms|Dr)\.?\s+/i, '') },
   currenciesAccepted: 'INR',
   paymentAccepted: 'Cash, Bank Transfer, GeM Portal, UPI',
   priceRange: '₹₹',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'SDA Shopping Complex, Opposite Iqbal Park',
+    streetAddress: contact.address_line1,
     addressLocality: 'Srinagar',
     addressRegion: 'Jammu & Kashmir',
-    postalCode: '190008',
+    postalCode: contact.address_line2.match(/\d{6}/)?.[0] ?? '190008',
     addressCountry: 'IN',
   },
   geo: {
@@ -152,7 +156,7 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
     latitude: 34.0836,
     longitude: 74.7973,
   },
-  hasMap: 'https://maps.google.com/?q=34.0836,74.7973',
+  hasMap: contact.maps_link,
   contactPoint: [
     {
       '@type': 'ContactPoint',
@@ -183,9 +187,9 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      opens: '10:00',
-      closes: '19:00',
+      dayOfWeek: WEEK.filter(d => !contact.closed_days.some(c => c.trim().toLowerCase() === d.toLowerCase())),
+      opens: contact.open_time,
+      closes: contact.close_time,
     },
   ],
   hasOfferCatalog: {
@@ -230,14 +234,8 @@ const localBusinessSchema = (contact: SiteCopy['contact']) => ({
     'Music Lab Setup',
     'Annual Maintenance Contract (AMC)',
   ],
-  // Add your verified profiles below; each URL boosts AI entity recognition
-  sameAs: [
-    // 'https://maps.app.goo.gl/YOUR_GOOGLE_MAPS_LINK',
-    // 'https://www.linkedin.com/company/mdf-enterprises-srinagar',
-    // 'https://www.facebook.com/mdfenterprisesjk',
-    // 'https://www.indiamart.com/mdf-enterprises-srinagar',
-    // 'https://mkp.gem.gov.in/seller/YOUR_GEM_SELLER_ID',
-  ],
+  // Admin → Text → Google & sharing → Business profiles
+  sameAs: seo.profiles.filter(u => /^https?:\/\//.test(u)),
 })
 
 const websiteSchema = {
@@ -259,9 +257,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en-IN" className={`${hanken.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
-        {/* Performance: preconnect for external origins */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Fonts are self-hosted by next/font; only the speed beacon is off-site */}
         <link rel="dns-prefetch" href="https://va.vercel-scripts.com" />
 
         {/* Geo targeting */}
@@ -271,7 +267,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="ICBM"          content="34.0836, 74.7973" />
 
         {/* Schema: LocalBusiness + SportingGoodsStore */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(copy.contact)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(copy)).replace(/</g, '\\u003c') }} />
         {/* Schema: WebSite entity */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>

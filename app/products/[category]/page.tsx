@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowUpRight, CaretRight, WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import { categories as defaultCategories } from '@/lib/data/categories'
 import { getProducts, getCategories, getSiteCopy } from '@/lib/db/content'
-import { waHref } from '@/lib/content/copy'
+import { fillContact, waHref } from '@/lib/content/copy'
 import { DEPARTMENT_GUIDES } from '@/lib/content/departments'
 import { CtaBand } from '@/components/home/CtaBand'
 import { ProductGrid } from '@/components/products/ProductGrid'
@@ -58,7 +58,8 @@ export default async function CategoryPage({ params }: Props) {
   const page = copy.products_page
   const fill = (text: string) => text.replace(/\[department\]/gi, cat.label.toLowerCase())
   const categoryProducts = allProducts.filter(p => p.category === category)
-  const guide = DEPARTMENT_GUIDES[category]
+  const baseGuide = DEPARTMENT_GUIDES[category]
+  const guide = baseGuide && { ...baseGuide, faq: baseGuide.faq.map(({ q, a }) => ({ q, a: fillContact(a, copy.contact) })) }
 
   const itemListSchema = {
     '@context': 'https://schema.org',

@@ -74,8 +74,10 @@ export function Hero() {
                 }
               }}
             >
-              <source src="/BG/heroBg.mp4" type="video/mp4" />
+              {/* First playable source wins: wide screens get the sharp 720p mp4 (5 MB), everything else the 960px webm (0.8 MB) */}
+              <source src="/BG/heroBg.mp4" type="video/mp4" media="(min-width: 1280px)" />
               <source src="/hero.webm" type="video/webm" />
+              <source src="/BG/heroBg.mp4" type="video/mp4" />
             </video>
             {/* Fallback image */}
             <Image

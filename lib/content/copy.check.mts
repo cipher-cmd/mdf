@@ -17,6 +17,14 @@ assert.equal(in2027.journey.heading, '29 Years.\nOne Valley.')
 assert.ok(copy.home_about.text.includes('{years}')) // the admin still sees the placeholder
 console.log('years-of-experience checks passed')
 
+// FAQ answers follow the admin's contact details
+const moved = applyTokens(mergeCopy({ contact: { phone_display: '+91 99999 00000', email: 'new@example.com' } }))
+const answers = moved.home_faq.items.map(f => f.a).join(' ')
+assert.ok(answers.includes('+91 99999 00000') && answers.includes('new@example.com'))
+assert.ok(!/\{(phone|email|address)\}/.test(answers))
+assert.ok(copy.home_faq.items.some(f => f.a.includes('{phone}'))) // the admin still sees the placeholder
+console.log('contact placeholder checks passed')
+
 // Blog posts link to the department they are about
 const { departmentFor } = await import('./departments.ts')
 assert.equal(departmentFor('Best Cricket Equipment Brands in India 2026'), 'sports')
