@@ -32,8 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!guide) return {}
   const url = `${BASE_URL}/products/sports/${sport}`
   return {
-    // Absolute: the site template would add a second "Srinagar"
-    title: { absolute: `${guide.title} | MDF Enterprises` },
+    title: guide.seoTitle,
     description: guide.description,
     alternates: { canonical: url },
     openGraph: {

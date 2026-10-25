@@ -41,7 +41,7 @@ export function Showroom() {
       <div className="absolute inset-0 z-0 pointer-events-none bg-feather">
         <Image
           src="/BG/ourShowroomBg.png"
-          alt=""
+          alt="Pencil sketch of a lakeside pavilion and chinar tree in Srinagar"
           fill
           className="object-cover object-right opacity-75 select-none"
           sizes="100vw"

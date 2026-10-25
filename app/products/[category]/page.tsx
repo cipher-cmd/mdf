@@ -123,7 +123,7 @@ export default async function CategoryPage({ params }: Props) {
           {cat.video ? (
             <video src={cat.video} poster={cat.poster} autoPlay muted loop playsInline aria-hidden className="absolute inset-0 w-full h-full object-cover" />
           ) : (
-            <Image src={cat.poster || cat.image} alt="" fill priority className="object-cover" sizes="(max-width: 1380px) 100vw, 1380px" />
+            <Image src={cat.poster || cat.image} alt={`${cat.label} at MDF Enterprises, Srinagar`} fill priority className="object-cover" sizes="(max-width: 1380px) 100vw, 1380px" />
           )}
           <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">

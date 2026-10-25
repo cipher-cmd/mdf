@@ -215,7 +215,7 @@ export const COPY_DEFAULTS = {
     seo_description: 'Buying guides, GeM procurement know-how and stories from the world of sport, fitness and music from MDF Enterprises, Srinagar.',
   },
   seo: {
-    site_title: 'MDF Enterprises | Sports, Fitness, Music & Awards in Srinagar, J&K',
+    site_title: 'MDF Enterprises | Sports, Fitness, Music & Awards, Srinagar',
     site_description: "J&K's premier sports equipment supplier since 1997. Cricket gear, fitness equipment, musical instruments & custom awards. GeM-registered, MSME-certified. Serving all districts of Jammu & Kashmir.",
     share_title: 'MDF Enterprises: One Supplier. Every Need.',
     share_description: "J&K's one-stop supplier of sports goods, fitness equipment, musical instruments and custom awards since 1997. GeM-registered, MSME-certified. Serving 1000+ institutions across Jammu & Kashmir.",

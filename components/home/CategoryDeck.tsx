@@ -33,11 +33,11 @@ function DeptCard({ dep, index, N, t, videoRef, cta }: { dep: Category; index: n
     >
       {/* Phones: blurred scene fills the tall card, the clip sits in a wide band so most of the frame stays visible */}
       <div className="sm:hidden absolute inset-0">
-        <Image src={dep.poster || dep.image} alt="" fill className="object-cover scale-125 blur-2xl opacity-70" sizes="50vw" />
+        <Image src={dep.poster || dep.image} alt={dep.label} fill className="object-cover scale-125 blur-2xl opacity-70" sizes="50vw" />
         <div className="absolute inset-0 bg-black/35" />
       </div>
 
-      {!dep.video && <Image src={dep.poster || dep.image} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 1400px" />}
+      {!dep.video && <Image src={dep.poster || dep.image} alt={`${dep.label} at MDF Enterprises, Srinagar`} fill className="object-cover" sizes="(max-width: 640px) 100vw, 1400px" />}
       {dep.video && <video
         ref={videoRef}
         src={dep.video}

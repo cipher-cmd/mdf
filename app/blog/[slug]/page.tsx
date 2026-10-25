@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPublishedPost(slug)
   if (!post) return {}
   return {
-    title: post.title,
+    // Search results cut titles past ~65 characters, so a long headline goes without the brand suffix
+    title: post.title.length > 47 ? { absolute: post.title } : post.title,
     description: post.metaDescription || post.excerpt,
     alternates: { canonical: `${BASE_URL}/blog/${slug}` },
     // Unreviewed AI articles: readable on the site, links followed, kept out of search results
@@ -39,7 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: 'article',
       url: `${BASE_URL}/blog/${slug}`,
-      title: post.title,
+      // Search results cut titles past ~65 characters, so a long headline goes without the brand suffix
+    title: post.title.length > 47 ? { absolute: post.title } : post.title,
       description: post.excerpt,
       publishedTime: `${post.publishedAt}T00:00:00+05:30`,
       ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
@@ -120,7 +122,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mt-7 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[12.5px] text-[#6B6359]">
             <span className="inline-flex items-center gap-2 font-semibold text-[#141414]">
               <span className="relative w-7 h-7 rounded-full bg-white border border-[#E5E5E5] overflow-hidden">
-                <Image src="/images/mdfFavicon.png" alt="" fill className="object-contain p-1" sizes="28px" />
+                <Image src="/images/mdfFavicon.png" alt="MDF Enterprises logo" fill className="object-contain p-1" sizes="28px" />
               </span>
               {copy.blog_page.author}
             </span>
@@ -133,7 +135,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-10 mt-10 sm:mt-14">
           <div className="relative aspect-[16/10] sm:aspect-[2/1] rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#EDEDED] shadow-[0_40px_80px_-40px_rgba(40,28,10,0.55)]">
-            <Image src={post.coverImage} alt="" fill priority className="object-cover" sizes="(max-width: 1180px) 100vw, 1100px" />
+            <Image src={post.coverImage} alt={post.title} fill priority className="object-cover" sizes="(max-width: 1180px) 100vw, 1100px" />
           </div>
           {post.coverCredit && (
             <p className="mt-2.5 text-right text-[11.5px] text-[#99938B]">

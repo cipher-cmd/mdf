@@ -7,4 +7,7 @@ import { revalidatePath } from 'next/cache'
  */
 export function refreshWebsite() {
   revalidatePath('/', 'layout')
+  // Route handlers sit outside the layout tree, so they are cleared by name
+  revalidatePath('/sitemap.xml')
+  revalidatePath('/llms.txt')
 }

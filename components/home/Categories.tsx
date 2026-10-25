@@ -91,7 +91,7 @@ export function Categories({ departments }: { departments: Category[] }) {
                 >
                   <Image
                     src={dep.poster || dep.image}
-                    alt=""
+                    alt={`${dep.label} at MDF Enterprises, Srinagar`}
                     fill
                     sizes="(max-width: 1400px) 60vw, 840px"
                     className={`object-cover transition-transform duration-[1.4s] ease-out ${on ? 'scale-100' : 'scale-[1.12]'}`}

@@ -13,7 +13,7 @@ function ClientCard({ item }: { item: Client }) {
     >
       <div className="relative w-11 h-11 md:w-14 md:h-14 flex-shrink-0 rounded-full bg-white border border-[#EDEDED] flex items-center justify-center">
         <div className="relative w-8 h-8 md:w-10 md:h-10">
-          <Image src={item.logo} alt="" fill className="object-contain" sizes="40px" />
+          <Image src={item.logo} alt={`${item.name} logo`} fill className="object-contain" sizes="40px" />
         </div>
       </div>
       <div className="min-w-0">
@@ -34,7 +34,7 @@ export function Clients() {
       <div className="absolute inset-0 z-0 pointer-events-none bg-feather">
         <Image
           src="/BG/trustedByBg.png"
-          alt=""
+          alt="Sketch of snow-capped mountains and pine trees beside a lake"
           fill
           className="object-cover object-center opacity-60 select-none"
           sizes="100vw"

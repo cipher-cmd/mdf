@@ -78,7 +78,7 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
     <section id="articles" className="relative w-full bg-[#F7F7F7] pt-6 sm:pt-10 pb-16 sm:pb-24">
       {/* Misty range watermark behind the heading */}
       <div className="absolute inset-x-0 top-0 h-[460px] pointer-events-none select-none bg-feather opacity-80" aria-hidden>
-        <Image src="/BG/blogBg.png" alt="" fill className="object-cover object-left-top" sizes="100vw" />
+        <Image src="/BG/blogBg.png" alt="Sketch of snow-capped mountains over a lake, with chinar leaves" fill className="object-cover object-left-top" sizes="100vw" />
       </div>
 
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">
@@ -118,7 +118,7 @@ export function BlogExplorer({ initialPosts }: { initialPosts?: BlogPost[] }) {
                 <div className="relative aspect-[16/10] rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#EDEDED]">
                   <Image
                     src={featured.coverImage}
-                    alt=""
+                    alt={featured.title}
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 760px"

@@ -149,7 +149,7 @@ export function Footer() {
           <div className="flex items-center gap-2">
             <span>{copy.bottom_line}</span>
             <div className="relative w-4 h-3.5 ml-0.5 flex-shrink-0">
-              <Image src="/images/mdfFavicon.png" alt="" fill sizes="16px" className="object-contain opacity-75" />
+              <Image src="/images/mdfFavicon.png" alt="MDF Enterprises logo" fill sizes="16px" className="object-contain opacity-75" />
             </div>
           </div>
         </div>

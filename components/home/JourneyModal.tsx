@@ -66,7 +66,7 @@ export function JourneyModal({ open, onClose }: { open: boolean; onClose: () => 
             {/* Left: picture + title */}
             <div className="relative h-[200px] md:h-auto overflow-hidden">
               <div className="absolute inset-0">
-                <Image src={copy.image} alt="" fill className="object-cover" sizes="(max-width: 768px) 100vw, 380px" />
+                <Image src={copy.image} alt="Dal Lake, Srinagar" fill className="object-cover" sizes="(max-width: 768px) 100vw, 380px" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5" />
               <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">

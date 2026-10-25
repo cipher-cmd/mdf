@@ -91,7 +91,7 @@ export function CtaBand() {
 
       {/* Panoramic Dal Lake finale: letsBuildBg.png, washed only behind the copy */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-feather">
-        <Image src="/BG/letsBuildBg.png" alt="" fill className="object-cover object-center opacity-90 select-none" sizes="100vw" />
+        <Image src="/BG/letsBuildBg.png" alt="Houseboats on Dal Lake below snow-capped mountains" fill className="object-cover object-center opacity-90 select-none" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-[#F7F7F7]/92 via-[#F7F7F7]/70 to-[#F7F7F7]/25" />
       </div>
 

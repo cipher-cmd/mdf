@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   metadataBase: new URL(BASE_URL),
   title: {
     default: seo.site_title,
-    template: '%s | MDF Enterprises, Srinagar',
+    template: '%s | MDF Enterprises',
   },
   description: seo.site_description,
   keywords: [

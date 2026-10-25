@@ -154,8 +154,10 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
 export interface SportGuide extends DepartmentGuide {
   /** Short name for links and breadcrumbs */
   label: string
-  /** Page title, written as the search it answers */
+  /** Page heading, written as the search it answers */
   title: string
+  /** Shorter <title>, kept under ~65 characters with the brand suffix */
+  seoTitle: string
   description: string
 }
 
@@ -165,6 +167,7 @@ export const SPORT_GUIDES: Record<string, SportGuide> = {
   cricket: {
     label: 'Cricket',
     title: 'Cricket Bats & Full Kits in Srinagar: English Willow & Kashmir Willow',
+    seoTitle: 'Cricket Bats & Kits in Srinagar',
     description: 'Buy English willow and Kashmir willow cricket bats, batting gloves, pads, helmets, balls and turf mats in Srinagar. SG and SS dealer, MDF Enterprises, since 1997.',
     heading: 'Cricket bat seller in Srinagar',
     body: [
@@ -198,6 +201,7 @@ export const SPORT_GUIDES: Record<string, SportGuide> = {
   'combat-sports': {
     label: 'Combat sports',
     title: 'Boxing, MMA, Kickboxing & Judo Equipment in Srinagar: Gloves, Bags & Tatami Mats',
+    seoTitle: 'Boxing, MMA & Judo Equipment in Srinagar',
     description: 'Where to buy boxing gloves, MMA gloves, punching bags, kickboxing pads, shin guards, judo and karate tatami mats and wushu kits in Srinagar. MDF Enterprises, since 1997.',
     heading: 'Boxing, MMA and judo equipment in Srinagar',
     body: [
@@ -231,6 +235,7 @@ export const SPORT_GUIDES: Record<string, SportGuide> = {
   football: {
     label: 'Football',
     title: 'Football, Turf Boots & Goalposts in Kashmir: NIVIA & COSCO Dealer',
+    seoTitle: 'Football & Turf Boots in Kashmir: NIVIA, COSCO',
     description: 'Footballs, turf boots, goalposts and goal nets in Srinagar and across Kashmir. Dealer for NIVIA and COSCO, supplying players, schools and clubs since 1997.',
     heading: 'Football and turf supplier in Kashmir',
     body: [
@@ -262,6 +267,7 @@ export const SPORT_GUIDES: Record<string, SportGuide> = {
   'badminton-table-tennis': {
     label: 'Badminton & table tennis',
     title: 'Original YONEX Badminton Rackets, Feather Shuttles & STAG TT Tables in Srinagar',
+    seoTitle: 'YONEX Badminton & STAG TT Tables, Srinagar',
     description: 'Genuine YONEX badminton rackets, feather and nylon shuttlecocks, nets and STAG table tennis tables in Srinagar. Authorised dealer, MDF Enterprises, since 1997.',
     heading: 'Original YONEX rackets and STAG tables in Srinagar',
     body: [
@@ -294,6 +300,7 @@ export const SPORT_GUIDES: Record<string, SportGuide> = {
   'basketball-volleyball': {
     label: 'Basketball & volleyball',
     title: 'Basketball Hoops, Acrylic Boards & Volleyball Court Equipment in Jammu & Kashmir',
+    seoTitle: 'Basketball Hoops & Volleyball Gear in J&K',
     description: 'Basketball hoops, acrylic backboards, volleyball posts and nets, and balls for schools, colleges and departments across Jammu & Kashmir, with court installation. MDF Enterprises.',
     heading: 'Basketball and volleyball court equipment in J&K',
     body: [

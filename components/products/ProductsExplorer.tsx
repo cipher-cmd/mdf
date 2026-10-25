@@ -51,7 +51,7 @@ export function ProductsExplorer({
     <section id="collection" className="relative w-full bg-[#F7F7F7] pt-6 sm:pt-10 pb-16 sm:pb-24">
       {/* Engraved Kashmir range, a quiet watermark behind the heading */}
       <div className="absolute inset-x-0 top-0 h-[420px] pointer-events-none select-none bg-feather opacity-70" aria-hidden>
-        <Image src="/BG/productsSectionBg.png" alt="" fill className="object-cover object-left" sizes="100vw" />
+        <Image src="/BG/productsSectionBg.png" alt="Pencil sketch of snow-capped mountains over a lake" fill className="object-cover object-left" sizes="100vw" />
       </div>
 
       <div className="relative max-w-[1380px] mx-auto px-4 sm:px-6 md:px-10">

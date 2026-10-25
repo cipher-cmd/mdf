@@ -51,7 +51,7 @@ export function WhoWeServe() {
 
           {/* Background sketch */}
           <div className="absolute inset-0 z-0 pointer-events-none bg-feather">
-            <Image src="/BG/whoWeServeBg.png" alt="" fill className="object-cover object-left md:object-left-bottom opacity-35 select-none" sizes="100vw" />
+            <Image src="/BG/whoWeServeBg.png" alt="Watercolour of a houseboat and shikara on Dal Lake below snow-capped mountains" fill className="object-cover object-left md:object-left-bottom opacity-35 select-none" sizes="100vw" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#F7F7F7]/35 to-[#F7F7F7]/80" />
           </div>
 

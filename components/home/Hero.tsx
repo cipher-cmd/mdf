@@ -158,7 +158,7 @@ export function Hero() {
               <div className="h-6 w-px bg-[#CCCCCC]" />
 
               <div className="flex items-center gap-2">
-                <Image src="/images/gemLogo.png" alt="" width={24} height={24} className="object-contain" />
+                <Image src="/images/gemLogo.png" alt="GeM logo" width={24} height={24} className="object-contain" />
                 <div>
                   <p className="text-[13px] font-semibold text-[#141414] leading-tight">GeM</p>
                   <p className="text-[12px] text-[#554F47] leading-tight mt-0.5">Registered</p>
@@ -197,7 +197,7 @@ export function Hero() {
         <div className="relative rounded-[22px] md:rounded-[26px] border border-[#E5E5E5] shadow-[0_12px_32px_-20px_rgba(0,0,0,0.18)] px-5 py-5 sm:px-6 md:px-8 overflow-hidden bg-[#F7F7F7]">
           <Image
             src="/BG/heroStripBg.png"
-            alt=""
+            alt="Sketch of a snow-capped mountain over a lake"
             fill
             className="object-cover object-right pointer-events-none opacity-60 select-none"
             sizes="(max-width: 1360px) 100vw, 1360px"

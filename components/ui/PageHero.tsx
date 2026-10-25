@@ -39,7 +39,7 @@ export function PageHero({ crumb, title, intro, video, poster, cta, badge, strip
         className="relative w-full min-h-[560px] sm:min-h-[600px] lg:h-[clamp(620px,82svh,760px)] flex flex-col justify-center pt-28 pb-24 sm:pb-28 overflow-hidden"
       >
         <motion.div style={{ scale: sceneScale }} className="absolute inset-0 pointer-events-none select-none will-change-transform" aria-hidden>
-          <Image src={poster} alt="" fill priority className="object-cover object-[72%_center] md:object-center" sizes="100vw" />
+          <Image src={poster} alt="Snow-capped mountains over Dal Lake, Srinagar" fill priority className="object-cover object-[72%_center] md:object-center" sizes="100vw" />
           <video
             ref={videoRef}
             autoPlay

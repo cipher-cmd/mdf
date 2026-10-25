@@ -18,7 +18,7 @@ export function PostCard({ post }: { post: BlogPost }) {
       <div className="relative aspect-[16/10] rounded-[20px] overflow-hidden bg-[#EDEDED] group-focus-visible:ring-4 group-focus-visible:ring-[#CCA552]/40">
         <Image
           src={post.coverImage}
-          alt=""
+          alt={post.title}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"

@@ -4,7 +4,7 @@ import { getCategories, getSiteCopy } from '@/lib/db/content'
 import { telHref } from '@/lib/content/copy'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
-const TITLE = 'Brand Partners & Distribution in Jammu & Kashmir'
+const TITLE = 'Brand Partners & Distributors in J&K'
 const DESCRIPTION =
   'Looking for a dealer or distributor in Srinagar and J&K? MDF Enterprises has sold sports, fitness, music and awards brands since 1997, with a showroom, GeM registration and 1000+ institutional buyers.'
 
