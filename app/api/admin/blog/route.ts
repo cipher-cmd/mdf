@@ -1,5 +1,6 @@
 import { query } from '@/lib/db'
 import { refreshWebsite } from '@/lib/db/revalidate'
+import { pingIndexNow, postPaths } from '@/lib/indexnow'
 import { route, ok, fail, str, bool } from '@/lib/admin/api'
 import { sanitizeHtml, slugify } from '@/lib/sanitize'
 import { BLOG_CATEGORIES } from '@/lib/ai/writer'
@@ -38,6 +39,10 @@ function fields(body: any) {
   }
 }
 
+// A scheduled article is not on the site until its date, so search engines hear about it only once it is live
+const isLive = (status: string, publishedAt: string | null) =>
+  status === 'published' && (!publishedAt || Date.parse(publishedAt) <= Date.now())
+
 async function freeSlug(wanted: string, exceptId = '') {
   const base = slugify(wanted, 80) || `article-${Date.now()}`
   for (let n = 1; ; n++) {
@@ -63,6 +68,7 @@ export const POST = route(async req => {
   )
   if (f.is_featured) await query('UPDATE mdf_blog_posts SET is_featured = false WHERE id <> $1', [id])
   refreshWebsite()
+  if (isLive(f.status, f.published_at)) pingIndexNow(postPaths(slug))
   return ok({ id, slug })
 })
 
@@ -90,6 +96,8 @@ export const PUT = route(async req => {
   )
   if (f.is_featured) await query('UPDATE mdf_blog_posts SET is_featured = false WHERE id <> $1', [id])
   refreshWebsite()
+  // Unpublishing pings too, so engines drop the page instead of waiting for their next crawl
+  if (current.status === 'published' || isLive(f.status, f.published_at)) pingIndexNow(postPaths(slug))
   return ok({ id, slug })
 })
 
@@ -98,13 +106,14 @@ export const PATCH = route(async req => {
   const body = await req.json()
   const id = str(body.id, 100)
   if (body.status !== 'published' && body.status !== 'draft') return fail('Unknown change.')
-  await query(
+  const [post] = await query<{ slug: string; status: string; published_at: string | null }>(
     `UPDATE mdf_blog_posts SET status = $2::text,
        published_at = CASE WHEN $2::text = 'published' THEN COALESCE(published_at, now()) ELSE published_at END,
-       updated_at = now() WHERE id = $1`,
+       updated_at = now() WHERE id = $1 RETURNING slug, status, published_at`,
     [id, body.status]
   )
   refreshWebsite()
+  if (post && (post.status === 'draft' || isLive(post.status, post.published_at))) pingIndexNow(postPaths(post.slug))
   return ok()
 })
 
@@ -112,7 +121,8 @@ export const DELETE = route(async req => {
   const id = new URL(req.url).searchParams.get('id')
   if (!id) return fail('Missing article.')
   await query('UPDATE mdf_blog_sources SET used_in_post_id = NULL WHERE used_in_post_id = $1', [id])
-  await query('DELETE FROM mdf_blog_posts WHERE id = $1', [id])
+  const [post] = await query<{ slug: string; status: string }>('DELETE FROM mdf_blog_posts WHERE id = $1 RETURNING slug, status', [id])
   refreshWebsite()
+  if (post?.status === 'published') pingIndexNow(postPaths(post.slug))
   return ok()
 })

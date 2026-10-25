@@ -4,7 +4,7 @@
 // Run it after each deploy, or from the blog automation right after a post goes live.
 
 const HOST = 'mdfenterprisesjk.in'
-const KEY = 'a9abee7befce54ee54584549762be375' // must match public/<KEY>.txt
+const KEY = '8b632c949073491e99a96291c30233b6' // must match public/<KEY>.txt
 
 const paths = process.argv.slice(2)
 let urls
