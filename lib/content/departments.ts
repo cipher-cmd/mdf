@@ -21,18 +21,34 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       'Most of our sports orders come from schools, colleges, clubs and government departments across Jammu & Kashmir. We quote for bulk orders, supply through the GeM portal and take part in L1 tenders, and our team can install courts and multi-activity zones.',
     ],
     stock: [
-      'Cricket: bats, balls, batting pads, gloves, helmets and full protection sets',
-      'Football, volleyball and hockey gear',
-      'Badminton rackets and shuttles',
-      'Table tennis tables and accessories',
-      'Athletics equipment and turf shoes',
-      'Multi-sport kits for school sports rooms',
+      'Cricket: English willow and Kashmir willow bats, balls, batting pads, gloves, helmets, full kits and turf mats',
+      'Combat sports: boxing and MMA gloves, punching bags, kickboxing pads, shin guards, judo and karate tatami mats',
+      'Football: NIVIA and COSCO footballs, turf boots, goalposts and goal nets',
+      'Basketball and volleyball: balls, hoops, acrylic backboards, posts and nets, with court installation',
+      'Badminton: YONEX rackets, feather and nylon shuttlecocks, nets',
+      'Table tennis: STAG tables, bats and balls',
+      'Hockey, athletics equipment and multi-sport kits for school sports rooms',
     ],
-    keywords: ['cricket', 'bat', 'football', 'badminton', 'volleyball', 'hockey', 'athletic', 'table tennis', 'sports goods', 'sports equipment', 'shuttle', 'racket'],
+    keywords: [
+      'cricket', 'bat', 'football', 'badminton', 'volleyball', 'hockey', 'athletic', 'table tennis', 'sports goods', 'sports equipment',
+      'shuttle', 'racket', 'boxing', 'mma', 'kickboxing', 'judo', 'karate', 'tatami', 'combat', 'basketball', 'hoop', 'turf', 'goalpost',
+    ],
     faq: [
       {
         q: 'Where can I buy cricket equipment in Srinagar?',
         a: 'MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park, Srinagar stocks cricket bats, balls, pads, gloves, helmets and protection sets from SG, SS and other brands. The shop is open Monday to Saturday, 10:00 to 19:00.',
+      },
+      {
+        q: 'Where can I buy boxing, MMA or judo equipment in Srinagar?',
+        a: 'MDF Enterprises in Srinagar stocks boxing and MMA gloves, punching bags, kickboxing pads, shin guards and judo and karate tatami mats, for individual fighters as well as clubs and academies.',
+      },
+      {
+        q: 'Who supplies basketball hoops and volleyball court equipment in J&K?',
+        a: 'MDF Enterprises supplies basketball hoops, acrylic backboards, volleyball posts and nets to schools, colleges and departments across Jammu & Kashmir, and its team can install the court equipment.',
+      },
+      {
+        q: 'Where can I buy YONEX badminton rackets or a STAG table tennis table in Srinagar?',
+        a: 'MDF Enterprises sells genuine YONEX badminton rackets, feather and nylon shuttlecocks and STAG table tennis tables at its showroom in SDA Shopping Complex, Srinagar.',
       },
       {
         q: 'Which sports brands does MDF Enterprises sell?',
@@ -55,18 +71,23 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       'Our in-house team installs what we sell, and we offer Annual Maintenance Contracts (AMC) covering preventive servicing, breakdown repairs and spare parts. Government departments can buy through the GeM portal or by tender.',
     ],
     stock: [
-      'Treadmills and cardio machines',
-      'Multi-gyms and strength machines',
-      'Dumbbells, plates, bars and weight sets',
-      'Gym flooring',
+      'Commercial treadmills, elliptical cross trainers and spin bikes',
+      'Multi-station gyms and strength machines',
+      'Rubber hex dumbbells, Olympic plates, barbells, squat racks and adjustable benches',
+      'Rubber gym flooring',
+      'Open-air gym equipment for parks and campuses',
       'Yoga mats and accessories',
-      'Complete gymnasium fit-outs with installation',
+      'Complete gymnasium fit-outs with installation and AMC',
     ],
-    keywords: ['gym', 'fitness', 'treadmill', 'weight', 'dumbbell', 'cardio', 'gymnasium', 'yoga', 'workout', 'strength'],
+    keywords: ['gym', 'fitness', 'treadmill', 'weight', 'dumbbell', 'cardio', 'gymnasium', 'yoga', 'workout', 'strength', 'elliptical', 'barbell', 'bench', 'open gym', 'outdoor gym'],
     faq: [
       {
         q: 'Where can I buy gym equipment in Srinagar?',
         a: 'MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park, Srinagar sells treadmills, multi-gyms, free weights, gym flooring and yoga mats, and installs complete gymnasiums.',
+      },
+      {
+        q: 'Who supplies outdoor open-air gym equipment in J&K?',
+        a: 'MDF Enterprises supplies and installs open-air gym equipment for parks, campuses and public spaces across Jammu & Kashmir, and government buyers can order it through the GeM portal.',
       },
       {
         q: 'Does MDF Enterprises install gym equipment?',
@@ -90,12 +111,12 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
     ],
     stock: [
       'Tabla, harmonium and percussion',
-      'Guitars and other string instruments',
+      'Acoustic and electric guitars, violins and rubabs',
       'Keyboards',
-      'Band sets for schools',
+      'Marching brass band sets for schools',
       'School music lab setup with acoustic treatment',
     ],
-    keywords: ['music', 'instrument', 'tabla', 'harmonium', 'guitar', 'keyboard', 'band', 'percussion'],
+    keywords: ['music', 'instrument', 'tabla', 'harmonium', 'guitar', 'keyboard', 'band', 'percussion', 'violin', 'rubab'],
     faq: [
       {
         q: 'Where can I buy a tabla or harmonium in Srinagar?',
@@ -118,13 +139,13 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       'For a tournament or annual day, send us the event name, the number of awards and your date. We will quote and confirm the design on WhatsApp before production.',
     ],
     stock: [
-      'Trophies and cups',
-      'Medals',
-      'Shields and plaques',
+      'Metal trophies and winners cups',
+      'Gold, silver and bronze medals',
+      'Institutional shields, wooden plaques and crystal awards',
       'Mementos',
       'Custom engraving',
     ],
-    keywords: ['trophy', 'trophies', 'medal', 'award', 'shield', 'memento', 'engraving', 'tournament', 'prize'],
+    keywords: ['trophy', 'trophies', 'medal', 'award', 'shield', 'memento', 'engraving', 'tournament', 'prize', 'plaque', 'crystal'],
     faq: [
       {
         q: 'Where can I get custom trophies made in Srinagar?',

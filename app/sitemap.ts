@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Unreviewed AI articles carry noindex, so they stay out of the sitemap too
   const posts = allPosts.filter(p => p.indexable !== false)
   // A lastmod that is always "now" gets ignored; move this date when the page content really changes
-  const deployedAt = new Date('2026-10-24')
+  const deployedAt = new Date('2026-10-25')
   const newestPost = posts[0]?.publishedAt ?? '2026-01-01'
 
   return [
@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: [abs('/images/hero_kashmir_scene.jpg'), abs('/images/showroom_interior.jpg')],
     },
     { url: `${base}/products`, lastModified: deployedAt, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/partners`, lastModified: deployedAt, changeFrequency: 'yearly', priority: 0.5 },
     { url: `${base}/privacy`, lastModified: new Date(LEGAL_UPDATED), changeFrequency: 'yearly', priority: 0.2 },
     { url: `${base}/terms`, lastModified: new Date(LEGAL_UPDATED), changeFrequency: 'yearly', priority: 0.2 },
     { url: `${base}/blog`, lastModified: new Date(newestPost), changeFrequency: 'weekly', priority: 0.8 },

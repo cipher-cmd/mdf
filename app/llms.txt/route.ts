@@ -35,6 +35,7 @@ export async function GET() {
     '',
     ...categories.map(c => `- [${c.label}](${BASE_URL}/products/${c.id}): ${c.items.replace(/ · /g, ', ')}`),
     `- [All products](${BASE_URL}/products)`,
+    `- [Brand partners and distribution](${BASE_URL}/partners): for brands looking for a dealer or distributor in J&K`,
     '',
     '## Common questions',
     '',
