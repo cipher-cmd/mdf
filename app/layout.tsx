@@ -153,8 +153,8 @@ const localBusinessSchema = ({ contact, seo, home_about }: SiteCopy) => ({
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 34.0836,
-    longitude: 74.7973,
+    latitude: 34.0665,
+    longitude: 74.8033,
   },
   hasMap: contact.maps_link,
   contactPoint: [
@@ -263,8 +263,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Geo targeting */}
         <meta name="geo.region"    content="IN-JK" />
         <meta name="geo.placename" content="Srinagar, Jammu & Kashmir, India" />
-        <meta name="geo.position"  content="34.0836;74.7973" />
-        <meta name="ICBM"          content="34.0836, 74.7973" />
+        <meta name="geo.position"  content="34.0665;74.8033" />
+        <meta name="ICBM"          content="34.0665, 74.8033" />
 
         {/* Schema: LocalBusiness + SportingGoodsStore */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema(copy)).replace(/</g, '\\u003c') }} />
