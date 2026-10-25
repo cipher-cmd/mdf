@@ -197,7 +197,10 @@ async function starterContent() {
     ['Gym and fitness', 'Home and institutional gyms, training tips'],
     ['Music education', 'Instruments for schools, music rooms, local musicians'],
     ['Athletics and marathons', 'Running events, track and field across J&K'],
-    ['Badminton and indoor sports', 'Indoor courts, badminton, table tennis'],
+    ['Badminton and indoor sports', 'Original YONEX badminton rackets, feather and nylon shuttles, STAG table tennis tables in Srinagar'],
+    ['Combat sports equipment in Srinagar', 'Where to buy MMA, kickboxing, boxing and judo equipment: gloves, punching bags, pads, tatami mats'],
+    ['Football and turf in Kashmir', 'Footballs, turf boots, goalposts and nets; NIVIA and COSCO dealer in Kashmir'],
+    ['Basketball and volleyball courts in J&K', 'Basketball hoops, acrylic backboards, volleyball posts and nets, court equipment for schools'],
   ]
   for (const [keyword, notes] of topics) {
     await sql`INSERT INTO mdf_blog_topics (keyword, notes) VALUES (${keyword}, ${notes}) ON CONFLICT DO NOTHING`

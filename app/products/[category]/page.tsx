@@ -6,9 +6,10 @@ import { ArrowUpRight, CaretRight, WhatsappLogo } from '@phosphor-icons/react/di
 import { categories as defaultCategories } from '@/lib/data/categories'
 import { getProducts, getCategories, getSiteCopy } from '@/lib/db/content'
 import { fillContact, waHref } from '@/lib/content/copy'
-import { DEPARTMENT_GUIDES } from '@/lib/content/departments'
+import { DEPARTMENT_GUIDES, SPORT_GUIDES } from '@/lib/content/departments'
 import { CtaBand } from '@/components/home/CtaBand'
 import { ProductGrid } from '@/components/products/ProductGrid'
+import { GuideSection } from '@/components/products/GuideSection'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 const abs = (src: string) => (src.startsWith('http') ? src : `${BASE_URL}${src}`)
@@ -159,32 +160,25 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         )}
 
-        {guide && (
-          <section aria-labelledby="guide-heading" className="mt-16 sm:mt-24 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
-            <div>
-              <h2 id="guide-heading" className="text-[30px] sm:text-[40px] font-bold leading-[1.05] font-serif-heading">{guide.heading}</h2>
-              {guide.body.map(p => <p key={p.slice(0, 24)} className="mt-4 text-[15px] leading-relaxed text-[#554E46]">{p}</p>)}
-              <h3 className="mt-8 mb-3 text-[16px] font-semibold text-[#141414]">What we stock</h3>
-              <ul className="space-y-2 text-[14.5px] text-[#141414]">
-                {guide.stock.map(s => <li key={s} className="relative pl-4 before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#CCA552]">{s}</li>)}
-              </ul>
+        {category === 'sports' && (
+          <nav aria-label="Shop by sport" className="mt-16 sm:mt-20">
+            <h2 className="mb-4 text-[22px] sm:text-[26px] font-bold font-serif-heading">Shop by sport</h2>
+            <div className="flex flex-wrap gap-2.5">
+              {Object.entries(SPORT_GUIDES).map(([slug, s]) => (
+                <Link
+                  key={slug}
+                  href={`/products/sports/${slug}`}
+                  className="group inline-flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-[#E0E0E0] bg-white/70 hover:bg-white hover:border-[#CCA552] text-[13.5px] font-semibold text-[#141414] transition-colors"
+                >
+                  {s.label}
+                  <ArrowUpRight size={13} weight="bold" className="text-[#B8923F] transition-transform duration-300 group-hover:rotate-45" />
+                </Link>
+              ))}
             </div>
-            <div>
-              <h2 className="text-[22px] sm:text-[26px] font-bold font-serif-heading">Common questions</h2>
-              <div className="mt-4 divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-                {guide.faq.map(({ q, a }) => (
-                  <details key={q} className="group py-4">
-                    <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden flex justify-between gap-4 text-[15px] font-semibold">
-                      {q}
-                      <CaretRight size={14} weight="bold" className="mt-1 flex-shrink-0 text-[#B8923F] transition-transform group-open:rotate-90" />
-                    </summary>
-                    <p className="mt-2 text-[14.5px] leading-relaxed text-[#554E46]">{a}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </section>
+          </nav>
         )}
+
+        {guide && <GuideSection guide={guide} />}
 
         {/* Other departments */}
         {allCategories.length > 1 && (

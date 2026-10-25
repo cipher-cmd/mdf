@@ -35,20 +35,8 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
     ],
     faq: [
       {
-        q: 'Where can I buy cricket equipment in Srinagar?',
-        a: 'MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park, Srinagar stocks cricket bats, balls, pads, gloves, helmets and protection sets from SG, SS and other brands. The shop is open Monday to Saturday, 10:00 to 19:00.',
-      },
-      {
-        q: 'Where can I buy boxing, MMA or judo equipment in Srinagar?',
-        a: 'MDF Enterprises in Srinagar stocks boxing and MMA gloves, punching bags, kickboxing pads, shin guards and judo and karate tatami mats, for individual fighters as well as clubs and academies.',
-      },
-      {
-        q: 'Who supplies basketball hoops and volleyball court equipment in J&K?',
-        a: 'MDF Enterprises supplies basketball hoops, acrylic backboards, volleyball posts and nets to schools, colleges and departments across Jammu & Kashmir, and its team can install the court equipment.',
-      },
-      {
-        q: 'Where can I buy YONEX badminton rackets or a STAG table tennis table in Srinagar?',
-        a: 'MDF Enterprises sells genuine YONEX badminton rackets, feather and nylon shuttlecocks and STAG table tennis tables at its showroom in SDA Shopping Complex, Srinagar.',
+        q: 'Where is a good sports shop in Srinagar?',
+        a: 'MDF Enterprises is a sports shop at SDA Shopping Complex, opposite Iqbal Park, Srinagar, trading since 1997. It stocks cricket, football, badminton, table tennis, basketball, volleyball and combat sports gear, and is open Monday to Saturday, 10:00 to 19:00.',
       },
       {
         q: 'Which sports brands does MDF Enterprises sell?',
@@ -158,6 +146,181 @@ export const DEPARTMENT_GUIDES: Record<string, DepartmentGuide> = {
       {
         q: 'Can government departments buy awards from MDF Enterprises?',
         a: 'Yes. MDF Enterprises is GeM-registered and MSME-certified, and supplies awards and trophies to government departments and institutions across J&K.',
+      },
+    ],
+  },
+}
+
+export interface SportGuide extends DepartmentGuide {
+  /** Short name for links and breadcrumbs */
+  label: string
+  /** Page title, written as the search it answers */
+  title: string
+  description: string
+}
+
+// One page per sport under /products/sports, so a search for "boxing gloves Srinagar" lands on a page about exactly that.
+// Each answers its own search with its own copy and FAQ; keywords pick the matching products and articles.
+export const SPORT_GUIDES: Record<string, SportGuide> = {
+  cricket: {
+    label: 'Cricket',
+    title: 'Cricket Bats & Full Kits in Srinagar: English Willow & Kashmir Willow',
+    description: 'Buy English willow and Kashmir willow cricket bats, batting gloves, pads, helmets, balls and turf mats in Srinagar. SG and SS dealer, MDF Enterprises, since 1997.',
+    heading: 'Cricket bat seller in Srinagar',
+    body: [
+      'Kashmir makes the willow, and Srinagar plays a lot of cricket. At our showroom in SDA Shopping Complex, opposite Iqbal Park, you can pick up and knock in English willow and Kashmir willow bats before you buy, then kit out with gloves, pads, a helmet and balls in the same visit.',
+      'We are a dealer for SG and SS, and we supply full team kits to schools, colleges and clubs across J&K. Grounds and academies order turf mats from us, and government buyers can order through the GeM portal.',
+    ],
+    stock: [
+      'English willow and Kashmir willow bats, for juniors and seniors',
+      'Batting gloves and batting pads',
+      'Helmets and full protection sets',
+      'Cricket balls',
+      'Full cricket kits for schools and clubs',
+      'Cricket turf mats for grounds, nets and schools',
+    ],
+    keywords: ['cricket', 'bat', 'willow', 'batting', 'helmet', 'wicket'],
+    faq: [
+      {
+        q: 'Where can I buy a cricket bat in Srinagar?',
+        a: 'MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park, Srinagar sells English willow and Kashmir willow cricket bats from SG, SS and other brands. The shop is open Monday to Saturday, 10:00 to 19:00.',
+      },
+      {
+        q: 'Should I buy an English willow or a Kashmir willow bat?',
+        a: 'Kashmir willow is heavier and harder, costs less and suits tennis-ball cricket and beginners. English willow is lighter, gives more ping off the middle and suits leather-ball cricket. Come to the shop and hold both before you decide.',
+      },
+      {
+        q: 'Can a school or club order full cricket kits?',
+        a: 'Yes. Send the number of players and the age group on WhatsApp to {phone} or email {email} for a quote. Government institutions can also order through the GeM portal.',
+      },
+    ],
+  },
+  'combat-sports': {
+    label: 'Combat sports',
+    title: 'Boxing, MMA, Kickboxing & Judo Equipment in Srinagar: Gloves, Bags & Tatami Mats',
+    description: 'Where to buy boxing gloves, MMA gloves, punching bags, kickboxing pads, shin guards, judo and karate tatami mats and wushu kits in Srinagar. MDF Enterprises, since 1997.',
+    heading: 'Boxing, MMA and judo equipment in Srinagar',
+    body: [
+      'Combat sports have grown fast in Kashmir, and fighters, coaches and academies need gear that holds up to daily training. We stock gloves, bags, pads and protection for boxing, MMA and kickboxing, and tatami mats for judo, karate and wushu, at our Srinagar showroom.',
+      'Clubs and academies setting up a training hall can get mats, bags and gloves in one order. We deliver across J&K, and schools and government departments can buy through the GeM portal.',
+    ],
+    stock: [
+      'Boxing gloves',
+      'MMA gloves',
+      'Punching bags',
+      'Kickboxing pads',
+      'Shin guards',
+      'Judo and karate tatami mats, and wushu kits',
+    ],
+    keywords: ['boxing', 'mma', 'kickboxing', 'judo', 'karate', 'wushu', 'tatami', 'punching', 'combat', 'martial'],
+    faq: [
+      {
+        q: 'Where can I buy boxing, MMA or judo equipment in Srinagar?',
+        a: 'MDF Enterprises in Srinagar stocks boxing and MMA gloves, punching bags, kickboxing pads, shin guards and judo and karate tatami mats, for individual fighters as well as clubs and academies.',
+      },
+      {
+        q: 'Do you supply tatami mats for a judo or karate hall?',
+        a: 'Yes. Tell us the size of the hall on WhatsApp at {phone} and we will quote for enough tatami mats to cover it, delivered anywhere in J&K.',
+      },
+      {
+        q: 'Can an academy order gloves and pads in bulk?',
+        a: 'Yes. Clubs and academies order gloves, pads and bags in bulk by WhatsApp on {phone} or by email at {email}.',
+      },
+    ],
+  },
+  football: {
+    label: 'Football',
+    title: 'Football, Turf Boots & Goalposts in Kashmir: NIVIA & COSCO Dealer',
+    description: 'Footballs, turf boots, goalposts and goal nets in Srinagar and across Kashmir. Dealer for NIVIA and COSCO, supplying players, schools and clubs since 1997.',
+    heading: 'Football and turf supplier in Kashmir',
+    body: [
+      'More turf grounds open in Kashmir every year, and players need boots that grip on artificial grass. We stock turf boots and footballs, and we are a dealer for NIVIA and COSCO, so the balls and gear are genuine.',
+      'For schools, clubs and new grounds we supply goalposts and goal nets alongside balls and team kit, and deliver across J&K. Government buyers can order through the GeM portal.',
+    ],
+    stock: [
+      'NIVIA and COSCO footballs for training and matches',
+      'Turf boots and turf shoes',
+      'Goalposts and goal nets',
+      'Football kits for schools and clubs',
+    ],
+    keywords: ['football', 'turf', 'goalpost', 'goal net', 'soccer', 'futsal'],
+    faq: [
+      {
+        q: 'Where can I buy football turf boots in Srinagar?',
+        a: 'MDF Enterprises at SDA Shopping Complex, opposite Iqbal Park, Srinagar sells turf boots and footballs. The shop is open Monday to Saturday, 10:00 to 19:00.',
+      },
+      {
+        q: 'Is MDF Enterprises a NIVIA and COSCO dealer?',
+        a: 'Yes. MDF Enterprises is an authorised dealer for NIVIA and COSCO in Jammu & Kashmir, and all stock is genuine.',
+      },
+      {
+        q: 'Who supplies goalposts in Kashmir?',
+        a: 'MDF Enterprises supplies goalposts and goal nets to schools, clubs and grounds across J&K. Ask for a quote on WhatsApp at {phone}.',
+      },
+    ],
+  },
+  'badminton-table-tennis': {
+    label: 'Badminton & table tennis',
+    title: 'Original YONEX Badminton Rackets, Feather Shuttles & STAG TT Tables in Srinagar',
+    description: 'Genuine YONEX badminton rackets, feather and nylon shuttlecocks, nets and STAG table tennis tables in Srinagar. Authorised dealer, MDF Enterprises, since 1997.',
+    heading: 'Original YONEX rackets and STAG tables in Srinagar',
+    body: [
+      'Long winters make Kashmir an indoor-sports place. We sell genuine YONEX badminton rackets and shuttlecocks and STAG table tennis tables, bought directly from the brands, so you are not paying for a copy.',
+      'Schools, colleges and clubs order rackets, shuttles, nets and tables from us, delivered anywhere in J&K. Government buyers can order through the GeM portal.',
+    ],
+    stock: [
+      'YONEX badminton rackets for beginners to club players',
+      'Feather and nylon shuttlecocks',
+      'Badminton nets',
+      'STAG table tennis tables',
+      'Table tennis bats, balls and nets',
+    ],
+    keywords: ['badminton', 'shuttle', 'racket', 'racquet', 'yonex', 'table tennis', 'stag', 'indoor'],
+    faq: [
+      {
+        q: 'Where can I buy original YONEX badminton rackets in Srinagar?',
+        a: 'MDF Enterprises sells genuine YONEX badminton rackets, feather and nylon shuttlecocks at its showroom in SDA Shopping Complex, opposite Iqbal Park, Srinagar.',
+      },
+      {
+        q: 'Feather or nylon shuttlecocks?',
+        a: 'Feather shuttles fly truer and are used in tournaments, but wear out faster. Nylon shuttles last much longer and suit practice, schools and outdoor play.',
+      },
+      {
+        q: 'Where can I buy a STAG table tennis table in Srinagar?',
+        a: 'MDF Enterprises sells STAG table tennis tables in Srinagar and delivers them across J&K. Ask for current models and prices on WhatsApp at {phone}.',
+      },
+    ],
+  },
+  'basketball-volleyball': {
+    label: 'Basketball & volleyball',
+    title: 'Basketball Hoops, Acrylic Boards & Volleyball Court Equipment in Jammu & Kashmir',
+    description: 'Basketball hoops, acrylic backboards, volleyball posts and nets, and balls for schools, colleges and departments across Jammu & Kashmir, with court installation. MDF Enterprises.',
+    heading: 'Basketball and volleyball court equipment in J&K',
+    body: [
+      'A court is only as good as its hoops and posts. We supply basketball hoops and acrylic backboards, volleyball posts and nets, and match balls to schools, colleges, clubs and government departments across Jammu & Kashmir.',
+      'Our in-house team installs the court equipment we sell and has completed 500+ installations across J&K, including sports courts. Government buyers can order through the GeM portal or by tender.',
+    ],
+    stock: [
+      'Basketball hoops',
+      'Acrylic basketball backboards',
+      'Basketballs',
+      'Volleyball posts and nets',
+      'Volleyballs',
+      'Court equipment installation',
+    ],
+    keywords: ['basketball', 'volleyball', 'hoop', 'backboard', 'court'],
+    faq: [
+      {
+        q: 'Who supplies basketball hoops and volleyball court equipment in J&K?',
+        a: 'MDF Enterprises supplies basketball hoops, acrylic backboards, volleyball posts and nets to schools, colleges and departments across Jammu & Kashmir, and its team can install the court equipment.',
+      },
+      {
+        q: 'Can you install a basketball hoop at our school?',
+        a: 'Yes. Our in-house team installs hoops, backboards and volleyball posts. Send the court location and what you need on WhatsApp to {phone} for a quote.',
+      },
+      {
+        q: 'Can government departments order court equipment through GeM?',
+        a: 'Yes. MDF Enterprises is GeM-registered and MSME-certified, and takes part in L1 tenders for sports court equipment across J&K.',
       },
     ],
   },

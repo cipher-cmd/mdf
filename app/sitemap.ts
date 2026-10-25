@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { LEGAL_UPDATED } from '@/lib/content/legal'
+import { SPORT_GUIDES } from '@/lib/content/departments'
 import { expireAtNextScheduledPost, getCategories, getPublishedPosts } from '@/lib/db/content'
 
 const base = 'https://mdfenterprisesjk.in'
@@ -35,6 +36,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.85,
       images: cat.image ? [abs(cat.image)] : undefined,
+    })),
+    ...Object.keys(SPORT_GUIDES).map(sport => ({
+      url: `${base}/products/sports/${sport}`,
+      lastModified: deployedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
     })),
     ...posts.map(post => ({
       url: `${base}/blog/${post.slug}`,

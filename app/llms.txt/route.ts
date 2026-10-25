@@ -1,4 +1,5 @@
 import { getCategories, getPublishedPosts, getSiteCopy } from '@/lib/db/content'
+import { SPORT_GUIDES } from '@/lib/content/departments'
 
 const BASE_URL = 'https://mdfenterprisesjk.in'
 
@@ -34,6 +35,7 @@ export async function GET() {
     '## Products',
     '',
     ...categories.map(c => `- [${c.label}](${BASE_URL}/products/${c.id}): ${c.items.replace(/ · /g, ', ')}`),
+    ...Object.entries(SPORT_GUIDES).map(([slug, g]) => `- [${g.label}](${BASE_URL}/products/sports/${slug}): ${g.stock.join(', ')}`),
     `- [All products](${BASE_URL}/products)`,
     `- [Brand partners and distribution](${BASE_URL}/partners): for brands looking for a dealer or distributor in J&K`,
     '',
