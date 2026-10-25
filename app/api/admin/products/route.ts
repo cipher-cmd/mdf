@@ -1,5 +1,6 @@
 import { query } from '@/lib/db'
 import { refreshWebsite } from '@/lib/db/revalidate'
+import { pingIndexNow, departmentPaths } from '@/lib/indexnow'
 import { route, ok, fail, str, bool, strList } from '@/lib/admin/api'
 import { slugify } from '@/lib/sanitize'
 
@@ -38,6 +39,7 @@ export const POST = route(async req => {
      f.whatsapp_text || null, f.is_featured, f.in_stock, f.is_visible]
   )
   refreshWebsite()
+  pingIndexNow(departmentPaths(f.category))
   return ok({ id })
 })
 
@@ -47,6 +49,8 @@ export const PUT = route(async req => {
   if (!id) return fail('Missing product.')
   const f = fields(body)
   if (!f.name) return fail('Please give the product a name.')
+  // A product moved to another department changes both pages
+  const before = (await query<{ category: string }>('SELECT category FROM mdf_products WHERE id = $1', [id]))[0]
   await query(
     `UPDATE mdf_products SET name = $2, category = $3, brand = $4, description = $5, specs = $6, image = $7,
        whatsapp_text = $8, is_featured = $9, in_stock = $10, is_visible = $11, updated_at = now()
@@ -55,6 +59,7 @@ export const PUT = route(async req => {
      f.whatsapp_text || null, f.is_featured, f.in_stock, f.is_visible]
   )
   refreshWebsite()
+  pingIndexNow(departmentPaths(before?.category, f.category))
   return ok({ id })
 })
 
@@ -70,7 +75,10 @@ export const PATCH = route(async req => {
   } else {
     const column = ({ is_visible: 'is_visible', in_stock: 'in_stock', is_featured: 'is_featured' } as Record<string, string>)[body.field]
     if (!column || typeof body.value !== 'boolean') return fail('Unknown change.')
-    await query(`UPDATE mdf_products SET ${column} = $2, updated_at = now() WHERE id = $1`, [str(body.id, 100), body.value])
+    const [product] = await query<{ category: string }>(
+      `UPDATE mdf_products SET ${column} = $2, updated_at = now() WHERE id = $1 RETURNING category`, [str(body.id, 100), body.value])
+    // Reordering alone is not worth a recrawl, so only these switches ping
+    if (product) pingIndexNow(departmentPaths(product.category))
   }
   refreshWebsite()
   return ok()
@@ -79,7 +87,8 @@ export const PATCH = route(async req => {
 export const DELETE = route(async req => {
   const id = new URL(req.url).searchParams.get('id')
   if (!id) return fail('Missing product.')
-  await query('DELETE FROM mdf_products WHERE id = $1', [id])
+  const [product] = await query<{ category: string }>('DELETE FROM mdf_products WHERE id = $1 RETURNING category', [id])
   refreshWebsite()
+  if (product) pingIndexNow(departmentPaths(product.category))
   return ok()
 })

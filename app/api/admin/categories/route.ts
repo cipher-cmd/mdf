@@ -1,5 +1,6 @@
 import { query } from '@/lib/db'
 import { refreshWebsite } from '@/lib/db/revalidate'
+import { pingIndexNow, departmentPaths } from '@/lib/indexnow'
 import { route, ok, fail, str, bool, strList } from '@/lib/admin/api'
 import { slugify } from '@/lib/sanitize'
 
@@ -33,6 +34,8 @@ export const POST = route(async req => {
     [id, f.label, f.short || f.label, f.tagline, f.items, f.image || null, f.is_active]
   )
   refreshWebsite()
+  // The home page lists every department too
+  pingIndexNow(['/', ...departmentPaths(id)])
   return ok({ id })
 })
 
@@ -48,6 +51,7 @@ export const PUT = route(async req => {
     [id, f.label, f.short || f.label, f.tagline, f.items, f.image, f.poster, f.is_active]
   )
   refreshWebsite()
+  pingIndexNow(['/', ...departmentPaths(id)])
   return ok({ id })
 })
 
@@ -60,6 +64,7 @@ export const PATCH = route(async req => {
     )
   } else if (typeof body.is_active === 'boolean') {
     await query('UPDATE mdf_categories SET is_active = $2, updated_at = now() WHERE id = $1', [str(body.id, 50), body.is_active])
+    pingIndexNow(['/', ...departmentPaths(str(body.id, 50))])
   } else return fail('Unknown change.')
   refreshWebsite()
   return ok()
@@ -72,5 +77,6 @@ export const DELETE = route(async req => {
   if (used[0]?.n) return fail(`This department still has ${used[0].n} product(s). Move or delete them first, or simply hide the department.`)
   await query('DELETE FROM mdf_categories WHERE id = $1', [id])
   refreshWebsite()
+  pingIndexNow(['/', ...departmentPaths(id)])
   return ok()
 })

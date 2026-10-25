@@ -8,7 +8,7 @@ const KEY = '8b632c949073491e99a96291c30233b6' // must match public/<KEY>.txt an
  * Runs after the response is sent, only on the live site; a failed ping is logged, never shown to the admin.
  */
 export function pingIndexNow(paths: string[]) {
-  if (process.env.VERCEL_ENV !== 'production') return
+  if (process.env.VERCEL_ENV !== 'production' || !paths.length) return
   after(async () => {
     try {
       const res = await fetch('https://api.indexnow.org/indexnow', {
@@ -31,3 +31,7 @@ export function pingIndexNow(paths: string[]) {
 
 /** An article page plus the blog index that lists it. */
 export const postPaths = (slug: string) => [`/blog/${slug}`, '/blog']
+
+/** Department pages that show these departments' products, plus the products overview. */
+export const departmentPaths = (...ids: (string | undefined)[]) =>
+  ['/products', ...new Set(ids.filter(Boolean).map(id => `/products/${id}`))]
