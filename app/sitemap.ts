@@ -1,16 +1,16 @@
 import type { MetadataRoute } from 'next'
 import { LEGAL_UPDATED } from '@/lib/content/legal'
 import { SPORT_GUIDES } from '@/lib/content/departments'
-import { expireAtNextScheduledPost, getCategories, getPublishedPosts } from '@/lib/db/content'
+import { getCategories, getPublishedPosts } from '@/lib/db/content'
 
 const base = 'https://mdfenterprisesjk.in'
 const abs = (path: string) => (path.startsWith('http') ? path : `${base}${encodeURI(path).replace(/&/g, '%26')}`)
 
-// Rebuilt with the rest of the site whenever the admin publishes something, and when a scheduled article goes live
-export const revalidate = 3600
+// Built per request: the cached copy never picked up admin changes. Only crawlers fetch it, so one query each is cheap
+export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, allPosts] = await Promise.all([getCategories(), getPublishedPosts(), expireAtNextScheduledPost()])
+  const [categories, allPosts] = await Promise.all([getCategories(), getPublishedPosts()])
   // Unreviewed AI articles carry noindex, so they stay out of the sitemap too
   const posts = allPosts.filter(p => p.indexable !== false)
   // A lastmod that is always "now" gets ignored; move this date when the page content really changes
