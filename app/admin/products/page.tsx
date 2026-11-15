@@ -6,6 +6,8 @@ import { useSearchParams } from 'next/navigation'
 import { Plus, MagnifyingGlass, Star, ArrowUp, ArrowDown, PencilSimple, Trash, X } from '@phosphor-icons/react'
 import { api, Badge, Button, Card, Drawer, Empty, Field, Loading, PageHeader, Select, TextArea, TextInput, Toggle, useFeedback } from '@/components/admin/ui'
 import { ImageField } from '@/components/admin/ImageField'
+import { enquiryText, type Product as SiteProduct } from '@/lib/data/products'
+import { useCopy } from '@/providers/SiteProvider'
 
 interface Product {
   id: string
@@ -37,6 +39,8 @@ function ProductsScreen() {
   const [saving, setSaving] = useState(false)
   const { notify, confirm } = useFeedback()
   const params = useSearchParams()
+  const business = useCopy('contact').business_name
+  const fresh = () => blank(filter !== 'all' ? filter : departments[0]?.id)
 
   const load = useCallback(async () => {
     try {
@@ -99,6 +103,8 @@ function ProductsScreen() {
 
   const save = async () => {
     if (!editing) return
+    if (!editing.image) return notify('Please add a photo first. It is what customers see on the Products page.', 'error')
+    if (!editing.name.trim()) return notify('Please give the product a name.', 'error')
     setSaving(true)
     try {
       const body = { ...editing, highlights: editing.specs.filter(s => s.trim()) }
@@ -139,7 +145,7 @@ function ProductsScreen() {
         eyebrow="Your catalogue"
         title="Products"
         intro="Everything customers see on the Products page. Switch a product off to hide it without deleting it."
-        actions={<Button variant="gold" onClick={() => setEditing(blank(departments[0]?.id))}><Plus size={16} weight="bold" /> Add a product</Button>}
+        actions={<Button variant="gold" onClick={() => setEditing(fresh())}><Plus size={16} weight="bold" /> Add a product</Button>}
       />
 
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
@@ -165,7 +171,7 @@ function ProductsScreen() {
           <Empty
             title={items.length ? 'No products match' : 'No products yet'}
             text={items.length ? 'Try a different search or department.' : 'Add your first product and it will appear on the website straight away.'}
-            action={!items.length && <Button variant="gold" onClick={() => setEditing(blank(departments[0]?.id))}><Plus size={16} weight="bold" /> Add a product</Button>}
+            action={!items.length && <Button variant="gold" onClick={() => setEditing(fresh())}><Plus size={16} weight="bold" /> Add a product</Button>}
           />
         </Card>
       ) : (
@@ -222,8 +228,8 @@ function ProductsScreen() {
       >
         {editing && (
           <div className="space-y-6">
-            <Field label="Photo" help="A tall photo works best (like a phone photo held upright). It is shrunk automatically.">
-              <ImageField value={editing.image ?? ''} onChange={v => set('image', v)} shape="portrait" maxSide={1350} />
+            <Field label="Photo" help="Upload the product poster or a tall photo. The contact strip at the bottom of a poster is cut off and the picture is shrunk automatically.">
+              <ImageField value={editing.image ?? ''} onChange={v => set('image', v)} shape="portrait" maxSide={1350} trimPoster />
             </Field>
             <Field label="Product name"><TextInput value={editing.name} onChange={e => set('name', e.target.value)} placeholder="e.g. English Willow Cricket Bat" /></Field>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -256,8 +262,13 @@ function ProductsScreen() {
             <details className="group">
               <summary className="cursor-pointer text-[13px] font-semibold text-gold-deep select-none">More options</summary>
               <div className="mt-3">
-                <Field label="WhatsApp message for this product" help="What the customer's WhatsApp message says when they tap Enquire. Leave empty for the usual message.">
-                  <TextArea value={editing.whatsapp_text ?? ''} onChange={e => set('whatsapp_text', e.target.value)} rows={2} />
+                <Field label="WhatsApp message for this product" help="Written for you from the name and brand (shown greyed out). Type here only if you want different words.">
+                  <TextArea
+                    value={editing.whatsapp_text ?? ''}
+                    onChange={e => set('whatsapp_text', e.target.value)}
+                    rows={6}
+                    placeholder={enquiryText({ name: editing.name || 'product name', brand: editing.brand } as SiteProduct, business)}
+                  />
                 </Field>
               </div>
             </details>

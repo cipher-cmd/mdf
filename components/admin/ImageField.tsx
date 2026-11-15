@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ImageSquare, UploadSimple, Images, Check } from '@phosphor-icons/react'
 import { api, Button, Drawer, Loading, Empty, useFeedback } from './ui'
+import { footerTop, posterCrop } from '@/lib/admin/posterCrop'
 
 const TARGET_BYTES = 350_000
 
@@ -12,15 +13,26 @@ const TARGET_BYTES = 350_000
  * quality stepped down until it is light enough. A 6 MB phone photo ends up ~150 KB,
  * which keeps the shared database small and the website fast.
  */
-async function compress(file: File, maxSide: number) {
+async function compress(file: File, maxSide: number, trimPoster = false) {
   const bitmap = await createImageBitmap(file)
-  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
-  const width = Math.round(bitmap.width * scale)
-  const height = Math.round(bitmap.height * scale)
+  let crop = { sx: 0, sy: 0, sw: bitmap.width, sh: bitmap.height }
+  if (trimPoster) {
+    // Look for the shop's contact strip on a small copy; ordinary photos come back untouched
+    const probe = document.createElement('canvas')
+    probe.width = 300
+    probe.height = Math.max(1, Math.round((bitmap.height * 300) / bitmap.width))
+    const ctx = probe.getContext('2d', { willReadFrequently: true })!
+    ctx.drawImage(bitmap, 0, 0, probe.width, probe.height)
+    const top = footerTop(ctx.getImageData(0, 0, probe.width, probe.height).data, probe.width, probe.height)
+    if (top !== null) crop = posterCrop(bitmap.width, bitmap.height, Math.round((top * bitmap.height) / probe.height))
+  }
+  const scale = Math.min(1, maxSide / Math.max(crop.sw, crop.sh))
+  const width = Math.round(crop.sw * scale)
+  const height = Math.round(crop.sh * scale)
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
-  canvas.getContext('2d')!.drawImage(bitmap, 0, 0, width, height)
+  canvas.getContext('2d')!.drawImage(bitmap, crop.sx, crop.sy, crop.sw, crop.sh, 0, 0, width, height)
   bitmap.close()
 
   let blob: Blob | null = null
@@ -34,9 +46,9 @@ async function compress(file: File, maxSide: number) {
   return { blob, width, height }
 }
 
-export async function uploadImage(file: File, maxSide = 1600): Promise<string> {
+export async function uploadImage(file: File, maxSide = 1600, trimPoster = false): Promise<string> {
   if (!file.type.startsWith('image/')) throw new Error('Please choose a picture file.')
-  const { blob, width, height } = await compress(file, maxSide)
+  const { blob, width, height } = await compress(file, maxSide, trimPoster)
   const name = file.name.replace(/\.[^.]+$/, '').slice(0, 120)
   const res = await fetch(`/api/admin/media?name=${encodeURIComponent(name)}&w=${width}&h=${height}`, {
     method: 'POST',
@@ -102,10 +114,12 @@ export function PictureGrid({ onPick, selected, onDelete, refreshKey = 0 }: {
 }
 
 /** A picture box: shows the current picture, uploads a new one, or picks one already uploaded. */
-export function ImageField({ value, onChange, maxSide = 1600, shape = 'landscape', allowEmpty = false }: {
+export function ImageField({ value, onChange, maxSide = 1600, shape = 'landscape', allowEmpty = false, trimPoster = false }: {
   value: string
   onChange: (url: string) => void
   maxSide?: number
+  /** Product photos: cut off the shop poster's contact strip and keep the 4:5 card shape */
+  trimPoster?: boolean
   shape?: 'landscape' | 'portrait' | 'square' | 'logo'
   allowEmpty?: boolean
 }) {
@@ -119,7 +133,7 @@ export function ImageField({ value, onChange, maxSide = 1600, shape = 'landscape
     if (!file) return
     setBusy(true)
     try {
-      onChange(await uploadImage(file, shape === 'logo' ? 600 : maxSide))
+      onChange(await uploadImage(file, shape === 'logo' ? 600 : maxSide, trimPoster))
       notify('Picture uploaded.')
     } catch (e) {
       notify((e as Error).message, 'error')

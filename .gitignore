@@ -63,3 +63,6 @@ Desktop.ini
 
 # local tool state
 ruvector.db
+
+# Raw product posters from the shop (cropped WebP copies live in public/images/products)
+/shopProd/

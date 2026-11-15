@@ -28,6 +28,7 @@ export const POST = route(async req => {
   const f = fields(await req.json())
   if (!f.name) return fail('Please give the product a name.')
   if (!f.category) return fail('Please choose a department.')
+  if (!f.image) return fail('Please add a photo first.')
   const slug = slugify(`${f.brand} ${f.name}`) || `product-${Date.now()}`
   const id = `${slug.slice(0, 80)}-${Date.now().toString(36)}`
   await query(
@@ -49,6 +50,7 @@ export const PUT = route(async req => {
   if (!id) return fail('Missing product.')
   const f = fields(body)
   if (!f.name) return fail('Please give the product a name.')
+  if (!f.image) return fail('Please add a photo first.')
   // A product moved to another department changes both pages
   const before = (await query<{ category: string }>('SELECT category FROM mdf_products WHERE id = $1', [id]))[0]
   await query(
