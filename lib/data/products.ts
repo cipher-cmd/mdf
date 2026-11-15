@@ -19,90 +19,105 @@ export interface Product {
   whatsappText?: string
 }
 
-export const WHATSAPP_NUMBER = '917006252334'
+/**
+ * The message pre-filled when someone taps Enquire. Names the exact item and leaves
+ * two short blanks, so the shop can quote in one reply instead of asking back.
+ */
+export function enquiryText(p: Product, business: string) {
+  if (p.whatsappText) return p.whatsappText
+  const item = p.brand && !p.name.toLowerCase().startsWith(p.brand.toLowerCase()) ? `${p.brand} ${p.name}` : p.name
+  return `Hi ${business}, I'm interested in the ${item}.\n\nSize / type: \nQuantity: \n\nPlease share the price and availability.`
+}
 
-export const waLink = (text: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
-
-export const productEnquiry = (p: Product) =>
-  waLink(p.whatsappText ?? `Hi MDF Enterprises, I am interested in ${p.name} (${p.brand}). Could you share sizes, availability and pricing?`)
-
+// Sports items are the shop's own product posters (shopProd/, Nov 2026). Copy states only what the posters show.
 export const products: Product[] = [
   {
-    id: 'p-1',
-    slug: 'ss-batting-pads',
-    name: 'Batting Pads',
+    id: 'ton-ss-cricket-bats',
+    slug: 'ton-ss-cricket-bats',
+    name: 'Cricket Bats',
     category: 'sports',
-    brand: 'SS',
-    image: '/images/products/ss-batting-pads.webp',
-    description: 'Lightweight batting pads with high-density foam and a contoured knee roll for full-day comfort at the crease.',
-    highlights: ['High-density foam protection', 'Lightweight cane-reinforced build', 'Youth & adult sizes'],
+    brand: 'TON & SS',
+    image: '/images/products/ton-ss-cricket-bats.webp',
+    description: 'TON and SS cricket bats, including the SS Tilak Verma and Shivam Dube player editions. Ask us for sizes, weights and grades in stock.',
+    highlights: ['TON and SS bats', 'SS Tilak Verma & Shivam Dube editions', 'Ask for sizes and weights in stock'],
     featured: true,
   },
   {
-    id: 'p-2',
-    slug: 'ss-premium-cricket-balls',
-    name: 'Premium Cricket Balls',
-    category: 'sports',
-    brand: 'SS',
-    image: '/images/products/ss-premium-cricket-balls.webp',
-    description: 'Hand-stitched leather balls in red and white — match and practice grades for clubs, schools and tournaments.',
-    highlights: ['Red & white leather', 'Match and practice grades', 'Bulk boxes for institutions'],
-    featured: true,
-    whatsappText: 'Hi MDF Enterprises, I am interested in SS Premium Cricket Balls. Could you share grades, box quantities and bulk pricing?',
-  },
-  {
-    id: 'p-3',
-    slug: 'ss-cricket-pads',
-    name: 'Cricket Pads',
-    category: 'sports',
-    brand: 'SS',
-    image: '/images/products/ss-cricket-pads.webp',
-    description: 'Classic Sunridges pads with a traditional profile, triple straps and a secure, stable fit.',
-    highlights: ['Traditional profile', 'Triple-strap secure fit', 'Breathable inner lining'],
-    featured: false,
-  },
-  {
-    id: 'p-4',
-    slug: 'ss-cricket-protection-set',
-    name: 'Cricket Protection Set',
-    category: 'sports',
-    brand: 'SS',
-    image: '/images/products/ss-cricket-protection-set.webp',
-    description: 'Complete matching kit — pads, gloves and guards — ideal for academies and school teams kitting out together.',
-    highlights: ['Pads, gloves & guards', 'Matched team sets', 'Institutional pricing'],
-    featured: true,
-  },
-  {
-    id: 'p-5',
+    id: 'ton-silver-edition-batting-gloves',
     slug: 'ton-silver-edition-batting-gloves',
-    name: 'Silver Edition Batting Gloves',
+    name: 'Silver Edition Cricket Batting Gloves',
     category: 'sports',
     brand: 'TON',
-    image: '/images/products/ton-silver-edition-batting-gloves.webp',
-    description: 'Soft-leather palm with segmented finger protection for grip, feel and confidence against pace.',
-    highlights: ['Soft leather palm', 'Segmented finger rolls', 'Left & right hand'],
+    image: '/images/products/ton-silver-edition-cricket-batting-gloves.webp',
+    description: 'All-white TON Silver Edition batting gloves with a perforated leather palm and padded finger rolls.',
+    highlights: ['All-white match finish', 'Perforated palm', 'Padded finger rolls'],
+    featured: true,
+  },
+  {
+    id: 'ton-ultra-lite-batting-gloves',
+    slug: 'ton-ultra-lite-batting-gloves',
+    name: 'Ultra Lite Cricket Batting Gloves',
+    category: 'sports',
+    brand: 'TON',
+    image: '/images/products/ton-ultra-lite-batting-gloves.webp',
+    description: 'TON Ultra Lite batting gloves in white with yellow and navy accents, a perforated palm and a hook-and-loop wrist strap.',
+    highlights: ['Ultra Lite model', 'Perforated palm', 'Hook-and-loop wrist strap'],
     featured: false,
   },
   {
-    id: 'p-6',
-    slug: 'ton-batting-gloves',
-    name: 'Batting Gloves',
+    id: 'ss-sunridges-batting-gloves-elbow-guard',
+    slug: 'ss-sunridges-batting-gloves-elbow-guard',
+    name: 'Sunridges Batting Gloves with Elbow Guard',
     category: 'sports',
-    brand: 'TON',
-    image: '/images/products/ton-batting-gloves.webp',
-    description: 'Tournament batting gloves with reinforced side bars and a sweat-wicking cuff.',
-    highlights: ['Reinforced side bars', 'Sweat-wicking cuff', 'Youth & adult sizes'],
+    brand: 'SS',
+    image: '/images/products/ss-sunridges-batting-gloves-elbow-guard.webp',
+    description: 'SS Sunridges cricket batting gloves in white, blue and silver, paired with a matching SS elbow guard.',
+    highlights: ['Batting gloves + elbow guard', 'White, blue & silver', 'Bulk sets for teams'],
     featured: false,
   },
   {
-    id: 'p-7',
-    slug: 'sega-turf-shoes',
-    name: 'Turf Shoes',
+    id: 'ss-sunridges-cricket-leg-guards',
+    slug: 'ss-sunridges-cricket-leg-guards',
+    name: 'Sunridges Cricket Leg Guards',
+    category: 'sports',
+    brand: 'SS',
+    image: '/images/products/ss-sunridges-cricket-leg-guards.webp',
+    description: 'SS Sunridges batting leg guards (pads) with a ribbed front and three hook-and-loop straps.',
+    highlights: ['Ribbed front padding', 'Three-strap fit', 'Ask for sizes in stock'],
+    featured: true,
+  },
+  {
+    id: 'ss-test-league-cricket-balls',
+    slug: 'ss-test-league-cricket-balls',
+    name: 'Cricket Balls: Match & Practice',
+    category: 'sports',
+    brand: 'SS, Test & League',
+    image: '/images/products/ss-test-league-cricket-balls.webp',
+    description: 'Red and white leather cricket balls from SS, Test and League for matches and practice. Ask us for box quantities for teams and academies.',
+    highlights: ['Red & white balls', 'Test: Grade A, 5½ oz, water-proofed', 'League: genuine alum hide'],
+    featured: true,
+    whatsappText: "Hi MDF Enterprises, I'm interested in cricket balls (SS, Test or League).\n\nBrand and colour (red / white): \nQuantity (pieces or boxes): \n\nPlease share the price and availability.",
+  },
+  {
+    id: 'ss-sunridges-cricket-kit-bag',
+    slug: 'ss-sunridges-cricket-kit-bag',
+    name: 'Sunridges Cricket Kit Bag',
+    category: 'sports',
+    brand: 'SS',
+    image: '/images/products/ss-sunridges-cricket-kit-bag.webp',
+    description: 'Blue camo SS Sunridges kit bag with zipped front and side pockets and a separate shoe compartment.',
+    highlights: ['Separate shoe compartment', 'Zipped front & side pockets', 'Blue camo finish'],
+    featured: false,
+  },
+  {
+    id: 'sega-cricket-spike-shoes',
+    slug: 'sega-cricket-spike-shoes',
+    name: 'Cricket Shoes with Spike Outsole',
     category: 'sports',
     brand: 'SEGA',
-    image: '/images/products/sega-turf-shoes.webp',
-    description: 'Rubber-stud turf shoes with superior grip and cushioning for cricket, football and astro surfaces.',
-    highlights: ['Multi-surface rubber studs', 'Cushioned midsole', 'Sizes UK 4–11'],
+    image: '/images/products/sega-cricket-spike-shoes.webp',
+    description: 'White SEGA cricket shoes with a yellow moulded spike outsole for grip on grass.',
+    highlights: ['Moulded spike outsole', 'White upper, yellow lining', 'Ask for sizes in stock'],
     featured: true,
   },
   {

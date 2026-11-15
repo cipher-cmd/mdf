@@ -19,7 +19,7 @@ export const COPY_DEFAULTS = {
     open_time: '10:00',
     close_time: '19:00',
     closed_days: ['Sunday'],
-    whatsapp_greeting: 'Hi MDF Enterprises, I would like to enquire about your products.',
+    whatsapp_greeting: "Hi MDF Enterprises, I'd like to enquire.\n\nLooking for: \nFor (personal / school / club / department): ",
     // "28 years in 2026" → 29 in 2027, 30 in 2028… Anywhere on the site, {years} shows this number.
     experience_years: 28,
     experience_counted_in: 2026,

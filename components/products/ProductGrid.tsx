@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Check, Eye, WhatsappLogo, X } from '@phosphor-icons/react'
 import { EASE } from '@/lib/animation'
-import type { Product } from '@/lib/data/products'
+import { enquiryText, type Product } from '@/lib/data/products'
 import { useCopy, useDepartments, useWhatsApp } from '@/providers/SiteProvider'
 
 /** Department name + WhatsApp enquiry link, both from the admin's settings. */
@@ -14,11 +14,11 @@ function useProductHelpers() {
   const departments = useDepartments()
   const whatsapp = useWhatsApp()
   const copy = useCopy('products_page')
+  const business = useCopy('contact').business_name
   return {
     copy,
     categoryLabel: (id: string) => departments.find(c => c.id === id)?.label ?? id,
-    productEnquiry: (p: Product) =>
-      whatsapp(p.whatsappText || `Hi MDF Enterprises, I am interested in ${p.name}${p.brand ? ` (${p.brand})` : ''}. Could you share sizes, availability and pricing?`),
+    productEnquiry: (p: Product) => whatsapp(enquiryText(p, business)),
   }
 }
 

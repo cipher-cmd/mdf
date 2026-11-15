@@ -22,6 +22,7 @@ export function ProductsExplorer({
   const currentCategories = initialCategories ?? defaultCategories
   const copy = useCopy('products_page')
   const waLink = useWhatsApp()
+  const business = useCopy('contact').business_name
 
   const [active, setActive] = useState('all')
   const [query, setQuery] = useState('')
@@ -103,7 +104,7 @@ export function ProductsExplorer({
                 <X size={13} weight="bold" /> Clear filters
               </button>
               <a
-                href={waLink(`Hi MDF Enterprises, I am looking for ${query || 'a product'}. Is it available?`)}
+                href={waLink(query.trim() ? `Hi ${business}, I'm looking for ${query.trim()}. Do you have it in stock?` : undefined)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center min-h-[44px] px-5 rounded-full bg-[#141414] text-white text-[13px] font-semibold hover:bg-[#2A241B] transition-colors"

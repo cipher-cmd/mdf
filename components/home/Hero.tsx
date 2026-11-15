@@ -65,7 +65,7 @@ export function Hero() {
               playsInline
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover object-[85%_center] opacity-95 z-0"
-              poster="/images/hero_kashmir_scene.jpg"
+              poster="/images/hero_kashmir_scene_poster.webp"
               onTimeUpdate={(e) => {
                 const vid = e.currentTarget
                 // Loop smoothly on panoramic Dal Lake establishing shot (0s - 3.8s)

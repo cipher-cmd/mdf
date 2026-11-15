@@ -103,6 +103,8 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
   const videos = useRef<(HTMLVideoElement | null)[]>([])
   const [active, setActive] = useState(0)
   const visible = useInView(deckRef, { margin: '-10% 0px' })
+  // Videos start downloading only when the deck is close to the viewport, not on page load
+  const near = useInView(deckRef, { margin: '30% 0px', once: true })
 
   const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start start', 'end end'] })
   const t = useTransform(scrollYProgress, v => Math.min(N - 1, (v / DWELL) * Math.max(1, N - 1)))
@@ -115,7 +117,7 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
   useEffect(() => {
     videos.current.forEach((v, i) => {
       if (!v) return
-      if (i <= active + 1 && v.preload !== 'auto') v.preload = 'auto'
+      if (near && i <= active + 1 && v.preload !== 'auto') v.preload = 'auto'
       if (i === active && visible) {
         v.currentTime = 0
         v.play().catch(() => {})
@@ -123,7 +125,7 @@ export function CategoryDeck({ departments }: { departments: Category[] }) {
         v.pause()
       }
     })
-  }, [active, visible])
+  }, [active, visible, near])
 
   const goTo = (i: number) => {
     const track = trackRef.current

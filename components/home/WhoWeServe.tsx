@@ -13,12 +13,13 @@ const LINKS: Record<string, string> = { products: '/products', contact: '/#conta
 export function WhoWeServe() {
   const copy = useCopy('home_who')
   const whatsapp = useWhatsApp()
+  const business = useCopy('contact').business_name
   const personas = copy.cards.map(c => ({
     ...c,
     tags: c.tags.split(',').map(t => t.trim()).filter(Boolean),
     cta: c.button,
     isExternal: c.link === 'whatsapp',
-    href: c.link === 'whatsapp' ? whatsapp(`Hi MDF Enterprises, I am enquiring about: ${c.title}.`) : LINKS[c.link] ?? '/#contact',
+    href: c.link === 'whatsapp' ? whatsapp(`Hi ${business}, I have an enquiry: ${c.title} (${c.desc.replace(/\.$/, '')}). Could you help?`) : LINKS[c.link] ?? '/#contact',
   }))
   const trackRef = useRef<HTMLDivElement>(null)
   const railRef = useRef<HTMLDivElement>(null)

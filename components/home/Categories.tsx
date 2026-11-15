@@ -26,19 +26,20 @@ export function Categories({ departments }: { departments: Category[] }) {
   const [active, setActive] = useState(0)
   const [held, setHeld] = useState(false)
   const visible = useInView(boardRef, { margin: '-15% 0px' })
+  const near = useInView(boardRef, { margin: '30% 0px', once: true })
   const N = departments.length
 
   // The open panel plays from the top; the next one warms up so the hand-off is instant
   useEffect(() => {
     videos.current.forEach((v, i) => {
       if (!v || !v.offsetParent) return
-      if (i === active || i === (active + 1) % N) v.preload = 'auto'
+      if (near && (i === active || i === (active + 1) % N)) v.preload = 'auto'
       if (i === active && visible) {
         v.currentTime = 0
         v.play().catch(() => {})
       } else v.pause()
     })
-  }, [active, visible, N])
+  }, [active, visible, near, N])
 
   const autoplay = visible && !held && !reduce && N > 1
 
